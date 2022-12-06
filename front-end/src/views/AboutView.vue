@@ -10,7 +10,7 @@ export default {
   methods: {
     retrieveUsers () {
       http
-        .get('/api/hello')
+        .get('/api/testH2')
         .then(response => {
           console.log(response.data)
         })
