@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fas.toy.dao.TestDao;
 import com.fas.toy.dto.TestDto;
 import com.fas.toy.service.TestH2Service;
+import com.fas.toy.service.TestH2ServiceImpl;
 
 import java.util.logging.Logger;
 
@@ -21,14 +22,14 @@ import java.util.logging.Logger;
 @RequestMapping("/api")
 public class HelloWorldController {
 
-    @Autowired(required = false)
-    TestH2Service service;
-
     @Autowired
     TestDao dao;
 
     @Autowired
 	SqlSessionTemplate session;
+
+    @Autowired
+    TestH2Service service2;
 
     final private static Logger LOG = Logger.getGlobal();
     public static final String SECURED_TEXT = "Hello from the secured resource!";
@@ -40,9 +41,7 @@ public class HelloWorldController {
     }
 
     @GetMapping("/testH2")
-    public List<TestDto> testH2Connect() {
-        System.out.println("dbdbdb");
-
-        return  dao.searchH2(session);
+    public List<TestDto> searchDb() {
+        return service2.userList();
     }
 }
