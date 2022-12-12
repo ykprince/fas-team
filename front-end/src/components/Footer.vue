@@ -1,7 +1,7 @@
 <template>
     <footer>
         <br>
-        <h1>==============footer입니다 ============</h1>
+        <h4>==============footer 영역 ============</h4>
     </footer>
 </template>
 

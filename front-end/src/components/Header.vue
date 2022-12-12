@@ -1,27 +1,15 @@
 <template>
   <header>
     <Logo />
-    <div class="nav nav-pills">
-      <div
+      <nav
         v-for="nav in navigations"
-        :key="nav.name"
-        class="nav-item">
+        :key="nav.name">
         <RouterLink
           :to="nav.href"
-          active-class="active"
-          :class="{ active: isMatch(nav.path) }"
-          class="nav-link">
+          >
           {{ nav.name }}
         </RouterLink>
-      </div>
-    </div>
-    <div
-      class="user"
-      @click="toAbout">
-      <img
-        :src="image"
-        :alt="name" />
-    </div>
+      </nav>
   </header>
 </template>
 
@@ -51,5 +39,18 @@ header {
   align-items: center;
   padding: 0 40px;
   position: relative;
+}
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>

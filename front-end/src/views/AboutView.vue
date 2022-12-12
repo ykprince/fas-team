@@ -5,8 +5,18 @@
 </template>
 <script>
 import http from '../http-common'
+import { mapState } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState('about', [
+      'name',
+      'email',
+      'blog',
+      'phone',
+      'image'
+    ])
+  },
   methods: {
     retrieveUsers () {
       http
