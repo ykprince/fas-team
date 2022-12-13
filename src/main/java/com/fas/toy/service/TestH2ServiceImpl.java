@@ -1,5 +1,6 @@
 package com.fas.toy.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -21,7 +22,7 @@ public class TestH2ServiceImpl implements TestH2Service{
     @Override
     public List<TestDto> userList() {
         System.out.println("asdasdasdsa");
-        return dao.searchH2(session);
+        return dao.searchH2();
     }
 
 }
