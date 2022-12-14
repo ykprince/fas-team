@@ -7,7 +7,7 @@ export default {
     books: [],
     loading: false,
     theBook: {},
-    message: ''
+    message: 'test'
   },
   getters: {
   },
@@ -45,7 +45,7 @@ export default {
         // const pageLength = Math.ceil(total / 10) // 총 페이지의 길이
       } catch ({ message }) {
         commit('updateState', {
-          movies: [],
+          books: [],
           message
         })
       } finally {
