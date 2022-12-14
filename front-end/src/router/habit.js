@@ -1,7 +1,7 @@
 export default [
   {
-    path: "/habit",
-    name: "habit",
-    component: () => import("@/views/HabitView.vue"),
-  },
-];
+    path: '/habit',
+    name: 'habit',
+    component: () => import('@/views/HabitView.vue')
+  }
+]
