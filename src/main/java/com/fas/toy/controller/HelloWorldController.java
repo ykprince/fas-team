@@ -26,16 +26,16 @@ public class HelloWorldController {
     TestDao dao;
 
     @Autowired
-	SqlSessionTemplate session;
+    SqlSessionTemplate session;
 
     @Autowired
     TestH2Service service2;
 
     // @ApiResponses({
-    //     @ApiResponse(responseCode = "200", description = "OK !!"),
-    //     @ApiResponse(responseCode = "400", description = "BAD REQUEST !!"),
-    //     @ApiResponse(responseCode = "404", description = "NOT FOUND !!"),
-    //     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !!")
+    // @ApiResponse(responseCode = "200", description = "OK !!"),
+    // @ApiResponse(responseCode = "400", description = "BAD REQUEST !!"),
+    // @ApiResponse(responseCode = "404", description = "NOT FOUND !!"),
+    // @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !!")
     // })
 
     final private static Logger LOG = Logger.getGlobal();
