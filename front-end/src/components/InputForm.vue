@@ -2,7 +2,7 @@
   <div>
     <input
       :type="props.inputType"
-      :placholder="props.customPlacholder"
+      :placholder="props.customPlaceholder"
       :maxLength="props.customMaxLength"
     />
   </div>
@@ -19,7 +19,7 @@ const props = defineProps({
     Type: String,
     default: '24'
   },
-  customPlacholder: {
+  customPlaceholder: {
     Type: String,
     default: '입력해주세요.'
   }
