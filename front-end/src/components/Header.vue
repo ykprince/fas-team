@@ -29,6 +29,10 @@ export default {
         {
           name: 'Habit',
           href: '/habit'
+        },
+        {
+          name: 'Book',
+          href: '/book'
         }
       ]
     }
