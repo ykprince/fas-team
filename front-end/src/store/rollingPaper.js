@@ -84,20 +84,35 @@ const testData = [
     ]
   }
 ]
+console.log('rolling Paper js', testData)
+// const getAllPaper = function (cb) {
+//   setTimeout(() => cb(testData), 100)
+// }
 
 export default {
   state: {
-    namespaced: true, // 해당 옵션으로 인해, 중복되는 호출부를 제한할 수 있음. 대신 호출 시, paperobj/blabla 로 호출해야함
-    paperObj: testData
+    namespaced: true, // 해당 옵션으로 인해, 중복되는 호출부를 제한할 수 있음. 대신 dispath시 rollingPaper/blabla 로 호출해야함
+    all: []
   },
 
   mutations: {
-
+    updateState (state, papers) {
+      state.all = papers
+    }
   },
 
   actions: {
     async selectOnePaper ({ state, commit }, payload) {
       console.log(payload)
+    },
+    getAllPapers ({ commit }) {
+      commit('updateState', testData)
+    },
+    async deletePaper ({ state, commit }, payload) {
+      const newObj = state.all.filter((item) =>
+        item !== payload
+      )
+      commit('updateState', newObj)
     }
   }
 }
