@@ -9,5 +9,14 @@ module.exports = {
       svgRule.uses.clear()
       svgRule.use('vue-svg-loader').loader('vue-svg-loader')
     }
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        additionalData: `@import "@/assets/scss/main.scss";`
+      }
+    }
   }
 }
+
+

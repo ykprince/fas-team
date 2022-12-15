@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="item">
         {{ habit.title }}
     </div>
 </template>
@@ -14,3 +14,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.item {
+  background-color: $blue;
+}
+</style>
