@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import about from './about'
 import book from './book'
+import habit from './habit'
 
 export default createStore({
   state: {
@@ -13,6 +14,7 @@ export default createStore({
   },
   modules: {
     about,
-    book
+    book,
+    habit
   }
 })
