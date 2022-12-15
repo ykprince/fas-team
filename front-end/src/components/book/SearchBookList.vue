@@ -11,28 +11,35 @@
         <div
           v-else
           class="books">
-          <!-- <BookGethering
+          <SBook  @sendData="readdt"
             v-for="book in books"
             :key="book.isbn"
-            :book="book" /> -->
+            :book="book" />
         </div>
       </div>
+      <div></div>
     </div>
   </template>
 
 <script>
 import { mapState } from 'vuex'
-// import BookGethering from './components/book/BookGethering.vue'
+import SBook from './SearchBook.vue'
 
 export default {
   components: {
-    // BookGethering
+    SBook
   },
   computed: {
     ...mapState('book', [
       'books',
       'message'
     ])
+  },
+  methods: {
+    readdt (data) {
+      this.$emit('setData', data)
+      console.log('ddemfdjdha', data)
+    }
   }
 }
 </script>

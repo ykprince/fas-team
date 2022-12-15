@@ -16,6 +16,12 @@ export default {
       Object.keys(payload).forEach(key => {
         state[key] = payload[key]
       })
+    },
+    resetBooks (state) {
+      console.log('reset:::::::::::::::::::')
+      state.books = []
+      state.message = ''
+      state.loading = false
     }
   },
   actions: {
