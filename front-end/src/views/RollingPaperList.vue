@@ -1,6 +1,5 @@
 <template lang="">
   <div class="container">
-    <h2>THis is paper</h2>
     <div
       v-for="rpItem in rollingpaperObj"
       :key="rpItem"
@@ -10,19 +9,28 @@
       <span @click="rmThispaper(rpItem)">delete</span>
     </div>
   </div>
+  <modal-popup class="modal" v-if="deleteModal" :modalText="modalText" :submitEmit="deletePaper"></modal-popup>
 </template>
 <script setup>
-// store.js에서 개인정보-롤링페이퍼정보 수신
-// 임시 데이터
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import modalPopup from '@/components/modalPopup.vue'
 
+const waitingDeleteObj = ref({})
+const deleteModal = ref(false) // 삭제버튼 눌렀을 때 모달 컴포넌트 출력
+const modalText = ref('삭제')
 const store = useStore()
-const rollingpaperObj = computed(() => store.state.rollingpaper.paperObj)
-console.log(rollingpaperObj)
+const rollingpaperObj = computed(() => store.state.rollingPaper.paperObj) // 롤링페이퍼 obj
 
 const rmThispaper = function (rpItem) {
-  console.log(rpItem)
+  waitingDeleteObj.value = rpItem
+  deleteModal.value = true
+}
+
+const deletePaper = () => {
+  // action  정의 필요
+  console.log(waitingDeleteObj)
+  // deleteModal.value = false
 }
 </script>
 <style lang="scss" scoped>
@@ -30,9 +38,10 @@ const rmThispaper = function (rpItem) {
   width: 100%;
   max-width: 1200px;
   display: flex;
+
   padding: 2rem;
   border: 1px solid grey;
-  margin: 0 2rem;
+  margin: 0 auto;
 }
 
 h2 {
@@ -45,6 +54,10 @@ h2 {
   width: 50%;
   border: 2px solid grey;
   border-radius: 1.5rem;
+
+  &:not(:last-of-type) {
+    margin-right: 2rem;
+  }
 
   span {
     position: absolute;
