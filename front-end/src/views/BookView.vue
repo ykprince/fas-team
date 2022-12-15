@@ -5,7 +5,7 @@
         add
   </button>
   <div  v-if="isShow" >
-    <addbook></addbook>
+    <addbook @handler="handler"></addbook>
   </div>
   <!-- <BGList></BGList> -->
 </template>
@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     handler () {
+      console.log('aasdasdasdas')
       this.isShow = !this.isShow
       this.$store.commit('book/resetBooks')
     }
