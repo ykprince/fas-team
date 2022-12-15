@@ -10,16 +10,28 @@
         Search
       </button>
       <div>
-        {{books}}
+        <div
+          class="books">
+          <SBList @setData="showData" />
+        </div>
+      </div>
+      <div class="getherForm">
+        {{book}}
       </div>
     </div>
-  </template>
+</template>
 <script>
 import { mapState } from 'vuex'
+import SBList from './SearchBookList.vue'
+
 export default {
+  components: {
+    SBList
+  },
   data () {
     return {
-      query: ''
+      query: '',
+      book: {}
     }
   },
   computed: {
@@ -34,6 +46,10 @@ export default {
       this.$store.dispatch('book/searchBooks', {
         query: this.query
       })
+    },
+    showData (data) {
+      this.book = data
+      console.log('ehckr::::', this.book)
     }
   },
   mounted () {
