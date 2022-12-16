@@ -19,16 +19,17 @@ export default {
 <style lang="scss" scoped>
 .item {
   display: flex;
+  position: relative;
+  border: solid 1px #e1e1e1;
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px #e1e1e1;
   background-color: white;
   height: 55px;
-  margin: 10px 20px;
+  margin-bottom: 5px;
   padding-left: 20px;
-  // border-radius: 10px;
   align-items: center;
-  // border: solid 2px lightgray;
   font-size: 12px;
   color: darkgray;
-  position:relative;
 
   .icon {
     position: absolute;
