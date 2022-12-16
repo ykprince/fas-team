@@ -1,19 +1,18 @@
 <template lang="">
   <div class="container" v-if="rollingpaperObj.length > 0">
-    <div
+    <paperListItem
       v-for="rpItem in rollingpaperObj"
       :key="rpItem"
       class="paper-objects-items"
-    >
-      <h2>{{ rpItem.paperName }}</h2>
-      <span @click="rmThispaper(rpItem)">X</span>
-    </div>
+      :rpItem="rpItem"
+      @showDeleteModal="showDeleteModal"
+    ></paperListItem>
   </div>
   <div v-else class="no-flex-container">
       <h2>아직 추가한 페이지가 없어요😢</h2>
       <h2>주변에 자랑할 수 있는, 나의 롤링 페이퍼를 추가해볼까요?</h2>
       <div class="add-new-paper-area">
-        <router-link to="RollingPaperAddNew">추가하러 가기🚀</router-link>
+        <router-link to="add-rollingpaper">추가하러 가기🚀</router-link>
       </div>
     </div>
   <transition name="modal" tag="div">
@@ -25,6 +24,7 @@
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 import modalPopup from '@/components/modalPopup.vue'
+import paperListItem from '@/components/rollingPaper/paperListItem.vue'
 
 const waitingDeleteObj = ref({})
 const deleteModal = ref(false) // 삭제버튼 눌렀을 때 모달 컴포넌트 출력
@@ -43,14 +43,14 @@ const submitChk = async () => { // 삭제확인
   cancelChk()
 }
 
+const showDeleteModal = (item) => {
+  waitingDeleteObj.value = item
+  deleteModal.value = true
+}
+
 const cancelChk = () => { // 삭제취소
   deleteModal.value = false
   waitingDeleteObj.value = {}
-}
-
-const rmThispaper = function (rpItem) {
-  waitingDeleteObj.value = rpItem
-  deleteModal.value = true
 }
 
 const deletePaper = async () =>
@@ -85,17 +85,12 @@ const deletePaper = async () =>
 
 }
 
-h2 {
-  padding-top: 10%;
-  text-align: center;
-}
-
 .paper-objects-items {
   position: relative;
   width: 50%;
   height: 30%;
   min-height: 30rem;
-  border: 2px solid grey;
+  border: 1px solid grey;
   border-radius: 1.5rem;
 
   &:not(:last-of-type) {
