@@ -1,6 +1,6 @@
 <template>
   <div class="habit-item-list">
-    <HabitItem v-for="habit in habits" :key="habit.habitId" :habit="habit"/>
+      <HabitItem v-for="habit in habits" :key="habit.habitId" :habit="habit"/>
   </div>
 </template>
 
@@ -25,7 +25,13 @@ export default {
         { habitId: '1', title: '테스트1', description: '테스트입니다1테스트입니다1', icon: 'habitIcon1' },
         { habitId: '2', title: '테스트2', description: '테스트입니다2테스트입니다1', icon: 'habitIcon2' },
         { habitId: '3', title: '테스트3', description: '테스트입니다2테스트입니다1', icon: 'habitIcon3' },
-        { habitId: '4', title: '테스트4', description: '테스트입니다2테스트입니다1', icon: 'habitIcon4' }
+        { habitId: '4', title: '테스트4', description: '테스트입니다2테스트입니다1', icon: 'habitIcon4' },
+        { habitId: '5', title: '테스트2', description: '테스트입니다2테스트입니다1', icon: 'habitIcon2' },
+        { habitId: '6', title: '테스트3', description: '테스트입니다2테스트입니다1', icon: 'habitIcon3' },
+        { habitId: '7', title: '테스트4', description: '테스트입니다2테스트입니다1', icon: 'habitIcon4' },
+        { habitId: '8', title: '테스트2', description: '테스트입니다2테스트입니다1', icon: 'habitIcon2' },
+        { habitId: '9', title: '테스트3', description: '테스트입니다2테스트입니다1', icon: 'habitIcon3' },
+        { habitId: '10', title: '테스트4', description: '테스트입니다2테스트입니다1', icon: 'habitIcon4' }
       ]
     }
   }
@@ -36,11 +42,12 @@ export default {
 <style lang="scss" scoped>
 
 .habit-item-list {
-  border-radius: 10px;
-  background-color: #f3f3f3;
+  overflow: scroll;
+  width: 100%;
 }
 
-.habit-item-list>.item:first-child {
-  margin-top:20px;
+.habit-item-list>.item:last-child {
+  margin-bottom: 80px;
 }
+
 </style>

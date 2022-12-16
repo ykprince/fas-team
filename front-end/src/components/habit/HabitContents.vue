@@ -22,7 +22,6 @@ export default {
     padding-left: 30px;
     border-radius: 10px;
     box-sizing: border-box;
-    // border: solid 2px lightgray;
     font-size: 12px;
     color: darkgray;
 }

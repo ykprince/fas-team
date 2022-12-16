@@ -24,7 +24,7 @@
       </div>
 
       <div v-else-if="addStep === 2" class="getherForm" >
-        <IGInfo :theBook="book" ></IGInfo>
+        <!-- <IGInfo :theBook="book" ></IGInfo> -->
       </div>
     </div>
   </div>
@@ -32,12 +32,12 @@
 <script>
 import { mapState } from 'vuex'
 import SBList from './SearchBookList.vue'
-import IGInfo from './InputGetherInfo.vue'
+// import IGInfo from './InputGetherInfo.vue';
 
 export default {
   components: {
-    SBList,
-    IGInfo
+    SBList
+    // IGInfo
   },
   data () {
     return {
