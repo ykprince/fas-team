@@ -2,8 +2,9 @@
   <div>
     <input
       :type="props.inputType"
-      :placholder="props.customPlaceholder"
+      :placeholder="props.customPlaceholder"
       :maxLength="props.customMaxLength"
+      :autofocus="props.customAutofocus"
     />
   </div>
 </template>
@@ -22,6 +23,10 @@ const props = defineProps({
   customPlaceholder: {
     Type: String,
     default: '입력해주세요.'
+  },
+  customAutofocus: {
+    Type: String,
+    default: 'false'
   }
 })
 </script>
@@ -34,6 +39,6 @@ input {
   width: 100%;
   height: 100%;
   padding: 5px;
-  font-size: 16px;
+  font-size: 1.2rem;
 }
 </style>
