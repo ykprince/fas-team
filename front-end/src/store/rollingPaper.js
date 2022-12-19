@@ -3,7 +3,7 @@ const testData = [
     id: 10001,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss1',
-    paperStyle: {}, // 스타일 설정
+    paperStyle: 'tomato', // 스타일 설정
     expireDate: '',
     paperList: [
       // 개별 items (다른사람들이 작성)
@@ -34,7 +34,7 @@ const testData = [
     id: 10002,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss2',
-    paperStyle: {}, // 스타일 설정
+    paperStyle: 'green', // 스타일 설정
     expireDate: '',
     paperList: [
       // 개별 items (다른사람들이 작성)
@@ -65,7 +65,7 @@ const testData = [
     id: 10003,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss3',
-    paperStyle: {}, // 스타일 설정
+    paperStyle: 'purple', // 스타일 설정
     expireDate: '',
     paperList: [
       // 개별 items (다른사람들이 작성)
