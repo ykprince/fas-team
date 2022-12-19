@@ -1,5 +1,6 @@
 const testData = [
   {
+    id: 10001,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss1',
     paperStyle: {}, // 스타일 설정
@@ -30,6 +31,7 @@ const testData = [
     ]
   },
   {
+    id: 10002,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss2',
     paperStyle: {}, // 스타일 설정
@@ -60,6 +62,7 @@ const testData = [
     ]
   },
   {
+    id: 10003,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss3',
     paperStyle: {}, // 스타일 설정
@@ -148,8 +151,14 @@ export default {
       const newPaperList = state.all.push(newPaperInfo)
       await commit('updateState', newPaperList)
     },
-    async updatePapper ({ state, commit }, payload) {
-      console.log(payload) // 수정 내용 추가해야함.
+    async updatePapperTitle ({ state, commit }, payload) {
+      const newObj = state.all.filter(function (item) {
+        if (item.id === payload.id) {
+          item.paperName = payload.paperName
+        }
+        return item
+      })
+      commit('updateState', newObj)
     }
   }
 }
