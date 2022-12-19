@@ -55,6 +55,7 @@ const cancelChk = () => { // 삭제취소
 
 const deletePaper = async () =>
   await store.dispatch('deletePaper', waitingDeleteObj.value)
+
 </script>
 <style lang="scss" scoped>
 .container {
