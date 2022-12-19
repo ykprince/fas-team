@@ -10,8 +10,9 @@ export default [
     component: () => import('@/views/RollingPaper/RollingPaperAddNew.vue')
   },
   {
-    path: '/view-rollingpaper',
+    path: '/view-rollingpaper/:id',
     name: 'viewRollingpaper',
-    component: () => import('@/views/RollingPaper/viewRollingpaper.vue')
+    component: () => import('@/views/RollingPaper/viewRollingpaper.vue'),
+    props: true
   }
 ]

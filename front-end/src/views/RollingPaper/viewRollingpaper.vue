@@ -3,10 +3,14 @@
     this is view
   </div>
 </template>
-<script>
-export default {
+<script setup>
+import { useRouter } from 'vue-router'
+import { created } from 'vue'
+const router = useRouter()
 
-}
+created(() => {
+  console.log(router)
+})
 </script>
 <style lang="">
 
