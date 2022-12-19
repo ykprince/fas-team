@@ -30,6 +30,7 @@
   </div>
 </template>
 <script setup>
+import { useRouter } from 'vue-router'
 import { defineProps, defineEmits, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 const emits = defineEmits(['showDeleteModal'])
@@ -66,8 +67,9 @@ const updateTitleChk = async () => {
   }
 }
 
+const router = useRouter()
 const viewOneItem = () => {
-  console.log('item')
+  router.push({ name: 'view-rollingpaper' }, props.rpItem.id)
 }
 </script>
 <style lang="scss" scoped>
