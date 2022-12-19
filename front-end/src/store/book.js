@@ -74,10 +74,12 @@ async function _fetchBook(payload) {
     headers: {
       host: host,
       Authorization: 'KakaoAK ' + key
+      // ttbkey: 'ttbkruise 11571515001'
     }
   }
 
   const url = `https://dapi.kakao.com/v3/search/book?query=${query}`
+  // const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?query=${query}&ttbkey=ttbkruise 11571515001`
   //   const url = id
   //     ? `https://dapi.kakao.com/v3/search/book?query=${query}`
   //     : ''

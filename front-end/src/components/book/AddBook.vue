@@ -2,29 +2,31 @@
   <div class="modal-p">
     <div class="overlay" @click="$emit('handler')"></div>
     <div class="modal-card" @click.stop="">
-      <div v-if="addStep === 1">
-        <input
-          v-model="query"
-          type="text"
-          placeholder="모임을 만들 책을 검색해주세요"
-          class="bookSearch"
-          @keyup.enter="apply"
-        />
-        <button
-          class="btn btn-primary"
-          @click="apply">
-          검색
-        </button>
-        <div>
-        <div
-          class="books">
-          <SBList @setData="showData" />
+
+      <div v-if="curStep === 1" class="step-1">
+        <div class="row">
+              <input  v-model="query"  @keyup.enter="apply" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button @click="apply" class="btn btn-outline-success" type="submit">Search</button>
+        </div>
+        <div class="row">
+          <div
+            class="books">
+            <SBList @setData="showData" />
+          </div>
         </div>
       </div>
+
+      <div v-else-if="curStep === 2" class="step-2" >
+        <IGData :theBook="book" ></IGData>
       </div>
 
-      <div v-else-if="addStep === 2" class="getherForm" >
-        <!-- <IGInfo :theBook="book" ></IGInfo> -->
+      <div v-else-if="curStep === 3" class="step-3" >
+        <IGFrom :theBook="book"></IGFrom>
+      </div>
+
+      <div v-if="!(curStep === 1)" class="btn-field">
+        <PCBtn :index="curStep > 1? curStep-1 : 1" :msg="msg1" @pageCtrl="pageCtrl"></PCBtn>
+        <PCBtn :index="curStep + 1" :msg="msg2" @pageCtrl="pageCtrl"></PCBtn>
       </div>
     </div>
   </div>
@@ -32,16 +34,23 @@
 <script>
 import { mapState } from 'vuex'
 import SBList from './SearchBookList.vue'
-// import IGInfo from './InputGetherInfo.vue';
+import IGData from './InputGetherData.vue'
+import IGFrom from './InputGetherForm.vue'
+import PCBtn from './PageCtrlBtn.vue'
 
 export default {
   components: {
-    SBList
-    // IGInfo
+    SBList,
+    IGFrom,
+    IGData,
+    PCBtn
+
   },
   data () {
     return {
-      addStep: 1,
+      curStep: 1,
+      msg1: 'Pre',
+      msg2: 'Next',
       query: '',
       book: {}
     }
@@ -59,10 +68,13 @@ export default {
       })
     },
     showData (data) {
-      console.log(':::::::::::::::::::::::::::::::::::::::::::')
       this.book = data
-      this.addStep = 2
+      this.curStep = 2
       console.log(this.step)
+    },
+    pageCtrl (num) {
+      console.log(num, 'asdasdasd')
+      this.curStep = num
     }
   },
   mounted () {
@@ -102,4 +114,15 @@ export default {
     border-radius: 5px;
     padding-right: 10px;
   }
+  .step-1,
+  .step-2,
+  .step-3 {
+    border: 2px solid red;
+    height: 500px;
+  }
+  .step-1-1 {
+      margin-top: 20px;
+      height: 400px;
+      border: 2px solid orange;
+    }
 </style>
