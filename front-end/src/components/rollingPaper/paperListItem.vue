@@ -18,9 +18,7 @@
         <p class="color-red" v-if="titleChk===true">중복되는 롤링페이퍼가 존재합니다.</p>
       </div>
 
-      <div class="context-left-area">
-
-      </div>
+      <div class="context-left-area"></div>
     </div>
 
     <span class="paper-close-btn" @click="rmThispaper(props.rpItem)">X</span>

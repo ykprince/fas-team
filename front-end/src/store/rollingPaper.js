@@ -159,6 +159,11 @@ export default {
         return item
       })
       commit('updateState', newObj)
+    },
+    async getOnePaper ({ state, commit }, id) {
+      const numberId = Number(id)
+      const newObj = state.all.filter(item => item.id === numberId)
+      commit('updateState', newObj)
     }
   }
 }
