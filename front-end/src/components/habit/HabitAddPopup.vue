@@ -1,14 +1,46 @@
 <template>
     <div class="popup-contatiner">
         <div class="contents">
-            <input type="text" placeholder="제목을 입력하세요. ex)물 1L 마시기" />
-            <textarea placeholder="간단히 메모하세요."></textarea>
-            <button class="submit-btn">등록</button>
+            <input type="text" placeholder="제목을 입력하세요. ex)물 1L 마시기" v-model="title"/>
+            <textarea placeholder="간단히 메모하세요." v-model="description"></textarea>
+            <button class="submit-btn" @click="addHabit">등록</button>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
+export default {
+  data () {
+    return {
+      title: '',
+      description: ''
+    }
+  },
+  computed: {
+    ...mapState('habit', [
+      'habits'
+    ])
+  },
+  emits: [
+    'openPop',
+    'afterAdded'
+  ],
+  methods: {
+    async addHabit () {
+      const theHabit = {
+        title: this.title,
+        description: this.description,
+        habitId: this.habits.length + 1,
+        icon: ''
+      }
+
+      await this.$store.dispatch('habit/addHabit', [theHabit])
+      this.$emit('afterAdded', theHabit)
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -29,20 +61,20 @@
     z-index: 1000;
 }
 
-input::placeholder {
-  color: darkgray;
-}
-
-textarea::placeholder {
-  color: darkgray;
-}
-
 .contents {
     display: flex;
     flex-direction: column;
     align-items: center;
     width:100%;
     color: darkgray;
+
+    input::placeholder {
+        color: darkgray;
+    }
+
+    textarea::placeholder {
+        color: darkgray;
+    }
 
     input {
         border: solid 1px #e1e1e1;
@@ -69,6 +101,7 @@ textarea::placeholder {
         padding-left: 15px;
         font-size: 12px;
         width: 100%;
+        resize: none;
     }
 
     .submit-btn {

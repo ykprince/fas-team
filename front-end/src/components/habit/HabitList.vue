@@ -1,10 +1,16 @@
 <template>
-  <div class="habit-item-list">
-      <HabitItem v-for="habit in habits" :key="habit.habitId" :habit="habit"/>
+  <div id="habitItemList" class="habit-item-list">
+      <HabitItem
+        v-for="habit in habits"
+        :key="habit.habitId"
+        :habit="habit"
+        :id="habit.habitId"
+        />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import HabitItem from '../habit/HabitItem'
 
 export default {
@@ -12,30 +18,14 @@ export default {
     HabitItem
   },
   // db 테이블 생성 후에 연결할 것
-  // computed: {
-  //   ...mapState('habit', [
-  //     'habits',
-  //     'message',
-  //     'loading'
-  //   ])
-  // }
-  data () {
-    return {
-      habits: [
-        { habitId: '1', title: '테스트1', description: '테스트입니다1테스트입니다1', icon: 'habitIcon1' },
-        { habitId: '2', title: '테스트2', description: '테스트입니다2테스트입니다1', icon: 'habitIcon2' },
-        { habitId: '3', title: '테스트3', description: '테스트입니다2테스트입니다1', icon: 'habitIcon3' },
-        { habitId: '4', title: '테스트4', description: '테스트입니다2테스트입니다1', icon: 'habitIcon4' },
-        { habitId: '5', title: '테스트2', description: '테스트입니다2테스트입니다1', icon: 'habitIcon2' },
-        { habitId: '6', title: '테스트3', description: '테스트입니다2테스트입니다1', icon: 'habitIcon3' },
-        { habitId: '7', title: '테스트4', description: '테스트입니다2테스트입니다1', icon: 'habitIcon4' },
-        { habitId: '8', title: '테스트2', description: '테스트입니다2테스트입니다1', icon: 'habitIcon2' },
-        { habitId: '9', title: '테스트3', description: '테스트입니다2테스트입니다1', icon: 'habitIcon3' },
-        { habitId: '10', title: '테스트4', description: '테스트입니다2테스트입니다1', icon: 'habitIcon4' }
-      ]
-    }
-  }
+  computed: {
+    ...mapState('habit', [
+      'habits'
+    ])
+  },
+  methods: {
 
+  }
 }
 </script>
 

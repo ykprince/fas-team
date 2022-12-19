@@ -1,14 +1,29 @@
 <template>
     <div>
         <div class="content">
-            내용이 들어갑니다~~~~~~
+            <div class="icon-box">
+                <div v-for="(icon, index) in habitIcons" :key="index" :class="icon">
+                    {{ icon }}
+                </div>
+            </div>
+            {{ theHabit.habitId }}
         </div>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-
+  computed: {
+    ...mapState('habit', [
+      'theHabit',
+      'habitIcons'
+    ])
+  },
+  created () {
+    console.log('왓하하하')
+    console.log(this.habitIcons)
+  }
 }
 </script>
 
@@ -24,5 +39,7 @@ export default {
     box-sizing: border-box;
     font-size: 12px;
     color: darkgray;
+    flex-direction: column;
+    align-items: baseline;
 }
 </style>

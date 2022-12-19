@@ -1,11 +1,12 @@
 <template>
-    <button class="add-btn" :class="clicked?'clicked':'unclicked'" @click="btnClick"></button>
+    <button class="add-btn" :class="onClickAddBtn?'clicked':'unclicked'" @click="btnClick"></button>
 </template>
 <script>
 export default {
-  data () {
-    return {
-      clicked: false
+  props: {
+    onClickAddBtn: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [
@@ -13,13 +14,11 @@ export default {
   ],
   methods: {
     btnClick () {
-      if (this.clicked) {
-        this.clicked = false
-      } else {
-        this.clicked = true
-      }
+      let clicked = false
 
-      this.$emit('openPop', this.clicked)
+      if (!this.onClickAddBtn) clicked = true
+
+      this.$emit('openPop', clicked)
     }
   }
 }
