@@ -17,7 +17,6 @@
             :book="book" />
         </div>
       </div>
-      <div></div>
     </div>
   </template>
 
@@ -38,8 +37,20 @@ export default {
   methods: {
     readdt (data) {
       this.$emit('setData', data)
-      console.log('ddemfdjdha', data)
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.container {
+  height: 100%;
+  border: 3px solid black;
+}
+
+.books {
+  border: 3px solid blue;
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>
