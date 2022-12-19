@@ -1,5 +1,5 @@
 <template>
-    <div class="item">
+    <div class="item" @click="itemClick">
         <span>{{ habit.title }}</span>
         <div class="icon" :class="[ habit.icon? habit.icon : '' ]"></div>
     </div>
@@ -11,6 +11,29 @@ export default {
     habit: {
       type: Object,
       default: () => ({})
+    }
+  },
+  methods: {
+    itemClick (e) {
+      // 조회
+      const habit = { habitId: e.target.id }
+      this.addFocusing(habit)
+
+      // 습관 아이디로 아이템 조회하기
+      this.$store.dispatch('habit/searchHabitWithId', {
+        habitId: habit.habitId
+      })
+    },
+    addFocusing (habit) {
+      const activatedItems = document.getElementsByClassName('active')
+
+      for (const element of activatedItems) {
+        const item = element
+        item.classList.remove('active')
+      }
+
+      const itemForFocusing = document.getElementById(habit.habitId)
+      itemForFocusing.className += ' active'
     }
   }
 }
@@ -30,6 +53,17 @@ export default {
   align-items: center;
   font-size: 12px;
   color: darkgray;
+
+  &:hover {
+    font-weight: 500;
+    font-size: 13px;
+    color: gray;
+    background-color: #f3f3f3;
+
+    .icon {
+      background-color: white;
+    }
+  }
 
   .icon {
     position: absolute;
@@ -65,4 +99,28 @@ export default {
   }
 
 }
+
+.active {
+  font-weight: 500;
+  font-size: 13px;
+  color: gray;
+  background-color: #f3f3f3;
+
+  .icon {
+    background-color: white;
+  }
+}
+
+// .active::before {
+//   content: "";
+//   position: absolute;
+//   right: 20px;
+//   width: 40px;
+//   height: 40px;
+//   border-radius: 50%;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   outline: 3px solid $blue;
+// }
 </style>
