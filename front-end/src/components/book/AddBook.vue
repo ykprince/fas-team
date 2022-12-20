@@ -1,32 +1,47 @@
 <template>
+
   <div class="modal-p">
     <div class="overlay" @click="$emit('handler')"></div>
     <div class="modal-card" @click.stop="">
 
       <div v-if="curStep === 1" class="step-1">
-        <div class="row">
-              <input  v-model="query"  @keyup.enter="apply" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button @click="apply" class="btn btn-outline-success" type="submit">Search</button>
+        <div class="row addStepArea">
+          <div class="input-group">
+            <input type="text" v-model="query"  @keyup.enter="apply" class="form-control" placeholder="책 이름을 검색" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-outline-secondary" @click="apply" type="button" id="button-addon2">검색</button>
+          </div>
         </div>
-        <div class="row">
-          <div
-            class="books">
+        <div class="row contentsArea-1">
+          <div  v-if="books.length > 0">
             <SBList @setData="showData" />
           </div>
         </div>
       </div>
 
       <div v-else-if="curStep === 2" class="step-2" >
-        <IGData :theBook="book" ></IGData>
+        <!-- <div class="addStepArea">
+        </div> -->
+        <div class="row contentsArea">
+          <IGData :theBook="theBook" ></IGData>
+        </div>
       </div>
 
       <div v-else-if="curStep === 3" class="step-3" >
-        <IGFrom :theBook="book"></IGFrom>
+        <div class="row addStepArea">
+        </div>
+        <div class="row contentsArea">
+          <IGFrom :theBook="theBook"></IGFrom>
+        </div>
       </div>
-
-      <div v-if="!(curStep === 1)" class="btn-field">
-        <PCBtn :index="curStep > 1? curStep-1 : 1" :msg="msg1" @pageCtrl="pageCtrl"></PCBtn>
-        <PCBtn :index="curStep + 1" :msg="msg2" @pageCtrl="pageCtrl"></PCBtn>
+      <div class="btn-field">
+        <div v-if="!(curStep === 1)">
+          <PCBtn :index="curStep > 1? curStep-1 : 1" :msg="msg1" @pageCtrl="pageCtrl"></PCBtn>
+          <PCBtn v-if="!(curStep === 3)" :index="curStep + 1" :msg="msg2" @pageCtrl="pageCtrl"></PCBtn>
+          <button v-else @click="addBookGethering">저장</button>
+        </div>
+        <div v-else>
+          <button @click="$emit('handler')">닫기</button>
+        </div>
       </div>
     </div>
   </div>
@@ -48,7 +63,7 @@ export default {
   },
   data () {
     return {
-      curStep: 1,
+      // curStep: 1,
       msg1: 'Pre',
       msg2: 'Next',
       query: '',
@@ -58,8 +73,21 @@ export default {
   computed: {
     ...mapState('book', [
       'meta',
-      'books'
+      'books',
+      'theBook',
+      'curStep'
     ])
+    // ...mapState('bookGether', [
+    //   'theGether',
+    //   'books',
+    //   'theBook'
+    // ])
+  },
+  watch: {
+    theBook (newVal) {
+      this.theBook = newVal
+      this.curStep = 2
+    }
   },
   methods: {
     async apply () {
@@ -67,14 +95,15 @@ export default {
         query: this.query
       })
     },
-    showData (data) {
-      this.book = data
-      this.curStep = 2
-      console.log(this.step)
-    },
     pageCtrl (num) {
-      console.log(num, 'asdasdasd')
-      this.curStep = num
+      console.log('"들어옴>"')
+      // this.curStep = num
+      this.$store.commit('book/updateState', {
+        curStep: num
+      })
+    },
+    addBookGethering () {
+      this.$store.dispatch('bookGether/testConsole')
     }
   },
   mounted () {
@@ -92,6 +121,7 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
+  text-align: center;
 }
 .overlay {
   opacity: 0.5;
@@ -104,6 +134,7 @@ export default {
   margin-top: 30px;
   padding: 20px;
   background-color: white;
+  border-radius: 10px;
   min-height: 500px;
   z-index: 10;
   opacity: 1;
@@ -117,12 +148,18 @@ export default {
   .step-1,
   .step-2,
   .step-3 {
-    border: 2px solid red;
     height: 500px;
   }
-  .step-1-1 {
-      margin-top: 20px;
-      height: 400px;
-      border: 2px solid orange;
-    }
+ .contentsArea-1 {
+  text-align: left;
+  overflow: auto;
+  height: 90%;
+  margin-top: 10px;
+ }
+ .contentsArea {
+  text-align: left;
+  overflow: auto;
+  height: 100%;
+  margin-top: 10px;
+ }
 </style>

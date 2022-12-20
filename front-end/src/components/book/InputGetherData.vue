@@ -1,10 +1,9 @@
 <template>
-    <div class="container" style="padding-top: 8px;">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12 imgDiv">
                 <img :src="theBook.thumbnail" class="img-fluid" alt="asd"/>
             </div>
-            <div>
+            <div  class="col-md-12">
                 <p style="font-size: 20px; font-weight: bold; margin-top: 40px;margin-bottom: 10px;">도서 기본 정보</p>
                 <table class="table table-striped table-bordered">
                     <colgroup>
@@ -13,22 +12,11 @@
                     </colgroup>
                     <tr>
                         <th>
-                            <label><strong>장르 1차 분류</strong></label>
+                            <label><strong>책소개</strong></label>
                         </th>
                         <td>
-                            <select id="cateCode_v" name="cateCode" class="form-control" onchange="">
-                                <option>선택</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <label><strong>장르 2차 분류</strong></label>
-                        </th>
-                        <td>
-                            <select id="cateCode_v2" name="cateCode" class="form-control" onchange="">
-                                <option>선택</option>
-                            </select>
+                            <!-- <input type="text" class="form-control" :value="theBook.contents" readonly> -->
+                            <textarea class="form-control" id="exampleFormControlTextarea1" :value="theBook.contents" rows="3"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -88,7 +76,6 @@
                 </table>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -101,3 +88,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.imgDiv {
+    text-align: center;
+}
+</style>

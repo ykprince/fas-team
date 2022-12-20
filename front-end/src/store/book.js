@@ -1,34 +1,39 @@
 import axios from 'axios'
-console.log('bbbbbbbbbbbbbbbbb')
+
+const NO_DATA_MSG = '서재가 텅 비어있어요. 로그인 후, 독서 모임을 추가해주세요! '
 export default {
   namespaced: true,
   state: {
-    meta: [],
-    books: [],
+    meta: [], // 조회 정보 ex) 조회된 갯수 등
+    books: [], // 조회된 도서 목록
+    theBook: {}, // 조회된 도서 개별 항목
+    curStep: 1, // 모임등록 단계
     loading: false,
-    theBook: {},
-    message: 'test'
+    message: NO_DATA_MSG
+
   },
   getters: {
   },
   mutations: {
     updateState (state, payload) {
+      console.log('"update"', state)
       Object.keys(payload).forEach(key => {
         state[key] = payload[key]
       })
+      console.log('"update2"', state)
     },
     resetBooks (state) {
       console.log('reset:::::::::::::::::::')
+      state.meta = []
       state.books = []
-      state.message = ''
+      state.message = NO_DATA_MSG
       state.loading = false
+      state.curStep = 1
+      state.theBook = {}
     }
   },
   actions: {
     async searchBooks ({ state, commit }, payload) {
-      // const { title, type, number, year } = payload
-    //   if (state.loading) return
-      console.log(payload)
       commit('updateState', {
         message: '',
         loading: true
@@ -41,14 +46,9 @@ export default {
         })
         const { meta, documents } = res.data
         commit('updateState', {
-          books: documents
+          books: documents,
+          meta: meta
         })
-        console.log(meta)
-        console.log(documents)
-        console.log(typeof documents)
-        // ceil = 올림!
-        // const total = parseInt(meta.total_count, 10)
-        // const pageLength = Math.ceil(total / 10) // 총 페이지의 길이
       } catch ({ message }) {
         commit('updateState', {
           books: [],
@@ -59,6 +59,19 @@ export default {
           loading: false
         })
       }
+    },
+    async sendData ({ state, commit }, payload) {
+      console.log(payload)
+      commit('updateState', {
+        theBook: payload,
+        loading: true
+      })
+    },
+    async pageCtrl ({ state, commit }, payload) {
+      console.log(payload)
+      commit('updateState', {
+        curStep: payload
+      })
     }
   }
 }
@@ -79,7 +92,7 @@ async function _fetchBook(payload) {
   }
 
   const url = `https://dapi.kakao.com/v3/search/book?query=${query}`
-  // const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?query=${query}&ttbkey=ttbkruise 11571515001`
+  // const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbKey=${hearderVal.headers.ttbkey}&Query=${query}`
   //   const url = id
   //     ? `https://dapi.kakao.com/v3/search/book?query=${query}`
   //     : ''
