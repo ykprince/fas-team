@@ -21,6 +21,10 @@ if (props.id === 0 || props.id === '0') {
   router.push({ name: 'rollingpaper' })
 }
 </script>
-<style lang="">
-
+<style lang="scss" scoped>
+.container{
+  width:100%;
+  max-width: 850px;
+  height: 100%;
+}
 </style>

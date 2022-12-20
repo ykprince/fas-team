@@ -8,24 +8,21 @@ const testData = [
     paperList: [
       // 개별 items (다른사람들이 작성)
       {
-        writter: '김상훈',
-        title: '안녕하세요. fasol에서 작성',
+        writer: '김상훈',
         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-        style: {},
+        style: 'seagreen',
         hiddenYn: true
       },
       {
-        writter: '이용근',
-        title: '안녕하세요.',
+        writer: '이용근',
         content: '올해도 수고하셨습니다.',
-        style: {},
+        style: 'royalblue',
         hiddenYn: false
       },
       {
-        writter: '홍샘이',
-        title: '안녕하세요. 샘이에요',
+        writer: '홍샘이',
         content: '올해도 수고하셨습니다.',
-        style: {},
+        style: 'tomato',
         hiddenYn: true
       }
     ]
@@ -39,24 +36,45 @@ const testData = [
     paperList: [
       // 개별 items (다른사람들이 작성)
       {
-        writter: '김상훈',
-        title: '안녕하세요. fasol에서 작성',
+        writer: '김상훈',
         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-        style: {},
+        style: 'seagreen',
         hiddenYn: true
       },
       {
-        writter: '이용근',
-        title: '안녕하세요.',
+        writer: '이용근',
         content: '올해도 수고하셨습니다.',
-        style: {},
+        style: 'darkviolet',
         hiddenYn: false
       },
       {
-        writter: '홍샘이',
-        title: '안녕하세요. 샘이에요',
+        writer: '홍샘이',
+        content: '올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.',
+        style: 'royalblue',
+        hiddenYn: true
+      },
+      {
+        writer: '홍샘이',
         content: '올해도 수고하셨습니다.',
-        style: {},
+        style: 'royalblue',
+        hiddenYn: true
+      },
+      {
+        writer: '홍샘이',
+        content: '올해도 수고하셨습니다.',
+        style: 'royalblue',
+        hiddenYn: true
+      },
+      {
+        writer: '홍샘이',
+        content: '올해도 수고하셨습니다.',
+        style: 'royalblue',
+        hiddenYn: true
+      },
+      {
+        writer: '홍샘이',
+        content: '올해도 수고하셨습니다.',
+        style: 'royalblue',
         hiddenYn: true
       }
     ]
@@ -65,29 +83,26 @@ const testData = [
     id: 10003,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss3',
-    paperStyle: 'purple', // 스타일 설정
+    paperStyle: 'darkviolet', // 스타일 설정
     expireDate: '',
     paperList: [
       // 개별 items (다른사람들이 작성)
       {
-        writter: '김상훈',
-        title: '안녕하세요. fasol에서 작성',
+        writer: '김상훈',
         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-        style: {},
+        style: 'darkviolet',
         hiddenYn: true
       },
       {
-        writter: '이용근',
-        title: '안녕하세요.',
+        writer: '이용근',
         content: '올해도 수고하셨습니다.',
-        style: {},
+        style: 'darkslategrey',
         hiddenYn: false
       },
       {
-        writter: '홍샘이',
-        title: '안녕하세요. 샘이에요',
+        writer: '홍샘이',
         content: '올해도 수고하셨습니다.',
-        style: {},
+        style: 'royalblue',
         hiddenYn: true
       }
     ]
@@ -115,9 +130,6 @@ export default {
   },
 
   actions: {
-    async selectOnePaper ({ state, commit }, payload) {
-      console.log(payload)
-    },
     getAllPapers ({ commit }) {
       commit('updateState', testData)
     },
