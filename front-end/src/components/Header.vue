@@ -33,6 +33,10 @@ export default {
         {
           name: 'Book',
           href: '/book'
+        },
+        {
+          name: 'Rollingpaper',
+          href: '/rollingpaper'
         }
       ]
     }
