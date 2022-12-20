@@ -20,7 +20,8 @@ export default {
   },
   computed: {
     ...mapState('habit', [
-      'habits'
+      'habits',
+      'theHabit'
     ])
   },
   emits: [
@@ -33,7 +34,7 @@ export default {
         title: this.title,
         description: this.description,
         habitId: this.habits.length + 1,
-        icon: ''
+        icon: 'habitIcon5'
       }
 
       await this.$store.dispatch('habit/addHabit', [theHabit])
@@ -47,10 +48,10 @@ export default {
 .popup-contatiner {
     position: absolute;
     display: flex;
-    right: -290px;
-    width: 300px;
-    height: 230px;
-    bottom: 62px;
+    right: -330px;
+    bottom: 80px;
+    width: 335px;
+    height: 245px;
     border: solid 5px rgb(192, 192, 192);
     border-radius: 21px;
     border-bottom-left-radius: unset;
@@ -85,7 +86,7 @@ export default {
         color: darkgray;
         margin-bottom: 5px;
         padding-left: 15px;
-        font-size: 12px;
+        font-size: 13px;
         width: 100%;
     }
 
@@ -99,7 +100,7 @@ export default {
         margin-bottom: 5px;
         padding: 10px;
         padding-left: 15px;
-        font-size: 12px;
+        font-size: 13px;
         width: 100%;
         resize: none;
     }
@@ -113,6 +114,7 @@ export default {
         height: 35px;
         width:50px;
         margin-top:5px;
+        font-size: 12px;
     }
 }
 </style>

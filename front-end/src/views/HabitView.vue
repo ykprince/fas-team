@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-section col-md-4">
-      <HabitList class="habit-list" @addFocusing="addFocusing"/>
+      <HabitList class="habit-list" />
       <HabitAddButton @openPop="openPop" :onClickAddBtn=clicked />
       <div>
         <HabitAddPopup class="habitPop" v-if="clicked" @afterAdded="afterAdded"/>
@@ -49,13 +49,15 @@ export default {
       list.scrollTop = list.scrollHeight
 
       // 신규 습관 클릭
-      document.getElementById(habit.habitId).click()
+      // theHabit에 넣기
+      // document.getElementById(habit.habitId).click()
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import '../assets/scss/habit.scss';
 .container {
   font-family: 'Noto Sans KR', sans-serif;
   display: flex;
@@ -72,6 +74,7 @@ export default {
     .habit-list {
       display: inline-block;
       height: 400px;
+      min-width: 300px;
       -ms-overflow-style: none;
     }
 
