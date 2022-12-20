@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import about from './about'
 import book from './book'
+import bookGether from './bookGether'
 import habit from './habit'
 import rollingPaper from './rollingPaper'
 
@@ -16,6 +17,7 @@ export default createStore({
   modules: {
     about,
     book,
+    bookGether,
     habit,
     rollingPaper
   }

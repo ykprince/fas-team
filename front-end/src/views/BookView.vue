@@ -4,14 +4,14 @@
         @click="handler">
         add
   </button>
-  <div  v-if="isShow" >
-    <addbook @handler="handler"></addbook>
+  <div  v-if="isShow"  >
+    <addbook @handler="handler" class="container"></addbook>
   </div>
-  <!-- <BGList></BGList> -->
+  <BGList></BGList>
 </template>
 <script>
 import addbook from '@/components/book/AddBook.vue'
-// import BGList from '@/components/book/BookGetheringList.vue'
+import BGList from '@/components/book/BookGetheringList.vue'
 export default {
   data () {
     return {
@@ -19,8 +19,8 @@ export default {
     }
   },
   components: {
-    addbook
-    // BGList
+    addbook,
+    BGList
   },
   methods: {
     handler () {

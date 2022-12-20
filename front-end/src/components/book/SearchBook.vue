@@ -1,6 +1,6 @@
 <template>
   <!-- <img :src="book.thumbnail" class="rounded float-start bookImg" alt="asd"  @click="sendData"/> -->
-  <div class="card mb-3"  @click="sendData" style="max-width: 540px; ">
+  <div class="card mb-3"  @click="sendData">
     <div class="row g-0">
       <div class="col-md-4">
         <img  :src="book.thumbnail" class="img-fluid rounded-start" alt="...">
@@ -25,10 +25,13 @@ export default {
     }
   },
   methods: {
-    sendData () {
-      console.log(this.book)
-      this.$emit('sendData', this.book)
-      console.log(this.book)
+    async sendData () {
+      console.log('asdad@@@@@@@@@@@@@@@@@@@@@@@ADDadasds')
+      this.$store.commit('book/updateState', {
+        theBook: this.book,
+        curStep: 2,
+        loading: true
+      })
     }
   }
 }
@@ -36,8 +39,8 @@ export default {
 
 <style lang="scss" scoped>
 .row {
- background-color: rgb(245, 245, 245);
  border-radius: 5px;
+ align-items:center;
 }
 .card-title{
   font-size: 15px;
