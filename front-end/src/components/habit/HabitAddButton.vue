@@ -27,8 +27,8 @@ export default {
 
 .add-btn {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 20%;
     right: 10px;
     bottom: 10px;
@@ -37,9 +37,10 @@ export default {
     z-index: 1000;
 
     &:after {
-        content:"+";
-        font-size: 20px;
-        font-weight: 700;
+      font-family: bootstrap-icons;
+      content: "\f64d";
+      font-size: 20px;
+      font-weight: 700;
     }
 }
 
