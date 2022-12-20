@@ -97,7 +97,8 @@ const testData = [
 export default {
   state: {
     namespaced: true, // 해당 옵션으로 인해, 중복되는 호출부를 제한할 수 있음. 대신 dispath시 rollingPaper/blabla 로 호출해야함
-    all: [],
+    all: [], // Array
+    one: {}, // Object
     searchResult: false
   },
 
@@ -107,6 +108,9 @@ export default {
     },
     updateState (state, papers) {
       state.all = papers
+    },
+    updateOneState (state, paper) {
+      state.one = paper
     }
   },
 
@@ -163,7 +167,7 @@ export default {
     async getOnePaper ({ state, commit }, id) {
       const numberId = Number(id)
       const newObj = state.all.filter(item => item.id === numberId)
-      commit('updateState', newObj)
+      commit('updateOneState', newObj[0])
     }
   }
 }
