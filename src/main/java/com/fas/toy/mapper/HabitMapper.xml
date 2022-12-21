@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fas.toy.dao.habit.HabitDao">
+    <select id="searchHabits" resultType="com.fas.toy.dto.habit.SearchHabitOut">
+        SELECT *
+        FROM habit
+        WHERE uid = #{id}
+    </select>
+
+    <select id="searchHabitByHabitId" resultType="com.fas.toy.dto.habit.SearchHabitOut">
+        SELECT *
+        FROM habit
+        WHERE uid = #{uid}
+        AND habit_id = #{habitId}
+    </select>
+
+    <select id="searchHabitRecords" resultType="com.fas.toy.dto.habit.SearchHabitRecordsOut">
+        SELECT *
+        FROM habit_records
+        WHERE habit_id = #{habitId}
+        AND date BETWEEN #{startDate} AND #{endDate}
+    </select>
+</mapper>
