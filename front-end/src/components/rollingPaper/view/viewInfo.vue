@@ -4,7 +4,7 @@
       <h3>{{rollingpaperObj.paperName}}&nbsp;</h3>
       <span>에는 총</span>
       <h3>&nbsp;{{rollingpaperObj.paperList.length}}&nbsp;</h3>
-      <span>개의 쪽지가 있어요.</span>
+      <span>개의 쪽지가 있어요</span>
     </div>
 
     <div class="container-content-area">
