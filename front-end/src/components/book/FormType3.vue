@@ -2,7 +2,7 @@
   <div>
     <div class="mb-3">
       <label for="exampleFormControlInput1" class="form-label">기대지수</label>
-      <input type="range" class="form-range" id="customRange2" max="100" min="0" step="1" v-model="theGether.expectRate">
+      <input type="range" class="form-range" id="customRange2" max="100" min="0" step="1" v-model="theGether.rate_ex">
     </div>
     <div class="mb-3">
       <label for="exampleFormControlTextarea1" class="form-label">기대평</label>

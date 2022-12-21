@@ -1,10 +1,10 @@
 <template>
   <div>
     <label for="inputPassword5" class="form-label">독서기간</label>
-    <input class="form-control" type="text" placeholder="시작일" aria-label="default input example" v-model="theGether.staDt" @keyup="test">
-    <input class="form-control" type="text" placeholder="종료일" aria-label="default input example" v-model="theGether.endDt" @keyup="test">
+    <input class="form-control" type="date" placeholder="시작일" aria-label="default input example" v-model="theGether.sta_dt">
+    <input class="form-control" type="date" placeholder="종료일" aria-label="default input example" v-model="theGether.end_dt">
     <label for="inputPassword5" class="form-label">평점</label>
-    <input type="range" class="form-range" id="customRange1" max="100" min="0" step="1" v-model="theGether.rate" @click="test">
+    <input type="range" class="form-range" id="customRange1" max="100" min="0" step="1" v-model="theGether.rate">
   </div>
 </template>
 
@@ -31,10 +31,6 @@ export default {
     console.log(this.theGether)
   },
   methods: {
-    test () {
-      console.log(this.theGether)
-      this.$store.dispatch('bookGether/testConsole')
-    }
   }
 }
 </script>

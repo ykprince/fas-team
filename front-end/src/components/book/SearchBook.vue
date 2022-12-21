@@ -1,8 +1,8 @@
 <template>
   <!-- <img :src="book.thumbnail" class="rounded float-start bookImg" alt="asd"  @click="sendData"/> -->
-  <div class="card mb-3"  @click="sendData">
+  <div class="book card mb-3"  @click="sendData">
     <div class="row g-0">
-      <div class="col-md-4">
+      <div class="col-md-2 thumb-div">
         <img  :src="book.thumbnail" class="img-fluid rounded-start" alt="...">
       </div>
       <div class="col-md-8">
@@ -46,5 +46,11 @@ export default {
   font-size: 15px;
   color: $black;
   margin: 5px;
+}
+.book {
+  height: 55px;
+}
+.thumb-div{
+  text-align: center;
 }
 </style>

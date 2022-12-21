@@ -16,14 +16,11 @@ export default {
   },
   mutations: {
     updateState (state, payload) {
-      console.log('"update"', state)
       Object.keys(payload).forEach(key => {
         state[key] = payload[key]
       })
-      console.log('"update2"', state)
     },
     resetBooks (state) {
-      console.log('reset:::::::::::::::::::')
       state.meta = []
       state.books = []
       state.message = NO_DATA_MSG
@@ -40,6 +37,7 @@ export default {
       })
 
       try {
+        // const res = await _fetchBook({
         const res = await _fetchBook({
           ...payload,
           page: 1
@@ -61,14 +59,12 @@ export default {
       }
     },
     async sendData ({ state, commit }, payload) {
-      console.log(payload)
       commit('updateState', {
         theBook: payload,
         loading: true
       })
     },
     async pageCtrl ({ state, commit }, payload) {
-      console.log(payload)
       commit('updateState', {
         curStep: payload
       })
@@ -114,3 +110,41 @@ async function _fetchBook(payload) {
       })
   })
 }
+// // eslint-disable-next-line
+// async function _fetchBook2(payload) {
+//   const { query, sort, page, size, target } = payload
+//   console.log(sort, page, size, target)
+//   //   const { title, type, year, page, id } = payload
+//   // const key = 'fe183eb6099a52483687d16016c6ef65'
+//   // const host = 'dapi.kakao.com'
+//   const hearderVal = {
+//     headers: {
+//       // host: host,
+//       // Authorization: 'KakaoAK ' + key
+//       ttbkey: 'ttbkruise 11571515001'
+//     }
+//   }
+
+//   // const url = `https://dapi.kakao.com/v3/search/book?query=${query}`
+//   const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbKey=${hearderVal.headers.ttbkey}&Query=${query}`
+//   //   const url = id
+//   //     ? `https://dapi.kakao.com/v3/search/book?query=${query}`
+//   //     : ''
+
+//   return new Promise((resolve, reject) => {
+//     axios.get(url)
+//       .then(res => {
+//         console.log('res')
+//         console.log(res)
+//         if (res.data.Error) {
+//           reject(res.data.Error)
+//         }
+//         resolve(res)
+//       })
+//       .catch(err => {
+//         console.log('err')
+//         console.log(err)
+//         reject(err.message)
+//       })
+//   })
+// }

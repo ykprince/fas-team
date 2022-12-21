@@ -1,22 +1,22 @@
 <template>
         <div class="row">
-            <div class="col-md-12 imgDiv">
-                <img :src="theBook.thumbnail" class="img-fluid" alt="asd"/>
+            <div class="col-md-6 imgDiv">
+                <img :src="theBook.thumbnail" class="img" alt="asd"/>
             </div>
-            <div  class="col-md-12">
+            <div  class="col-md-6">
                 <p style="font-size: 20px; font-weight: bold; margin-top: 40px;margin-bottom: 10px;">도서 기본 정보</p>
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped table-bordered dataTable">
                     <colgroup>
                     <col width="20%">
                     <col width="auto">
                     </colgroup>
-                    <tr>
+                    <tr class="fTr">
                         <th>
                             <label><strong>책소개</strong></label>
                         </th>
                         <td>
                             <!-- <input type="text" class="form-control" :value="theBook.contents" readonly> -->
-                            <textarea class="form-control" id="exampleFormControlTextarea1" :value="theBook.contents" rows="3"></textarea>
+                            <textarea class="form-control infoArea"  :value="theBook.contents" rows="5"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -91,6 +91,18 @@ export default {
 
 <style lang="scss">
 .imgDiv {
-    text-align: center;
+    padding: 40px;
+    .img {
+        height: 400px;
+    }
+}
+.dataTable {
+    height: 400px;
+}
+.infoArea{
+    height: 100%;
+}
+.fTr {
+    height: 200px;
 }
 </style>

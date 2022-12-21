@@ -6,17 +6,26 @@ export default {
   state: {
     gethers: [], // 등록된 도서 모임 목록
     theGether: { // 등록된 도서 모임 개별 항목
-      Type: '',
-      staDt: '',
-      endDt: '',
-      rate: '',
-      readPage: '',
-      expectRate: '',
-      expectComment: '',
-      mainColor: ''
+      // type: 1,
+      // sta_dt: '',
+      // end_dt: '',
+      // rate: '',
+      // read_page: '',
+      // rate_ex: '',
+      // expectComment: '',
+      // mainColor: '',
+      // thumbImg: ''
     },
-    message: NO_DATA_MSG
-
+    getherDetail: {},
+    message: NO_DATA_MSG,
+    gethers2: [
+      { title: 'no title book', type: '1', sta_dt: '20221010', end_dt: '20221210', rate: '89', read_page: '', rate_ex: '', expectComment: '', mainColor: '' },
+      { title: 'no title book', type: '2', sta_dt: '20221210', end_dt: '', rate: '89', read_page: '200', rate_ex: '', expectComment: '', mainColor: '' },
+      { title: 'no title book', type: '3', sta_dt: '20221010', end_dt: '20221210', rate: '89', read_page: '', rate_ex: '88', expectComment: '너무 기대가 되는 조합', mainColor: '' },
+      { title: 'no title book', type: '1', sta_dt: '20221010', end_dt: '20221210', rate: '89', read_page: '', rate_ex: '', expectComment: '', mainColor: '' },
+      { title: 'no title book', type: '2', sta_dt: '20221010', end_dt: '20221210', rate: '89', read_page: '56', rate_ex: '', expectComment: '', mainColor: '' },
+      { title: 'no title book', type: '2', sta_dt: '20221010', end_dt: '20221210', rate: '89', read_page: '56', rate_ex: '', expectComment: '', mainColor: '' }
+    ]
   },
   getters: {
   },
@@ -27,18 +36,26 @@ export default {
       })
     },
     resetTheGether (state, payload) {
-      console.log('resetTheGether:::::::::::::::::::', state)
-      state.theGether.Type = payload
-      state.theGether.staDt = ''
-      state.theGether.endDt = ''
+      state.theGether.type = payload
+      state.theGether.sta_dt = ''
+      state.theGether.end_dt = ''
       state.theGether.rate = ''
-      state.theGether.readPage = ''
-      state.theGether.expectRate = ''
+      state.theGether.read_page = ''
+      state.theGether.rate_ex = ''
       state.theGether.expectComment = ''
       state.theGether.mainColor = ''
     }
   },
   actions: {
+    async insertBookGether ({ state, commit }, payload) {
+      const param = { ...state.theGether, ...payload }
+      try {
+        const res = await getBookGetherList(param)
+        console.log(res)
+      } catch (error) {
+        console.log(error + '::::::::::')
+      }
+    },
     async testConsole ({ state, commit }) {
       console.log('여기들어와버리기', state)
     },
@@ -62,11 +79,8 @@ export default {
 
 // eslint-disable-next-line
 async function getBookGetherList (payload) {
-  // const { query, sort, page, size, target } = payload
-  // console.log(sort, page, size, target)
-
-  const url = '/book/searchGethers'
-
+  const url = '/book/insert'
+  console.log('인서트 스탭 2회차', url, payload)
   return new Promise((resolve, reject) => {
     axios.post(url, payload)
       .then(res => {

@@ -1,12 +1,6 @@
 <template>
   <div
-    v-if="message"
-    class="message">
-    {{ message }}
-  </div>
-  <div
-    v-else
-    class="books2">
+    class="book-item-list">
     <SBook
       v-for="book in books"
       :key="book.isbn"
@@ -34,4 +28,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.book-item-list {
+  overflow: scroll;
+  width: 100%;
+}
+
+.book-item-list>.item:last-child {
+  margin-bottom: 80px;
+}
+
 </style>

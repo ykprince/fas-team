@@ -70,16 +70,13 @@ export default {
     ])
   },
   methods: {
-    pageCtrl2 () {
-      console.log(this.theBook)
-    },
     formChange (num) {
       console.log(this.theGether)
       this.formType = num
     }
   },
   mounted () {
-    this.pageCtrl2()
+    this.$store.commit('bookGether/resetTheGether', 1)
   }
 }
 </script>
