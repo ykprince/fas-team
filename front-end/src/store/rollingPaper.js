@@ -6,7 +6,6 @@ const testData = [
     paperStyle: 'tomato', // 스타일 설정
     expireDate: '',
     paperList: [
-      // 개별 items (다른사람들이 작성)
       {
         writer: '김상훈',
         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
@@ -31,7 +30,7 @@ const testData = [
     id: 10002,
     paperName: 'Fasol', // 롤링페이퍼 1개 obj
     aboutPage: 'fasol pagessss2',
-    paperStyle: 'green', // 스타일 설정
+    paperStyle: 'seagreen', // 스타일 설정
     expireDate: '',
     paperList: [
       // 개별 items (다른사람들이 작성)
@@ -180,6 +179,19 @@ export default {
       const numberId = Number(id)
       const newObj = state.all.filter(item => item.id === numberId)
       commit('updateOneState', newObj[0])
+    },
+    async addNewLetter ({ state, commit }, dataObj) {
+      const newObj = {
+        writer: dataObj.name,
+        content: dataObj.content,
+        releaseAt: dataObj.date,
+        style: dataObj.style,
+        hiddenYn: dataObj.hiddenYn,
+        created_at: dataObj.created_at
+      }
+      console.log(newObj)
+      // dataObj.id 를 가지고 있는 롤링페이퍼.paperList에 newObj 추가하기 (db처리)
+      // insert into letterList where id=id
     }
   }
 }

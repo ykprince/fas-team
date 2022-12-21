@@ -50,31 +50,7 @@
           </div>
         </div>
 
-        <div class="me-3 ms-3 bg-select-area">
-          <p class="inside-p-text col-12 text-start">이런 배경은 어때요?</p>
-          <div class="d-flex" >
-            <div class="bg-select-item">
-              <label for="tomato" @click="selectColor" class="bg-active">빨간색</label>
-              <input type="radio" name="tomato" id="tomato" value="tomato" checked v-model="selectBackground">
-            </div>
-            <div class="bg-select-item">
-              <label for="seagreen" @click="selectColor" class="">초록색</label>
-              <input type="radio" name="seagreen" id="seagreen" value="seagreen"  v-model="selectBackground">
-            </div>
-            <div class="bg-select-item">
-              <label for="royalblue" @click="selectColor">파란색</label>
-              <input type="radio" name="royalblue" id="royalblue" value="royalblue"  v-model="selectBackground">
-            </div>
-            <div class="bg-select-item">
-              <label for="darkviolet" @click="selectColor">보라색</label>
-              <input type="radio" name="darkviolet" id="darkviolet" value="darkviolet"  v-model="selectBackground">
-            </div>
-            <div class="bg-select-item">
-              <label for="darkslategrey" @click="selectColor" class="">검정색</label>
-              <input type="radio" name="darkslategrey" id="darkslategrey" value="darkslategrey"  v-model="selectBackground">
-            </div>
-          </div>
-        </div>
+        <select-color-comp @selectColor="selectColor"></select-color-comp>
 
         <div class="col-12 mb-3 button-area"><!--3행-->
           <button type="button" @click="chkValid" class="btn btn-lg color-white me-2" >만들래요</button>
@@ -88,6 +64,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import SelectColorComp from '@/components/rollingPaper/new/SelectColorComp.vue'
 
 const router = useRouter()
 const customPlaceholder = ref({
@@ -108,13 +85,10 @@ const store = useStore()
 
 store.dispatch('getAllPapers')
 
-const selectColor = (event) => {
-  const labels = document.querySelectorAll('.bg-select-item label')
-  labels.forEach(label => {
-    label.classList.remove('bg-active')
-  })
-  event.target.classList.add('bg-active')
+const selectColor = (newBgColor) => {
+  selectBackground.value = newBgColor
 }
+
 // 날짜 체크
 const chkDate = () => {
   const todayDate = new Date().toISOString()

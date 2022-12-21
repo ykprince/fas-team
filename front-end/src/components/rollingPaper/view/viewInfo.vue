@@ -27,7 +27,7 @@
       </div>
       <div v-else class="contents-none">
         <h1>아직 날아온 쪽지가 없어요😥</h1>
-        <button class="btn " type="button" @click="showOthers">지인들에게 페이지를 알려줄래요</button>
+        <button class="btn " type="button" @click="showOthers" @touchstart="showOthers">지인들에게 페이지를 알려줄래요</button>
       </div>
     </div>
 </div>
@@ -35,7 +35,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { defineProps, computed } from 'vue'
-
+import { KAKKAO_JS_API_KEY } from '@/store/kakkaoShareLink.js'
 const props = defineProps({
   id: {
     Type: Number,
@@ -50,9 +50,15 @@ const rollingpaperObj = computed(() => store.state.rollingPaper.one)
 store.dispatch('getOnePaper', props.id)
 const listCount = computed(() => store.state.rollingPaper.one.paperList.length)
 
-const showOthers = () => {
-  // 카카오톡 공유하기 추가하기
-  // https://developers.kakao.com/docs/latest/ko/message/js-link
+const showOthers = async () => {
+  await window.Kakao.init(KAKKAO_JS_API_KEY)
+  await window.Kakao.Share.sendCustom({
+    templateId: 87538,
+    installTalk: true, // 카카오톡 미설치시 설치페이지로 이동
+    serverCallbackArgs: {
+      key: props.id // 사용자 정의 파라미터 설정
+    }
+  })
 }
 
 console.log(rollingpaperList)

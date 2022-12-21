@@ -14,5 +14,11 @@ export default [
     name: 'viewRollingpaper',
     component: () => import('@/views/RollingPaper/viewRollingpaper.vue'),
     props: true
+  },
+  {
+    path: '/new-letter/:id',
+    name: 'WriteNewLetter',
+    component: () => import('@/views/RollingPaper/WriteNewLetter.vue'),
+    props: true
   }
 ]
