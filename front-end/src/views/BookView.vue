@@ -1,13 +1,20 @@
 <template>
-  <button
-        class="btn btn-primary"
-        @click="handler">
-        add
-  </button>
-  <div  v-if="isShow"  >
-    <addbook @handler="handler" class="container"></addbook>
+  <div class="container">
+    <button
+          class="btn btn-primary"
+          @click="handler">
+          add
+    </button>
+    <select>
+      <option>카드형</option>
+      <option>리스트형</option>
+      <option>개별</option>
+    </select>
+    <div  v-if="isShow"  >
+      <addbook @handler="handler" class="container"></addbook>
+    </div>
+    <BGList></BGList>
   </div>
-  <BGList></BGList>
 </template>
 <script>
 import addbook from '@/components/book/AddBook.vue'
@@ -24,7 +31,6 @@ export default {
   },
   methods: {
     handler () {
-      console.log('aasdasdasdas')
       this.isShow = !this.isShow
       this.$store.commit('book/resetBooks')
     }
