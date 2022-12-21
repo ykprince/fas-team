@@ -1,0 +1,3 @@
+const KAKKAO_JS_API_KEY = 'c75c7df9c2738bc636bb5e76c54a29f5'
+
+export { KAKKAO_JS_API_KEY }
