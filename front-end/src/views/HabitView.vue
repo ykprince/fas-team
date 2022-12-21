@@ -36,6 +36,12 @@ export default {
       clicked: false
     }
   },
+  created () {
+    // uid 추후 삭제
+    this.$store.dispatch('habit/searchHabits', {
+      uid: 1
+    })
+  },
   methods: {
     openPop (value) {
       this.clicked = value

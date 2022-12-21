@@ -1,33 +1,37 @@
 <template>
-    <div class="week-box">
-        <div class="each-day" v-for="week in weeks" :key="week">
-            <div class="day">{{ week }}</div>
-            <div class="icon habitIcon1-color"></div>
+    <div class="day-box">
+        <div class="each-day" v-for="(day, index) in thisWeek" :key="index">
+            <div class="day">{{ day.day }}</div>
+            <div class="icon" :class="day.icon?day.icon:'defaultIcon'"></div>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data () {
     return {
-      weeks: ['일', '월', '화', '수', '목', '금', '토']
+      week: ['일', '월', '화', '수', '목', '금', '토']
     }
+  },
+  computed: {
+    ...mapState('habit', [
+      'thisWeek'
+    ])
+  },
+  created () {
+    console.log('안녕하세요?')
+    console.log(this.thisWeek[0])
   }
+
 }
 </script>
 
 <style lang="scss" scoped>
-.icon::after {
-    font-family: bootstrap-icons;
-    content: '\F287';
-    font-size: 2px;
-    color: #f3f3f3;
-}
-.habitIcon1-color::after {
-    color: $yellow;
-}
-.week-box {
+
+.day-box {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,6 +61,17 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
+
+            &::after {
+                font-size: 2px !important;
+            }
+        }
+
+        .defaultIcon::after {
+            font-family: bootstrap-icons;
+            content: '\F287';
+            font-size: 2px;
+            color: #f3f3f3;
         }
     }
 }

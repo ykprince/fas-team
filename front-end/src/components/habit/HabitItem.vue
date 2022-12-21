@@ -22,12 +22,9 @@ export default {
   },
   methods: {
     itemClick (e) {
-      // 조회
-      const habit = { habitId: e.target.id }
-
       // 습관 아이디로 아이템 조회하기
       this.$store.dispatch('habit/searchHabitWithId', {
-        habitId: habit.habitId
+        habitId: e.target.id
       })
     }
   }
