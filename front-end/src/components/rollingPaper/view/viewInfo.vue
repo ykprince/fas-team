@@ -54,7 +54,10 @@ const showOthers = async () => {
   await window.Kakao.init(KAKKAO_JS_API_KEY)
   await window.Kakao.Share.sendCustom({
     templateId: 87538,
-    installTalk: true // 카카오톡 미설치시 설치페이지로 이동
+    installTalk: true, // 카카오톡 미설치시 설치페이지로 이동
+    serverCallbackArgs: {
+      key: props.id // 사용자 정의 파라미터 설정
+    }
   })
 }
 
