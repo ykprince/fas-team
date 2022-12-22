@@ -33,8 +33,8 @@ export default {
       const theHabit = {
         title: this.title,
         description: this.description,
-        habitId: this.habits.length + 1,
-        icon: 'habitIcon5'
+        habitId: this.habits.length + 1, // 임시
+        icon: ''
       }
 
       await this.$store.dispatch('habit/addHabit', [theHabit])

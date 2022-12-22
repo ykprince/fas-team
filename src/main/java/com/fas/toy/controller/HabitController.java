@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fas.toy.dto.habit.SearchHabitIn;
 import com.fas.toy.dto.habit.SearchHabitOut;
-import com.fas.toy.dto.habit.SearchHabitRecordsIn;
 import com.fas.toy.dto.habit.SearchHabitRecordsOut;
 import com.fas.toy.service.habit.HabitService;
 
@@ -36,12 +35,10 @@ public class HabitController {
         SearchHabitOut habitResult = HabitService.searchHabitByHabitId(habit);
 
         if (habit.getStartDate() != null) {
-            List<SearchHabitRecordsOut> test = HabitService.searchHabitRecords(habit);
-            System.out.println(test);
-            habitResult.setHabitRecords(test);
+            List<SearchHabitRecordsOut> habitRecords = HabitService.searchHabitRecords(habit);
+            habitResult.setHabitRecords(habitRecords);
         }
 
-        System.out.println(habitResult);
         return habitResult;
     }
 

@@ -12,9 +12,6 @@ import { mapState } from 'vuex'
 
 export default {
   data () {
-    return {
-      week: ['일', '월', '화', '수', '목', '금', '토']
-    }
   },
   computed: {
     ...mapState('habit', [
@@ -23,7 +20,7 @@ export default {
   },
   created () {
     console.log('안녕하세요?')
-    console.log(this.thisWeek[0])
+    console.log(this.thisWeek)
   }
 
 }

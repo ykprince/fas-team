@@ -1,14 +1,20 @@
 <template>
-  <div class="container">
-    <div class="left-section col-md-4">
-      <HabitList class="habit-list" />
-      <HabitAddButton @openPop="openPop" :onClickAddBtn=clicked />
-      <div>
-        <HabitAddPopup class="habitPop" v-if="clicked" @afterAdded="afterAdded"/>
-      </div>
+  <div>
+    <div>
+        <Spinner v-if="loading" />
     </div>
-    <HabitContents class="col-md-8 habit-content" />
-    <div class="dim" v-if="clicked"></div>
+    <div class="container">
+      <div class="left-section col-md-4">
+        <HabitList class="habit-list" />
+        <HabitAddButton @openPop="openPop" :onClickAddBtn=clicked />
+        <div>
+          <HabitAddPopup class="habitPop" v-if="clicked" @afterAdded="afterAdded"/>
+        </div>
+      </div>
+      <HabitContents class="col-md-8 habit-content" />
+      <div class="dim" v-if="clicked"></div>
+
+    </div>
   </div>
 </template>
 
@@ -18,17 +24,20 @@ import HabitList from '../components/habit/HabitList.vue'
 import HabitContents from '../components/habit/HabitContents.vue'
 import HabitAddButton from '../components/habit/HabitAddButton.vue'
 import HabitAddPopup from '../components/habit/HabitAddPopup.vue'
+import Spinner from '../components/habit/Spinner.vue'
 
 export default {
   components: {
     HabitList,
     HabitContents,
     HabitAddButton,
-    HabitAddPopup
+    HabitAddPopup,
+    Spinner
   },
   computed: {
     ...mapState('habit', [
-      'habits'
+      'habits',
+      'loading'
     ])
   },
   data () {
@@ -53,10 +62,6 @@ export default {
       // 스크롤 하단으로 내리기
       const list = document.getElementById('habitItemList')
       list.scrollTop = list.scrollHeight
-
-      // 신규 습관 클릭
-      // theHabit에 넣기
-      // document.getElementById(habit.habitId).click()
     }
   }
 }
@@ -64,9 +69,24 @@ export default {
 
 <style lang="scss">
 @import '../assets/scss/habit.scss';
+
 .container {
   font-family: 'Noto Sans KR', sans-serif;
   display: flex;
+
+  .disabled > * * {
+    background-color: #f3f3f3;
+    color: darkgray !important;
+
+    // & :disabled {
+    //   background-color: #f3f3f3;
+    //   color: darkgray !important;
+    // }
+
+    &::after {
+      color: darkgray !important;
+    }
+  }
 
   .left-section {
     position: relative;

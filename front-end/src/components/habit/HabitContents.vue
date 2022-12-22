@@ -8,14 +8,14 @@
           <a class="nav-link" href="#">CALENDAR</a>
         </li>
       </ul>
-      <div class="content">
+      <div class="content" :class="Object.keys(theHabit).length === 0?'disabled':''">
         <div class="first-section">
           <div class="today-box">
             <div class="today">
-              <div class="day">{{ day }}</div>
+              <div class="day">{{ today.date }}</div>
               <div class="year-month-box">
                 <span class="today-string">TODAY</span>
-                <span class="year-month">{{ year }}.{{ month }}</span>
+                <span class="year-month">{{ today.year }}.{{ today.month }}</span>
               </div>
             </div>
           </div>
@@ -48,25 +48,26 @@ export default {
   components: {
     HabitsOfThisWeek
   },
-  data () {
-    const date = new Date()
-
-    return {
-      year: date.getFullYear(),
-      month: date.getMonth() + 1,
-      day: date.getDate()
-    }
-  },
   computed: {
     ...mapState('habit', [
       'theHabit',
-      'habitIcons'
+      'habitIcons',
+      'today'
     ])
   },
   methods: {
     iconClick (e) {
-      this.theHabit.icon = e.target.id
+      if (Object.keys(this.theHabit).length === 0) return
+
+      this.$store.commit('habit/updateState', {
+        theHabit: {
+          ...this.theHabit,
+          icon: e.target.id
+        }
+      })
     }
+  },
+  created () {
   }
 }
 </script>
@@ -124,6 +125,7 @@ export default {
 
       .today-box {
         margin-right: 10px;
+        margin-bottom: 10px;
       }
 
       .today {
@@ -136,7 +138,6 @@ export default {
         border: solid 1px #e1e1e1;
         border-radius: 3px;
         box-shadow: 0px 1px 2px #e1e1e1;
-        margin-bottom: 10px;
 
         .day {
           width: 60px;

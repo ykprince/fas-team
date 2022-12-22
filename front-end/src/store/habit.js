@@ -1,5 +1,4 @@
 import axios from 'axios'
-import _uniqBy from 'lodash/uniqBy'
 
 export default {
   namespaced: true,
@@ -8,20 +7,33 @@ export default {
     loading: false,
     habitIcons: ['habitIcon1', 'habitIcon2', 'habitIcon3', 'habitIcon4', 'habitIcon5'],
     theHabit: {},
+    today: (() => {
+      const curDate = new Date()
+      const year = curDate.getFullYear()
+      const month = curDate.getMonth() + 1
+      const date = curDate.getDate()
+
+      return {
+        year: year,
+        month: month,
+        date: date
+      }
+    })(),
     thisWeek: (() => {
       const days = ['일', '월', '화', '수', '목', '금', '토']
-      const curDay = new Date()
-      const thisDate = curDay.getDate()
-      const thisDay = curDay.getDay()
+      const curDate = new Date()
+      const thisDate = curDate.getDate()
+      const thisDay = curDate.getDay()
 
       const thisWeek = []
 
       for (let i = 0; i < 7; i++) {
         const resultDay = thisDate - thisDay + i
-        const theDate = new Date(curDay.setDate(resultDay)).toISOString().substring(0, 10).replaceAll('-', '')
+        const theDate = new Date(curDate.setDate(resultDay)).toISOString().substring(0, 10).replaceAll('-', '')
         const obj = {
           day: days[i],
-          date: theDate
+          date: theDate,
+          icon: ''
         }
 
         thisWeek.push(obj)
@@ -40,25 +52,22 @@ export default {
   },
   actions: {
     async searchHabits ({ state, commit }, payload) {
-      // if (state.loading) {
-      //   return
-      // }
+      if (state.loading) return
 
-      // commit('updateState', {
-      //   message: '',
-      //   loading: true
-      // })
+      commit('updateState', {
+        message: '',
+        loading: true
+      })
 
       try {
         const res = await _fetchHabit({
           ...payload
         })
-        console.log('요기요')
-        console.log(res.data)
-        const { Search } = res.data
-        console.log(_uniqBy(Search, 'habitId'))
+
+        // const { Search } = res.data
+
         commit('updateState', {
-          habits: res.data // 중복제거
+          habits: res.data
         })
       } catch (message) {
         commit('updateState', {
@@ -73,11 +82,11 @@ export default {
     },
     async searchHabitWithId ({ state, commit }, payload) {
       // 습관 아이디로 조회
-      // if (state.loading) return
+      if (state.loading) return
 
       commit('updateState', {
-        theHabit: {}
-        // loading: true
+        message: '',
+        loading: true
       })
 
       payload.startDate = state.thisWeek[0].date
@@ -85,10 +94,25 @@ export default {
 
       try {
         const res = await _fetchHabit(payload)
-        console.log('여기는 습관 아이디로 조회 후')
-        console.log(res.data)
+        const records = res.data.habitRecords
+        const thisWeek = state.thisWeek
+
+        for (const day of thisWeek) {
+          if (records.length < 1) {
+            day.icon = ''
+          } else {
+            for (const record of records) {
+              if (record.date === day.date) {
+                day.icon = record.icon
+                break
+              }
+            }
+          }
+        }
+
         commit('updateState', {
-          theHabit: res.data
+          theHabit: res.data,
+          thisWeek: thisWeek
         })
       } catch (error) {
         commit('updateState', {
@@ -105,8 +129,6 @@ export default {
         habits: [...state.habits, ...payload],
         theHabit: payload[0]
       })
-
-      console.log(this.state.theHabit)
     }
   }
 }
@@ -114,9 +136,7 @@ export default {
 // '_' 기호는 현재 페이지에서만 사용한다는 의미
 function _fetchHabit (payload) {
   const { habitId } = payload
-  console.log(habitId)
   const url = habitId ? '/habit/getHabitByHabitId' : '/habit/getHabits'
-  console.log(url)
   // const params = payload
 
   return new Promise((resolve, reject) => {

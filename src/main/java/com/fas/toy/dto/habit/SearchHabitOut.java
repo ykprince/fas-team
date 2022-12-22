@@ -3,8 +3,12 @@ package com.fas.toy.dto.habit;
 import java.sql.Date;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class SearchHabitOut {
     private int uid; // 사용자 아이디
@@ -39,5 +43,17 @@ public class SearchHabitOut {
 		this.habitRecords = habitRecords;
 	}
 
+	@Override
+	public String toString() {
+		return "{" +
+			" uid='" + uid + "'" +
+			", habitId='" + habitId + "'" +
+			", title='" + title + "'" +
+			", description='" + description + "'" +
+			", icon='" + icon + "'" +
+			", date='" + date + "'" +
+			", habitRecords='" + habitRecords + "'" +
+			"}";
+	}
 }
 
