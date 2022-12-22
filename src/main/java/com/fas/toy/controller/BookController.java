@@ -1,5 +1,6 @@
 package com.fas.toy.controller;
 
+import java.io.Console;
 import java.util.List;
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fas.toy.dao.TestDao;
 import com.fas.toy.dto.TestDto;
 import com.fas.toy.dto.book.BookGetherDto;
+import com.fas.toy.dto.book.SearchBookGetherListIn;
+import com.fas.toy.dto.book.SearchBookGetherListOut;
 import com.fas.toy.service.TestH2Service;
 import com.fas.toy.service.TestH2ServiceImpl;
 import com.fas.toy.service.book.BookGetherService;
@@ -23,9 +26,6 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/book")
 public class BookController {
-
-    @Autowired
-    TestDao dao;
 
     @Autowired
     SqlSessionTemplate session;
@@ -40,9 +40,13 @@ public class BookController {
 
     @PostMapping("/insert")
     public String insertBookGethering(@RequestBody BookGetherDto dto) {
-        System.out.println("::::::::::::::::::::::::::::::::::::::::::::::");
         System.out.println(dto);
         int result = service2.insertBookGether(dto);
         return result > 0 ? "등록 성공" : "문제가 발생";
+    }
+
+    @PostMapping("/selectBookGetherList")
+    public List<BookGetherDto> selectBookGetherList(@RequestBody SearchBookGetherListIn dto) {
+        return service2.seachBookGetherList(dto);
     }
 }

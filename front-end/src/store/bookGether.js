@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+console.log('asd')
 const NO_DATA_MSG = '서재가 텅 비어있어요. 로그인 후, 독서 모임을 추가해주세요! '
 export default {
   namespaced: true,
@@ -48,24 +48,26 @@ export default {
   },
   actions: {
     async insertBookGether ({ state, commit }, payload) {
+      const url = '/book/insert'
       const param = { ...state.theGether, ...payload }
+      param.authors = param.authors.join()
+      param.translators = param.translators.join()
       try {
-        const res = await getBookGetherList(param)
-        console.log(res)
+        const res = await callPostService(url, param)
+        console.log(res.data)
       } catch (error) {
         console.log(error + '::::::::::')
       }
     },
-    async testConsole ({ state, commit }) {
-      console.log('여기들어와버리기', state)
-    },
-    async SearchGethers ({ state, commit }, payload) {
+    async searchGetherList ({ state, commit }, payload) {
       console.log('그룹 조회 시작해버리기')
-
+      const url = '/book/selectBookGetherList'
+      console.log(payload)
       try {
-        const res = await getBookGetherList(...payload)
+        const res = await callPostService(url, payload)
+        console.log(res.data)
         commit('updateState', {
-          gethers: res
+          gethers: res.data
         })
       } catch (error) {
         console.log(error + '::::::::::')
@@ -78,23 +80,37 @@ export default {
 }
 
 // eslint-disable-next-line
-async function getBookGetherList (payload) {
-  const url = '/book/insert'
-  console.log('인서트 스탭 2회차', url, payload)
+async function callPostService (url, payload) {
+
   return new Promise((resolve, reject) => {
     axios.post(url, payload)
       .then(res => {
-        console.log('res')
-        console.log(res)
+        console.log(res.data)
         if (res.data.Error) {
           reject(res.data.Error)
         }
         resolve(res)
       })
       .catch(err => {
-        console.log('err')
         console.log(err)
         reject(err.message)
       })
   })
 }
+
+// async function callGetService (url, payload) {
+//   return new Promise((resolve, reject) => {
+//     axios.get(url, payload)
+//       .then(res => {
+//         console.log(res)
+//         if (res.data.Error) {
+//           reject(res.data.Error)
+//         }
+//         resolve(res)
+//       })
+//       .catch(err => {
+//         console.log(err)
+//         reject(err.message)
+//       })
+//   })
+// }

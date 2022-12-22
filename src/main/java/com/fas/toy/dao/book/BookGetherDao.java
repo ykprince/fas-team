@@ -1,7 +1,15 @@
 package com.fas.toy.dao.book;
 
-import com.fas.toy.dto.book.BookGetherDto;
+import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
+import com.fas.toy.dto.book.BookGetherDto;
+import com.fas.toy.dto.book.SearchBookGetherListIn;
+import com.fas.toy.dto.book.SearchBookGetherListOut;
+
+@Mapper
 public interface BookGetherDao {
-    public abstract int insertBookGether(BookGetherDto bgDto);
+    int insertBookGether(BookGetherDto bgDto);
+    List<BookGetherDto> selectBookGetherList(SearchBookGetherListIn sbglI);
 }
