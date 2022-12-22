@@ -16,7 +16,7 @@
     </select>
 
     <select id="searchHabitRecords" resultType="com.fas.toy.dto.habit.SearchHabitRecordsOut">
-        SELECT *
+        SELECT icon, date
         FROM habit_records
         WHERE habit_id = #{habitId}
         AND date BETWEEN #{startDate} AND #{endDate}

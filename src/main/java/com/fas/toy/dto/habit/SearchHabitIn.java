@@ -40,4 +40,14 @@ public class SearchHabitIn {
 	public void setHabitId(String habitId) {
 		this.habitId = habitId;
 	}
+
+	@Override
+	public String toString() {
+		return "{" +
+			" uid='" + uid + "'" +
+			", habitId='" + habitId + "'" +
+			", startDate='" + startDate + "'" +
+			", endDate='" + endDate + "'" +
+			"}";
+	}
 }
