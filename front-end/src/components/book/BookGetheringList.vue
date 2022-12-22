@@ -9,7 +9,7 @@
       </div>
     </nav>
     <div class="infoArea">
-      <div v-for="gether in gethers2" :key="gether.type" class="gether">
+      <div v-for="gether in gethers" :key="gether.type" class="gether">
         <BookGethering :gether="gether"></BookGethering>
       </div>
     </div>
@@ -32,17 +32,18 @@ export default {
   watch: {
     tItem (newVal) {
       if (newVal === 1) {
-        this.getItem[0].a = 10
+        console.log(1)
       } else if (newVal === 2) {
-        this.getItem[0].a = 20
+        console.log(2)
       } else {
-        this.getItem[0].a = 30
+        console.log(3)
       }
     }
   },
   computed: {
     ...mapState('bookGether', [
       'gethers2',
+      'gethers',
       'message'
     ])
   },
@@ -50,6 +51,9 @@ export default {
     testtt (num) {
       this.tItem = num
     }
+  },
+  mounted () {
+    this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: 0 })
   }
 }
 </script>

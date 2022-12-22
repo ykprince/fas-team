@@ -2,7 +2,7 @@
   <span v-if="gether.type == '1'" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
   <span class="visually-hidden">New alerts</span>
 </span>
-<img class="thumbImg" src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1164422%3Ftimestamp%3D20221107224040">
+<img class="thumbImg" :src="gether.thumbnail">
 <div class="gInfo">
   {{ gether.sta_dt }}
 </div>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="BookGetherMapper">
+<mapper namespace="com.fas.toy.dao.book.BookGetherDao">
     <insert id="insertBookGether">
         INSERT INTO book_gether
         VALUES (
@@ -12,7 +12,25 @@
                 #{rate},
                 #{rate_ex},
                 #{read_page},
-                #{bg_color}
+                #{comment_ex},
+                #{bg_color},
+                #{authors},
+                #{contents},
+                #{datetime},
+                #{isbn},
+                #{price},
+                #{publisher},
+                #{thumbnail},
+                #{title},
+                #{translators},
+                #{url}
                 )
     </insert>
+
+    <select id="selectBookGetherList" resultType="com.fas.toy.dto.book.BookGetherDto">
+        SELECT *
+        FROM book_gether
+        WHERE uid = #{uid}
+    </select>
+
 </mapper>

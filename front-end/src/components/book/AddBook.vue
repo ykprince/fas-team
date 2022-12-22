@@ -179,7 +179,7 @@ export default {
 }
 
 .pgCtrlBtn {
-  width: ;
+  width: 100px;
 }
 .saveBtn {
 
