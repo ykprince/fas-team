@@ -1,6 +1,6 @@
 <template>
-  <div class="container ">
-    <div class="d-flex flex-column content-wrap" @click="viewOneItem">
+  <div class="container" :style="{'background-color':props.rpItem.paperStyle}" @click="viewOneItem" >
+    <div class="d-flex flex-column content-wrap" >
       <div @click.stop="" v-if="!updateItemYn" >
         <h2 @click="updateItemYn = !updateItemYn" >
           {{ props.rpItem.paperName}}
@@ -23,7 +23,7 @@
 
     <span class="paper-close-btn" @click="rmThispaper(props.rpItem)">X</span>
     <div class="paper-count-area">
-      <p>현재 n개의 글이 작성되어져있어요!</p>
+      <p>현재 <strong>{{ props.rpItem.paperList.length }}</strong>개의 글이 작성되어져있어요!</p>
     </div>
   </div>
 </template>
@@ -75,11 +75,10 @@ const viewOneItem = () => {
   position: relative;
   width:100%;
   height:100%;
+  color: white;
 
-  .update-area {
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
+  &:hover {
+    cursor:pointer;
   }
 
   h2 {
@@ -101,9 +100,22 @@ const viewOneItem = () => {
     }
   }
   .update-area {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+
     input{
       text-align: center;
-      padding: 0.3rem;
+      padding: 0.5rem;
+    }
+    button {
+      padding: 0.3rem 0.5rem;
+      background: inherit;
+      color: whitesmoke;
+      border:none;
+      &:hover {
+        text-decoration: underline;
+      }
     }
     .color-red {
       color: tomato;

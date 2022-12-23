@@ -110,9 +110,10 @@ const testData = [
 
 export default {
   state: {
-    namespaced: true, // 해당 옵션으로 인해, 중복되는 호출부를 제한할 수 있음. 대신 dispath시 rollingPaper/blabla 로 호출해야함
+    namespaced: true,
     all: [], // Array
     one: {}, // Object
+    검색용: {}, // Object
     searchResult: false
   },
 
@@ -124,7 +125,11 @@ export default {
       state.all = papers
     },
     updateOneState (state, paper) {
+      console.log('updateOneState')
       state.one = paper
+    },
+    searchUpdateState (state, paper) {
+      state.one.paperList = paper
     }
   },
 
@@ -159,7 +164,7 @@ export default {
       const newPaperInfo = {
         paperName: payload.title,
         aboutPage: payload.content,
-        paperStyle: {},
+        paperStyle: payload.paperStyle,
         expireDate: payload.date,
         paperList: []
       }
@@ -192,6 +197,20 @@ export default {
       console.log(newObj)
       // dataObj.id 를 가지고 있는 롤링페이퍼.paperList에 newObj 추가하기 (db처리)
       // insert into letterList where id=id
+    },
+    async searchNameInPaper ({ state, commit }, obj) {
+      obj.paperid = Number(obj.paperid)
+      console.log('dsasdasdsada' + obj)
+      let newObj = []
+      if (obj.name === '') {
+        newObj = state.all.filter(item => item.id === obj.paperid)[0]
+      } else {
+        newObj = state.one.paperList.filter(item => item.writer.includes(obj.name))
+      }
+      commit('searchUpdateState', newObj)
+    },
+    async restoreOne ({ state, commit }) {
+      commit('updateOneState')
     }
   }
 }

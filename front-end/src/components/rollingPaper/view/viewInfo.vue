@@ -1,41 +1,64 @@
 <template lang="">
-  <div class="container" :style="{'background-color': rollingpaperObj.paperStyle}">
-    <div class="container-header" v-if="listCount < 0">
-      <h3>{{rollingpaperObj.paperName}}&nbsp;</h3>
-      <span>에는 총</span>
-      <h3>&nbsp;{{rollingpaperObj.paperList.length}}&nbsp;</h3>
-      <span>개의 쪽지가 있어요</span>
+  <div class="container" :class="rollingpaperObj.paperStyle">
+    <div class="top-image">
+      <topImage></topImage>
     </div>
 
-    <div class="container-content-area">
-      <div class="outer-list" v-if="listCount < 0">
-        <div class="container-repeat" v-for="(item, index) in rollingpaperObj.paperList" :key="index">
-          <!--작성자-->
-          <span class="writer">
-            <strong class="writer-strong" :style="{'color':item.style}">{{item.writer}}</strong>
-            님께서
-            <strong class="writer-strong" :style="[{'display' : item.hiddenYn === true ? 'inline' : 'none'}, {'color':item.style}]">몰래</strong>
-            써주셨어요.
-          </span>
+    <div class="container-header">
+      <div class="title-section">
+        <h3 :class="rollingpaperObj.paperStyle"><strong>{{rollingpaperObj.paperName}}</strong></h3>
+        &nbsp;
+        <span>에는 총&nbsp;</span>
+        <h3 :class="rollingpaperObj.paperStyle"><strong>{{listCount}}</strong></h3>
+        <span>&nbsp;개의 쪽지가 있어요</span>
+      </div>
 
-          <!--내용-->
-          <div class="content">
-            <span class="content-span">{{item.content}}</span>
-          </div>
-
+      <div class="search-section">
+        <div>
+          <button type="button" @click="searchMyLetter">내가 쓴 글 찾기</button>
+        </div>
+        <div>
+          <input type="text" placeholder="작성자를 검색해보세요" autofocus v-model="searchingName" @keyup="searchName">
         </div>
       </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="container-content-area">
+      <MasonryWall :items="rollingpaperObj.paperList" :ssr-columns="1" :column-width="250" :gap="10" v-if="listCount > 0">
+        <template #default="{item}">
+          <div class="repeat-area" :class="item.style">
+            <!--작성자-->
+            <span class="writer">
+              <strong class="writer-strong writer-link" :style="{'color':item.style}">{{item.writer}}</strong>
+              님께서
+              <strong class="writer-strong" :style="[{'display' : item.hiddenYn === true ? 'inline' : 'none'}, {'color':item.style}]">몰래</strong>
+              써주셨어요.
+            </span>
+
+            <!--내용-->
+            <div class="content">
+              <span class="content-span">{{item.content}}</span>
+            </div>
+          </div>
+
+        </template>
+      </MasonryWall>
       <div v-else class="contents-none">
-        <h1>아직 날아온 쪽지가 없어요😥</h1>
+        <h1>쪽지가 없어요😥</h1>
         <button class="btn " type="button" @click="showOthers" @touchstart="showOthers">지인들에게 페이지를 알려줄래요</button>
       </div>
     </div>
-</div>
+
+  </div>
 </template>
 <script setup>
+import MasonryWall from '@yeger/vue-masonry-wall'
 import { useStore } from 'vuex'
-import { defineProps, computed } from 'vue'
+import { defineProps, computed, ref } from 'vue'
 import { KAKKAO_JS_API_KEY } from '@/store/kakkaoShareLink.js'
+import TopImage from '../TopImage.vue'
 const props = defineProps({
   id: {
     Type: Number,
@@ -45,10 +68,22 @@ const props = defineProps({
 const store = useStore()
 const rollingpaperList = computed(() => store.state.rollingPaper.all)
 store.dispatch('getAllPapers')
-
 const rollingpaperObj = computed(() => store.state.rollingPaper.one)
 store.dispatch('getOnePaper', props.id)
 const listCount = computed(() => store.state.rollingPaper.one.paperList.length)
+const searchingName = ref('')
+
+const searchName = () => {
+  if (searchingName.value === '') {
+    store.dispatch('restoreOne')
+  } else {
+    const obj = {
+      paperid: props.id,
+      name: searchingName.value
+    }
+    store.dispatch('searchNameInPaper', obj)
+  }
+}
 
 const showOthers = async () => {
   await window.Kakao.init(KAKKAO_JS_API_KEY)
@@ -59,6 +94,12 @@ const showOthers = async () => {
       key: props.id // 사용자 정의 파라미터 설정
     }
   })
+}
+
+const searchMyLetter = () => {
+  // 1. Logincheck.
+  // 2. Search 'one' => info of this account
+  console.log('logincheck, search one')
 }
 
 console.log(rollingpaperList)
@@ -75,97 +116,159 @@ console.log(listCount)
   color: white;
   border-radius: 0.5rem;
   font-size: 1.2rem;
+}
+.top-image{
+  max-width: 500px;
+  display: block;
+  margin: 0 auto;
+}
+.container-header {
+  width: 100%;
+  height: 3rem;
+  padding: 0 auto;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  justify-content: center;
 
-  .container-header {
+  .title-section{
     width: 100%;
-    height: 3rem;
-    padding: 0 auto;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
+    font-size: 2rem;
     h3 {
       display: inline-block;
-      font-size: 2rem;
-    }
-  }
-  .container-content-area{
-    height:100%;
-    margin-top: 3rem;
-    .outer-list{
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 1rem;
-      margin: 0;
-
-      .content-list{
-        padding: 0;
-      }
-
-      .container-repeat {
-        display: inline-block;
-        margin: 0;
-        width: 100%;
-        transition: all .5s;
-      }
-      .writer {
-        display: inline-block;
-        margin-bottom: 3rem;
-        .writer-strong{
-          font-size: 1.4rem;
-          background: white;
-          padding: 0.3rem;
-          border-radius: 0.5rem;
-        }
-      }
-      .content {
-        max-height: 20rem;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border-radius: 1rem;
-        padding: 3rem;
-        margin: 0 auto;
-        margin-bottom: 3rem;
-        background-color: rgb(255, 253, 250);
-        color: rgb(49, 49, 49);
-        white-space: wrap;
-
-        &::-webkit-scrollbar{
-          width: 0.5rem;
-        }
-        &::-webkit-scrollbar-thumb {
-          background-color: rgb(194, 194, 194);
-          opacity: 0.3;
-          border-radius: 1rem;
-        }
-      }
-
+      font-size: 2.5rem;
+      background-color: whitesmoke;
+      padding: 5px;
+      border-radius: 5px 5px 5px;
     }
   }
 
-  .contents-none{
-    width:100%;
-    height:100%;
-    min-height: 30rem;
-    max-height:70rem;
-    text-align: center;
+  .search-section{
+    width: 90%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
 
-    button {
-      margin-top: 3rem;
-      background: white;
-        color: black;
-      font-size: 2rem;
-
-      &:hover {
+    div {
+      button {
+        padding: 0.5rem;
+        border:none;
         background-color: inherit;
         color: white;
-        text-decoration: underline;
+        transition: 0.25s;
+
+        &:hover {
+          background-color: white;
+          color: darkgreen;
+        }
+      }
+
+      input {
+        padding: 0.5rem;
+        border:none;
+        border-radius: 0.5rem;
       }
     }
+  }
+}
+
+.divider{
+  border-bottom: 1px solid white;
+  width: 90%;
+  margin: 0 auto 4rem auto;
+}
+
+.container-content-area {
+  width: 100%;
+  padding: 2rem;
+
+  .repeat-area {
+    box-shadow: 5px 5px 5px rgb(39, 37, 37, 0.3);
+    padding: 2rem;
+    border-radius: 15px;
+
+    .writer{
+      display: inline-block;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      .writer-strong{
+        padding: 5px;
+        background-color: whitesmoke;
+        border-radius: 5px 5px 5px;
+      }
+    }
+
+    .writer-link{
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .content {
+      background: whitesmoke;
+      color: black;
+      padding: 1rem;
+      border-radius: 5px 5px 5px;
+    }
+  }
+}
+
+.contents-none{
+  width:100%;
+  height:100%;
+  min-height: 30rem;
+  max-height:70rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    margin-top: 3rem;
+    background: white;
+    color: black;
+    font-size: 2rem;
+
+    &:hover {
+      background-color: inherit;
+      color: white;
+      text-decoration: underline;
+    }
+  }
+}
+
+.tomato {
+  background-color: tomato;
+  strong{
+    color: tomato;
+  }
+}
+.royalblue {
+  background-color: royalblue;
+  strong {
+    color: royalblue;
+  }
+}
+.seagreen {
+  background-color:seagreen;
+  strong{
+    color:seagreen;
+  }
+}
+.darkviolet {
+  background-color: darkviolet;
+  strong{
+    color:darkviolet;
+  }
+}
+.darkslategrey {
+  background-color: darkslategrey;
+  strong{
+    color:darkslategrey;
   }
 }
 
