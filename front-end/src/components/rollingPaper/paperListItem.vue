@@ -21,9 +21,10 @@
       <div class="context-left-area"></div>
     </div>
 
-    <span class="paper-close-btn" @click="rmThispaper(props.rpItem)">X</span>
+    <span class="paper-close-btn" @click.stop="" @click="rmThispaper(props.rpItem)">X</span>
+
     <div class="paper-count-area">
-      <p>현재 <strong>{{ props.rpItem.paperList.length }}</strong>개의 글이 작성되어져있어요!</p>
+      <p>현재 <strong :style="{'color':props.rpItem.paperStyle}">{{ props.rpItem.paperList.length }}</strong>개의 글이 작성되어져있어요!</p>
     </div>
   </div>
 </template>
@@ -145,11 +146,25 @@ const viewOneItem = () => {
   }
 
   .paper-count-area{
-    width:100%;
+    width: 100%;
     position: absolute;
     bottom: 0;
     left: 0;
     text-align: center;
+    margin-bottom: 1rem;
+
+    p{
+      width: fit-content;
+      background-color: rgb(255, 255, 255, 0.8);
+      padding: 0.5rem 2rem;
+      color: black;
+      border-radius: 5px 5px 5px;
+      margin: 0 auto;
+
+      strong{
+        font-size: 1.6rem;
+      }
+    }
   }
 }
 </style>

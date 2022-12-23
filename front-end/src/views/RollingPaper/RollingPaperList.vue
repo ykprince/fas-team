@@ -79,6 +79,10 @@ const deletePaper = async () =>
   padding: 2rem;
   margin: 0 auto;
 }
+.no-flex-container{
+  margin-top: 20%;
+
+}
 
 .content-repeat-area{
   display: grid;
