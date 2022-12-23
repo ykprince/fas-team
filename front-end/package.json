@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@yeger/vue-masonry-wall": "^3.4.2",
     "axios": "^1.2.0",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.2",

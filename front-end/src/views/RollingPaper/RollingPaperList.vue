@@ -1,20 +1,32 @@
 <template lang="">
   <div class="container" v-if="rollingpaperObj.length > 0">
-    <paperListItem
+    <div class="container-header">
+      <div class="header-text">
+        <span>반가워요,</span>
+        <h2>ㅇㅇㅇ</h2>
+        <span>님</span>
+      </div>
+      <div class="add-new-button">
+        <button @click="moveAddNewRP">새로운 롤링페이퍼</button>
+      </div>
+    </div>
+    <div class="content-repeat-area">
+      <paperListItem
       v-for="rpItem in rollingpaperObj"
       :key="rpItem"
       class="paper-objects-items"
       :rpItem="rpItem"
       @showDeleteModal="showDeleteModal"
-    ></paperListItem>
+      ></paperListItem>
+    </div>
   </div>
   <div v-else class="no-flex-container">
-      <h2>아직 추가한 페이지가 없어요😢</h2>
-      <h2>주변에 자랑할 수 있는, 나의 롤링 페이퍼를 추가해볼까요?</h2>
-      <div class="add-new-paper-area">
-        <router-link to="add-rollingpaper">추가하러 가기🚀</router-link>
-      </div>
+    <h2>아직 추가한 페이지가 없어요😢</h2>
+    <h2>주변에 자랑할 수 있는, 나의 롤링 페이퍼를 추가해볼까요?</h2>
+    <div class="add-new-paper-area">
+      <router-link to="add-rollingpaper">추가하러 가기🚀</router-link>
     </div>
+  </div>
   <transition name="modal" tag="div">
     <modal-popup class="paper-modal-vue" v-if="deleteModal" :modalText="modalText" :btnText1="btnText1" :btnText2="btnText2" :submitEmit="deletePaper" @submitEmit="submitChk" @cancelEmit="cancelChk"></modal-popup>
   </transition>
@@ -23,20 +35,22 @@
 <script setup>
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import modalPopup from '@/components/modalPopup.vue'
 import paperListItem from '@/components/rollingPaper/paperListItem.vue'
-
+const router = useRouter()
 const waitingDeleteObj = ref({})
 const deleteModal = ref(false) // 삭제버튼 눌렀을 때 모달 컴포넌트 출력
 const modalText = ref('삭제 하시겠습니까?')
 const btnText1 = ref('확인')
 const btnText2 = ref('취소')
-
 const store = useStore()
-
 const rollingpaperObj = computed(() => store.state.rollingPaper.all) // 롤링페이퍼
-
 store.dispatch('getAllPapers')
+
+const moveAddNewRP = () => {
+  router.push('/add-rollingpaper')
+}
 
 const submitChk = async () => { // 삭제확인
   await deletePaper()
@@ -58,16 +72,60 @@ const deletePaper = async () =>
 
 </script>
 <style lang="scss" scoped>
-.container {
-  display: flex;
-}
 .container, .no-flex-container {
   width: 100%;
   height: 100%;
   max-width: 1200px;
   padding: 2rem;
-  border: 1px solid grey;
   margin: 0 auto;
+}
+
+.content-repeat-area{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+  gap: 2rem;
+  grid-gap: 2rem;
+}
+
+.container-header{
+  display: flex;
+  justify-content: space-between;
+  height: 4rem;
+  margin-bottom: 2rem;
+
+  .header-text{
+    flex:1;
+    min-width: 180px;
+    text-align:left;
+
+    h2 {
+      display: inline-block;
+      font-size: 2.7rem;
+      font-weight: bold;
+    }
+    span{
+      font-size: 1.8rem;
+    }
+  }
+
+  .add-new-button{
+    padding-right: 0.5rem;
+    text-align:left;
+
+    button {
+      margin:0 auto;
+      height: 100%;
+      width:fit-content;
+      padding: 0.3rem 0.5rem;
+      border: none;
+      border-radius: 5px 5px 5px;
+      min-width: 100px;
+      &:hover {
+        background-color: whitesmoke;
+        color: black;
+      }
+    }
+  }
 }
 
 .add-new-paper-area {
@@ -77,19 +135,16 @@ const deletePaper = async () =>
     color: black;
     text-decoration: none;
     font-size: 1.1rem;
-
     &:hover {
       font-weight: bold;
       font-size: 1.1rem;
     }
   }
-
 }
 
 .paper-objects-items {
   position: relative;
-  width: 50%;
-  height: 30%;
+  width: 370px;
   min-height: 30rem;
   border: 1px solid grey;
   border-radius: 1.5rem;
@@ -140,11 +195,12 @@ const deletePaper = async () =>
 @media (max-width: 400px) {
   .container {
     width: 100%;
-    max-width: 35rem;
   }
 
-  .paper-objects-items {
-    width: 50%;
+  .content-repeat-area{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 }
 

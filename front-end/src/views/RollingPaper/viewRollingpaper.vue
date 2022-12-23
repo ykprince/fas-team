@@ -7,7 +7,6 @@
 import viewInfo from '@/components/rollingPaper/view/viewInfo.vue'
 import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
-
 const props = defineProps({
   id: {
     Type: Number,

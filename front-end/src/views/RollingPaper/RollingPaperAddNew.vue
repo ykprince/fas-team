@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div :style="{'background-color': selectBackground}" class="border-radius">
-        <img src="" alt="이미지 추가할거임">
+        <img :src="topImg" alt="크리스마스 장식 이미지">
 
         <h2 class="text-center col-12 color-white">나만의 롤링페이퍼 만들기</h2>
         <!--1행-->
@@ -65,6 +65,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import SelectColorComp from '@/components/rollingPaper/new/SelectColorComp.vue'
+const topImg = require('@/assets/rollingpaper/chrismas-decoration.png')
 
 const router = useRouter()
 const customPlaceholder = ref({
@@ -133,7 +134,8 @@ const addNewPaper = async () => {
   const dataObj = {
     title: title.value,
     date: expireDate.value,
-    content: content.value
+    content: content.value,
+    paperStyle: selectBackground.value
   }
   await store.dispatch('addNewPaper', dataObj)
   closeAdd()
