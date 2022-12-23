@@ -20,5 +20,11 @@ export default [
     name: 'WriteNewLetter',
     component: () => import('@/views/RollingPaper/WriteNewLetter.vue'),
     props: true
+  },
+  {
+    path: '/bg',
+    name: 'bgcomp',
+    component: () => import('@/components/rollingPaper/BgComp.vue'),
+    props: true
   }
 ]
