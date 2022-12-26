@@ -1,15 +1,15 @@
 <template lang="">
-  <div class="container" :class="rollingpaperObj.paperStyle">
+  <div class="container" :class="props.bgColor">
     <div class="top-image">
       <topImage></topImage>
     </div>
 
     <div class="container-header">
       <div class="title-section">
-        <h3 :class="rollingpaperObj.paperStyle"><strong>{{rollingpaperObj.paperName}}</strong></h3>
+        <h3 :class="props.bgColor"><strong>{{props.rTitle}}</strong></h3>
         &nbsp;
         <span>에는 총&nbsp;</span>
-        <h3 :class="rollingpaperObj.paperStyle"><strong>{{listCount}}</strong></h3>
+        <h3 :class="props.bgColor"><strong>{{letters.length}}</strong></h3>
         <span>&nbsp;개의 쪽지가 있어요</span>
       </div>
 
@@ -26,20 +26,20 @@
     <div class="divider"></div>
 
     <div class="container-content-area">
-      <MasonryWall :items="rollingpaperObj.paperList" :ssr-columns="1" :column-width="250" :gap="10" v-if="listCount > 0">
+      <MasonryWall :items="letters" :ssr-columns="1" :column-width="250" :gap="10" v-if="letters.length > 0">
         <template #default="{item}">
-          <div class="repeat-area" :class="item.style">
+          <div class="repeat-area" :class="item.lstyle">
             <!--작성자-->
             <span class="writer">
-              <strong class="writer-strong writer-link" :style="{'color':item.style}">{{item.writer}}</strong>
+              <strong class="writer-strong writer-link" :style="{'color':item.lstyle}">{{item.lwriter}}</strong>
               님께서
-              <strong class="writer-strong" :style="[{'display' : item.hiddenYn === true ? 'inline' : 'none'}, {'color':item.style}]">몰래</strong>
+              <strong class="writer-strong" :style="[{'display' : item.lhiddenYn === true ? 'inline' : 'none'}, {'color':item.lstyle}]">몰래</strong>
               써주셨어요.
             </span>
 
             <!--내용-->
             <div class="content">
-              <span class="content-span">{{item.content}}</span>
+              <span class="content-span">{{item.lcontent}}</span>
             </div>
           </div>
 
@@ -63,14 +63,21 @@ const props = defineProps({
   id: {
     Type: Number,
     default: 0
+  },
+  bgColor: {
+    Type: String,
+    default: ''
+  },
+  rTitle: {
+    Type: String,
+    default: ''
   }
 })
 const store = useStore()
-const rollingpaperList = computed(() => store.state.rollingPaper.all)
-store.dispatch('getAllPapers')
-const rollingpaperObj = computed(() => store.state.rollingPaper.one)
-store.dispatch('getOnePaper', props.id)
-const listCount = computed(() => store.state.rollingPaper.one.paperList.length)
+const onePage = computed(() => store.state.rollingPaper.one)
+const letters = computed(() => store.state.rollingPaper.letters)
+store.dispatch('getLetters', props.id)
+console.log(onePage)
 const searchingName = ref('')
 
 const searchName = () => {
@@ -102,8 +109,7 @@ const searchMyLetter = () => {
   console.log('logincheck, search one')
 }
 
-console.log(rollingpaperList)
-console.log(listCount)
+// console.log(listCount)
 
 </script>
 

@@ -34,7 +34,7 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import modalPopup from '@/components/modalPopup.vue'
 import paperListItem from '@/components/rollingPaper/paperListItem.vue'
@@ -46,7 +46,9 @@ const btnText1 = ref('확인')
 const btnText2 = ref('취소')
 const store = useStore()
 const rollingpaperObj = computed(() => store.state.rollingPaper.all) // 롤링페이퍼
-store.dispatch('getAllPapers')
+onMounted(() => {
+  store.dispatch('getAllPapers')
+})
 
 const moveAddNewRP = () => {
   router.push('/add-rollingpaper')

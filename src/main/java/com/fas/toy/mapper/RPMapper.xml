@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fas.toy.dao.rollingpaper.RPDao">
+  <select id="searchRollingpapers" resultType="com.fas.toy.dto.rollingpaper.SearchRollingpaperOut">
+      SELECT r.*, COUNT(l.r_seq) as listCount 
+        FROM rollingpaper AS r LEFT JOIN letter AS l 
+        ON r.r_seq =l.r_seq 
+        WHERE r.uid=#{id} 
+        GROUP BY r.r_seq
+  </select>
+
+  <select id="searchLetters" resultType="com.fas.toy.dto.rollingpaper.SearchLetterOut">
+      SELECT *
+        FROM letter
+        WHERE r_seq = #{rSeq}
+  </select>
+</mapper>
