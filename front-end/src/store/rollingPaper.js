@@ -1,119 +1,121 @@
-const testData = [
-  {
-    id: 10001,
-    paperName: 'Fasol', // 롤링페이퍼 1개 obj
-    aboutPage: 'fasol pagessss1',
-    paperStyle: 'tomato', // 스타일 설정
-    expireDate: '',
-    paperList: [
-      {
-        writer: '김상훈',
-        content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-        style: 'seagreen',
-        hiddenYn: true
-      },
-      {
-        writer: '이용근',
-        content: '올해도 수고하셨습니다.',
-        style: 'royalblue',
-        hiddenYn: false
-      },
-      {
-        writer: '홍샘이',
-        content: '올해도 수고하셨습니다.',
-        style: 'tomato',
-        hiddenYn: true
-      }
-    ]
-  },
-  {
-    id: 10002,
-    paperName: 'Fasol', // 롤링페이퍼 1개 obj
-    aboutPage: 'fasol pagessss2',
-    paperStyle: 'seagreen', // 스타일 설정
-    expireDate: '',
-    paperList: [
-      // 개별 items (다른사람들이 작성)
-      {
-        writer: '김상훈',
-        content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-        style: 'seagreen',
-        hiddenYn: true
-      },
-      {
-        writer: '이용근',
-        content: '올해도 수고하셨습니다.',
-        style: 'darkviolet',
-        hiddenYn: false
-      },
-      {
-        writer: '홍샘이',
-        content: '올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.',
-        style: 'royalblue',
-        hiddenYn: true
-      },
-      {
-        writer: '홍샘이',
-        content: '올해도 수고하셨습니다.',
-        style: 'royalblue',
-        hiddenYn: true
-      },
-      {
-        writer: '홍샘이',
-        content: '올해도 수고하셨습니다.',
-        style: 'royalblue',
-        hiddenYn: true
-      },
-      {
-        writer: '홍샘이',
-        content: '올해도 수고하셨습니다.',
-        style: 'royalblue',
-        hiddenYn: true
-      },
-      {
-        writer: '홍샘이',
-        content: '올해도 수고하셨습니다.',
-        style: 'royalblue',
-        hiddenYn: true
-      }
-    ]
-  },
-  {
-    id: 10003,
-    paperName: 'Fasol', // 롤링페이퍼 1개 obj
-    aboutPage: 'fasol pagessss3',
-    paperStyle: 'darkviolet', // 스타일 설정
-    expireDate: '',
-    paperList: [
-      // 개별 items (다른사람들이 작성)
-      {
-        writer: '김상훈',
-        content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-        style: 'darkviolet',
-        hiddenYn: true
-      },
-      {
-        writer: '이용근',
-        content: '올해도 수고하셨습니다.',
-        style: 'darkslategrey',
-        hiddenYn: false
-      },
-      {
-        writer: '홍샘이',
-        content: '올해도 수고하셨습니다.',
-        style: 'royalblue',
-        hiddenYn: true
-      }
-    ]
-  }
-]
+import axios from 'axios'
+
+// const testData = [
+//   {
+//     id: 10001,
+//     paperName: 'Fasol', // 롤링페이퍼 1개 obj
+//     aboutPage: 'fasol pagessss1',
+//     paperStyle: 'tomato', // 스타일 설정
+//     expireDate: '',
+//     paperList: [
+//       {
+//         writer: '김상훈',
+//         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
+//         style: 'seagreen',
+//         hiddenYn: true
+//       },
+//       {
+//         writer: '이용근',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'royalblue',
+//         hiddenYn: false
+//       },
+//       {
+//         writer: '홍샘이',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'tomato',
+//         hiddenYn: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 10002,
+//     paperName: 'Fasol', // 롤링페이퍼 1개 obj
+//     aboutPage: 'fasol pagessss2',
+//     paperStyle: 'seagreen', // 스타일 설정
+//     expireDate: '',
+//     paperList: [
+//       // 개별 items (다른사람들이 작성)
+//       {
+//         writer: '김상훈',
+//         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
+//         style: 'seagreen',
+//         hiddenYn: true
+//       },
+//       {
+//         writer: '이용근',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'darkviolet',
+//         hiddenYn: false
+//       },
+//       {
+//         writer: '홍샘이',
+//         content: '올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.',
+//         style: 'royalblue',
+//         hiddenYn: true
+//       },
+//       {
+//         writer: '홍샘이',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'royalblue',
+//         hiddenYn: true
+//       },
+//       {
+//         writer: '홍샘이',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'royalblue',
+//         hiddenYn: true
+//       },
+//       {
+//         writer: '홍샘이',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'royalblue',
+//         hiddenYn: true
+//       },
+//       {
+//         writer: '홍샘이',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'royalblue',
+//         hiddenYn: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 10003,
+//     paperName: 'Fasol', // 롤링페이퍼 1개 obj
+//     aboutPage: 'fasol pagessss3',
+//     paperStyle: 'darkviolet', // 스타일 설정
+//     expireDate: '',
+//     paperList: [
+//       // 개별 items (다른사람들이 작성)
+//       {
+//         writer: '김상훈',
+//         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
+//         style: 'darkviolet',
+//         hiddenYn: true
+//       },
+//       {
+//         writer: '이용근',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'darkslategrey',
+//         hiddenYn: false
+//       },
+//       {
+//         writer: '홍샘이',
+//         content: '올해도 수고하셨습니다.',
+//         style: 'royalblue',
+//         hiddenYn: true
+//       }
+//     ]
+//   }
+// ]
 
 export default {
   state: {
     namespaced: true,
     all: [], // Array
     one: {}, // Object
-    검색용: {}, // Object
+    letters: [],
     searchResult: false
   },
 
@@ -123,6 +125,9 @@ export default {
     },
     updateState (state, papers) {
       state.all = papers
+    },
+    updateLetters (state, letters) {
+      state.letters = letters
     },
     updateOneState (state, paper) {
       console.log('updateOneState')
@@ -134,8 +139,11 @@ export default {
   },
 
   actions: {
-    getAllPapers ({ commit }) {
-      commit('updateState', testData)
+    async getAllPapers ({ commit }) {
+      const url = '/rp/getRollingpapers'
+      const rsObj = await _fetchRollingpaper(url, {})
+      console.log(rsObj.data)
+      commit('updateState', rsObj.data)
     },
     async deletePaper ({ state, commit }, payload) {
       const newObj = state.all.filter((item) =>
@@ -145,9 +153,9 @@ export default {
     },
 
     /**
-     * @desc 동일한 제목이 있는지 검사
-     * @param {String} payload 롤링페이퍼 제목
-     */
+    * @desc 동일한 제목이 있는지 검사
+    * @param {String} payload 롤링페이퍼 제목
+    */
     searchPaperTitle ({ state, commit }, payload) {
       const resultObj = state.all.filter((item) =>
         item.paperName === payload
@@ -157,9 +165,9 @@ export default {
     },
 
     /**
-     * @desc 새로운 롤링페이퍼 생성
-     * @param {Object} payload 새로 생성할 데이터 정보
-     */
+    * @desc 새로운 롤링페이퍼 생성
+    * @param {Object} payload 새로 생성할 데이터 정보
+    */
     async addNewPaper ({ state, commit }, payload) {
       const newPaperInfo = {
         paperName: payload.title,
@@ -180,10 +188,19 @@ export default {
       })
       commit('updateState', newObj)
     },
-    async getOnePaper ({ state, commit }, id) {
-      const numberId = Number(id)
-      const newObj = state.all.filter(item => item.id === numberId)
-      commit('updateOneState', newObj[0])
+    async getLetters ({ state, commit }, id) {
+      // paper filters - front
+      console.log(state.all)
+      const onePage = state.all.filter(item => item.rseq === id)
+      console.log('onePage' + onePage)
+
+      // letters 목록 조회 - db
+      const url = '/rp/getLetters'
+      id = Number(id)
+      const param = { rSeq: id }
+
+      const resObj = await _fetchRollingpaper(url, param)
+      commit('updateLetters', resObj.data)
     },
     async addNewLetter ({ state, commit }, dataObj) {
       const newObj = {
@@ -200,7 +217,6 @@ export default {
     },
     async searchNameInPaper ({ state, commit }, obj) {
       obj.paperid = Number(obj.paperid)
-      console.log('dsasdasdsada' + obj)
       let newObj = []
       if (obj.name === '') {
         newObj = state.all.filter(item => item.id === obj.paperid)[0]
@@ -213,4 +229,20 @@ export default {
       commit('updateOneState')
     }
   }
+}
+
+function _fetchRollingpaper (url, payload) {
+  return new Promise((resolve, reject) => {
+    axios.post(url, null, { params: { ...payload } })
+      .then((res) => {
+        if (res.data.Error) {
+          reject(res.data.Error)
+        }
+        console.log(res)
+        resolve(res)
+      })
+      .catch((err) => {
+        reject(err.message)
+      })
+  })
 }

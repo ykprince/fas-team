@@ -1,6 +1,6 @@
 <template lang="">
   <div class="container">
-    <view-info :id="id"></view-info>
+    <view-info :id="id" :bgColor="bgColor" :rTitle="rTitle"></view-info>
   </div>
 </template>
 <script setup>
@@ -11,6 +11,14 @@ const props = defineProps({
   id: {
     Type: Number,
     default: 0
+  },
+  bgColor: {
+    Type: String,
+    default: ''
+  },
+  rTitle: {
+    Type: String,
+    default: ''
   }
 })
 const router = useRouter()

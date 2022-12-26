@@ -1,9 +1,9 @@
 <template>
-  <div class="container" :style="{'background-color':props.rpItem.paperStyle}" @click="viewOneItem" >
+  <div class="container" :style="{'background-color':props.rpItem.rstyle}" @click="viewOneItem" >
     <div class="d-flex flex-column content-wrap" >
       <div @click.stop="" v-if="!updateItemYn" >
         <h2 @click="updateItemYn = !updateItemYn" >
-          {{ props.rpItem.paperName}}
+          {{ props.rpItem.rtitle}}
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
           <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
           </svg>
@@ -24,7 +24,7 @@
     <span class="paper-close-btn" @click.stop="" @click="rmThispaper(props.rpItem)">X</span>
 
     <div class="paper-count-area">
-      <p>현재 <strong :style="{'color':props.rpItem.paperStyle}">{{ props.rpItem.paperList.length }}</strong>개의 글이 작성되어져있어요!</p>
+      <p>현재 <strong :style="{'color':props.rpItem.rstyle}">{{ props.rpItem.listCount }}</strong>개의 글이 작성되어져있어요!</p>
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ const props = defineProps({
 const store = useStore()
 const titleChk = computed(() => store.state.rollingPaper.searchResult)
 const updateItemYn = ref(false)
-const updateTitleText = ref(props.rpItem.paperName)
+const updateTitleText = ref(props.rpItem.rtitle)
 
 const rmThispaper = (item) => {
   emits('showDeleteModal', item)
@@ -68,7 +68,9 @@ const updateTitleChk = async () => {
 
 const router = useRouter()
 const viewOneItem = () => {
-  router.push({ name: 'viewRollingpaper', params: { id: props.rpItem.id } })
+  console.log('viewRollingpaper')
+  router.push({ name: 'viewRollingpaper', params: { id: props.rpItem.rseq, bgColor: props.rpItem.rstyle, rTitle: props.rpItem.rtitle } })
+  console.log('viewRollingpaper!')
 }
 </script>
 <style lang="scss" scoped>
