@@ -1,24 +1,22 @@
 <template>
-    <button class="add-btn" :class="onClickAddBtn?'clicked':'unclicked'" @click="btnClick"></button>
+    <button class="add-btn" :class="openAddHabitPop?'clicked':'unclicked'" @click="btnClick"></button>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
-  props: {
-    onClickAddBtn: {
-      type: Boolean,
-      default: false
-    }
+  computed: {
+    ...mapState('habit', [
+      'openAddHabitPop'
+    ])
   },
-  emits: [
-    'openPop'
-  ],
   methods: {
     btnClick () {
       let clicked = false
+      if (!this.openAddHabitPop) clicked = true
 
-      if (!this.onClickAddBtn) clicked = true
-
-      this.$emit('openPop', clicked)
+      this.$store.commit('habit/updateState', {
+        openAddHabitPop: clicked
+      })
     }
   }
 }
@@ -31,7 +29,7 @@ export default {
     height: 60px;
     border-radius: 20%;
     right: 10px;
-    bottom: 10px;
+    bottom: 52px;
     transition: all 0.2s;
     color: rgb(192, 192, 192);
     z-index: 1000;

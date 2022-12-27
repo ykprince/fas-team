@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SearchHabitRecordsOut {
+public class HabitOut {
     private int habitId;
-    private String date;
-    private String icon;
+    private String title;
+    private String description;
 }

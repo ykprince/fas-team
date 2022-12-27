@@ -18,42 +18,5 @@ public class SearchHabitOut {
     private String icon;
     private String date; // 등록일
 	private List<SearchHabitRecordsOut> habitRecords;
-
-	public int getUid() {
-		return this.uid;
-	}
-
-	public void setUid(int uid) {
-		this.uid = uid;
-	}
-
-	public String getHabitId() {
-		return this.habitId;
-	}
-
-	public void setHabitId(String habitId) {
-		this.habitId = habitId;
-	}
-
-	public List<SearchHabitRecordsOut> getHabitRecords() {
-		return this.habitRecords;
-	}
-
-	public void setHabitRecords(List<SearchHabitRecordsOut> habitRecords) {
-		this.habitRecords = habitRecords;
-	}
-
-	@Override
-	public String toString() {
-		return "{" +
-			" uid='" + uid + "'" +
-			", habitId='" + habitId + "'" +
-			", title='" + title + "'" +
-			", description='" + description + "'" +
-			", icon='" + icon + "'" +
-			", date='" + date + "'" +
-			", habitRecords='" + habitRecords + "'" +
-			"}";
-	}
 }
 

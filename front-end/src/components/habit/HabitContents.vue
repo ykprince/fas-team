@@ -8,7 +8,9 @@
           <a class="nav-link" href="#">CALENDAR</a>
         </li>
       </ul>
-      <div class="content" :class="Object.keys(theHabit).length === 0?'disabled':''">
+      <div
+        class="content"
+        :class="!theHabitState?'disabled':''">
         <div class="first-section">
           <div class="today-box">
             <div class="today">
@@ -30,11 +32,27 @@
           </div>
         </div>
         <div class="second-section">
-          <input class="title" type="text" :value="theHabit.title">
-          <textarea class="description" :value="theHabit.description"></textarea>
+          <input
+            class="title"
+            type="text"
+            v-model="theHabit.title"
+            :disabled="!theHabitState">
+          <textarea
+            class="description"
+            v-model="theHabit.description"
+            :disabled="!theHabitState"></textarea>
         </div>
         <div>
           <HabitsOfThisWeek />
+        </div>
+        <div class="third-section">
+          <button
+            class="up"
+            :disabled="!theHabitState"
+            @click="updateHabit()">수정</button>
+          <button
+            class="del"
+            :disabled="!theHabitState">삭제</button>
         </div>
       </div>
     </div>
@@ -45,6 +63,13 @@ import { mapState } from 'vuex'
 import HabitsOfThisWeek from '../habit/HabitsOfThisWeek.vue'
 
 export default {
+  data () {
+    return {
+      icon: '',
+      title: '',
+      contents: ''
+    }
+  },
   components: {
     HabitsOfThisWeek
   },
@@ -53,7 +78,13 @@ export default {
       'theHabit',
       'habitIcons',
       'today'
-    ])
+    ]),
+    theHabitState () {
+      let theHabitTf = true
+      if (Object.keys(this.theHabit).length === 0) theHabitTf = false
+
+      return theHabitTf
+    }
   },
   methods: {
     iconClick (e) {
@@ -65,10 +96,12 @@ export default {
           icon: e.target.id
         }
       })
+    },
+    updateHabit () {
+      this.$store.commit('habit/updateHabit', this.theHabit)
     }
-  },
-  created () {
   }
+
 }
 </script>
 
@@ -108,7 +141,6 @@ export default {
 
 .content {
     display: flex;
-    height: 400px;
     margin-left: 20px;
     padding-top: 15px;
     border-radius: 3px;
@@ -117,6 +149,33 @@ export default {
     color: darkgray;
     flex-direction: column;
     align-items: baseline;
+
+    .third-section {
+      margin-top: 10px;
+
+      & > * {
+        margin-right: 5px;
+      }
+
+      &:last-child {
+        margin-right: 0px;
+      }
+
+      button {
+        border: solid 1px #e1e1e1;
+        border-radius: 3px;
+        box-shadow: 0px 1px 2px #e1e1e1;
+        background-color: white;
+        color: darkgray;
+        height: 35px;
+        width: 50px;
+        font-size: 12px;
+
+        &:hover {
+          background-color: #f3f3f3;
+        }
+      }
+    }
 
     .first-section {
       display: flex;

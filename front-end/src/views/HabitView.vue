@@ -6,13 +6,8 @@
     <div class="container">
       <div class="left-section col-md-4">
         <HabitList class="habit-list" />
-        <HabitAddButton @openPop="openPop" :onClickAddBtn=clicked />
-        <div>
-          <HabitAddPopup class="habitPop" v-if="clicked" @afterAdded="afterAdded"/>
-        </div>
       </div>
       <HabitContents class="col-md-8 habit-content" />
-      <div class="dim" v-if="clicked"></div>
 
     </div>
   </div>
@@ -22,16 +17,12 @@
 import { mapState } from 'vuex'
 import HabitList from '../components/habit/HabitList.vue'
 import HabitContents from '../components/habit/HabitContents.vue'
-import HabitAddButton from '../components/habit/HabitAddButton.vue'
-import HabitAddPopup from '../components/habit/HabitAddPopup.vue'
 import Spinner from '../components/habit/Spinner.vue'
 
 export default {
   components: {
     HabitList,
     HabitContents,
-    HabitAddButton,
-    HabitAddPopup,
     Spinner
   },
   computed: {
@@ -75,13 +66,8 @@ export default {
   display: flex;
 
   .disabled > * * {
-    background-color: #f3f3f3;
+    background-color: #f3f3f3 !important;;
     color: darkgray !important;
-
-    // & :disabled {
-    //   background-color: #f3f3f3;
-    //   color: darkgray !important;
-    // }
 
     &::after {
       color: darkgray !important;
@@ -91,17 +77,17 @@ export default {
   .left-section {
     position: relative;
 
-    &:hover>.unclicked {
-      background-color: white;
-      color: rgb(192, 192, 192);
-      box-shadow: 0px 0px 8px -3px #8a8a8a;
-    }
-
     .habit-list {
       display: inline-block;
       height: 400px;
       min-width: 300px;
       -ms-overflow-style: none;
+
+      &:hover>.unclicked {
+        background-color: white;
+        color: rgb(192, 192, 192);
+        box-shadow: 0px 0px 8px -3px #8a8a8a;
+      }
     }
 
     .habit-list::-webkit-scrollbar{
@@ -112,19 +98,6 @@ export default {
       display: inline-block;
     }
   }
-
-  .dim {
-    position:fixed;
-    top:0;
-    left:0;
-    right: 0;
-    display: flex;
-    background-color: #00000071;
-    z-index: 999;
-    width:100%;
-    height:100%;
-  }
-
 }
 
 // @include media-breakpoint-down(xl) {

@@ -21,4 +21,12 @@
         WHERE habit_id = #{habitId}
         AND date BETWEEN #{startDate} AND #{endDate}
     </select>
+
+    <insert id="insertHabit" parameterType="com.fas.toy.dto.habit.HabitIn">
+        INSERT INTO habit (uid, title, description, icon, date)
+        VALUES (#{uid}, #{title}, #{description}, '', DATE_FORMAT(NOW(), '%Y%m%d'));
+        <selectKey keyProperty="habitId" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID() AS habitId
+        </selectKey>
+    </insert>
 </mapper>
