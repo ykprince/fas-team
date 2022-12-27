@@ -58,8 +58,7 @@ const formData = ref({
   date: '',
   hiddenYn: false,
   content: '',
-  style: bgColor.value,
-  created_at: new Date().toISOString()
+  style: bgColor.value
 })
 const today = new Date().toISOString()
 const vertifyChk = ref({
@@ -118,6 +117,9 @@ const updateRadio = (event) => {
 
 p {
   margin-bottom: 0;
+}
+input, textarea {
+  border: none;
 }
 .container {
   font-size: 1.5rem;

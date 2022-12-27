@@ -104,15 +104,14 @@ const chkValid = () => {
   title.value === '' ? (validChk.value.title = false) : (validChk.value.title = true)
   content.value === '' ? (validChk.value.content = false) : (validChk.value.content = true)
   chkDate()
-  console.log(validChk.value)
+
   if (
     validChk.value.title === true &&
-  validChk.value.content === true &&
-  validChk.value.date === true
+    validChk.value.content === true &&
+    validChk.value.date === true
   ) {
     addNewPaper()
   } else {
-    // 내용중 빈 값이 있을 경우
     return false
   }
 }
@@ -132,10 +131,10 @@ const closeAdd = () => {
 
 const addNewPaper = async () => {
   const dataObj = {
-    title: title.value,
-    date: expireDate.value,
-    content: content.value,
-    paperStyle: selectBackground.value
+    rTitle: title.value,
+    rContent: content.value,
+    rStyle: selectBackground.value,
+    rExpiredAt: expireDate.value
   }
   await store.dispatch('addNewPaper', dataObj)
   closeAdd()
