@@ -7,6 +7,8 @@ export default {
     gethers: [], // 등록된 도서 모임 목록
     theGether: { // 등록된 도서 모임 개별 항목
     },
+    getherContent: { // 상세 컨텐츠
+    },
     getherDetail: {},
     message: NO_DATA_MSG,
     successMsg: FAIL_MSG,
@@ -22,6 +24,9 @@ export default {
     },
     resetTheGether (state, payload) {
       state.theGether.type = payload
+    },
+    setContent (state, payload) {
+      state.getherContent = payload
     }
   },
   actions: {

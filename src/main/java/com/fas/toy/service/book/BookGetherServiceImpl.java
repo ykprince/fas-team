@@ -18,7 +18,7 @@ public class BookGetherServiceImpl implements BookGetherService{
 
     @Override
     public int insertBookGether(BookGetherDto bgDto) {
-        bgDto.setEnd_dt("9999-01-01");
+        bgDto.setEndDt("9999-01-01");
         return bgDao.insertBookGether(bgDto);
     }
 

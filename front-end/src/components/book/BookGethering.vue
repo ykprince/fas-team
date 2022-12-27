@@ -1,11 +1,11 @@
 <template>
-<div :id="gether.bg_idx">
+<div :id="gether.bgIdx">
   <span v-if="gether.type == '1'" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
     <span class="visually-hidden">New alerts</span>
   </span>
   <img class="thumbImg" :src="gether.thumbnail">
   <div class="gInfo">
-    {{ gether.sta_dt }}
+    {{ gether.staDt }}
   </div>
   <figcaption>
     <h3>{{gether.title}}</h3>

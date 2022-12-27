@@ -5,12 +5,12 @@
       <div class="form-items">
         <div>
           <label for="staDt1" class="form-label">독서량</label>
-          <input class="form-control" type="date" id="staDt1" placeholder="시작일" v-model="theGether.sta_dt">
+          <input class="form-control" type="date" id="staDt1" placeholder="시작일" v-model="theGether.staDt">
           <span>~</span>
         </div>
         <div>
           <label for="endDt1" class="form-label">독서량</label>
-          <input class="form-control" type="date" id="endDt1" placeholder="종료일" v-model="theGether.end_dt">
+          <input class="form-control" type="date" id="endDt1" placeholder="종료일" v-model="theGether.endDt">
         </div>
       </div>
     </div>
