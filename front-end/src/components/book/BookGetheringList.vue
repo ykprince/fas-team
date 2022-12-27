@@ -16,7 +16,7 @@
         </select>
       </nav>
       <div class="infoArea">
-        <div  @click="test" v-for="gether in gethers" :key="gether.type" class="gether">
+        <div  @click="test(gether)" v-for="gether in gethers" :key="gether.type" class="gether">
           <BookGethering :gether="gether"></BookGethering>
         </div>
       </div>
@@ -43,7 +43,8 @@ export default {
   data () {
     return {
       tItem: 0,
-      bgId: Number
+      bgId: 0,
+      getherList: [{}]
     }
   },
   watch: {
@@ -67,6 +68,7 @@ export default {
   computed: {
     ...mapState('bookGether', [
       'theGether',
+      'getherContent',
       'gethers',
       'message',
       'successTf'
@@ -76,8 +78,9 @@ export default {
     testtt (num) {
       this.tItem = num
     },
-    test () {
-      console.log(this.bgId)
+    test (content) {
+      this.bgId = 1
+      this.$store.commit('bookGether/setContent', content)
     }
   },
   mounted () {
@@ -97,7 +100,8 @@ export default {
 }
 .detailArea {
   width: 50%;
-  background-color: gray;
+  padding: 15px;
+  // background-color: gray;
 }
 
 // 최상위 div 클래스명 변경

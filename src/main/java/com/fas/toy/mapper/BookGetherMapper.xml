@@ -7,13 +7,13 @@
                 NULL,
                 #{uid},
                 #{type},
-                #{sta_dt},
-                #{end_dt},
+                #{staDt},
+                #{endDt},
                 #{rate},
-                #{rate_ex},
-                #{read_page},
-                #{comment_ex},
-                #{bg_color},
+                #{rateEx},
+                #{readPage},
+                #{commentEx},
+                #{bgColor},
                 #{authors},
                 #{contents},
                 #{datetime},
@@ -26,6 +26,7 @@
                 #{url}
                 )
     </insert>
+
 
     <select id="selectBookGetherList" resultType="com.fas.toy.dto.book.BookGetherDto">
         SELECT *
