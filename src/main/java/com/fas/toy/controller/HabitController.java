@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fas.toy.dto.habit.HabitIn;
+import com.fas.toy.dto.habit.HabitOut;
 import com.fas.toy.dto.habit.SearchHabitIn;
 import com.fas.toy.dto.habit.SearchHabitOut;
 import com.fas.toy.dto.habit.SearchHabitRecordsOut;
@@ -42,4 +44,17 @@ public class HabitController {
         return habitResult;
     }
 
+    @GetMapping("/addHabit")
+    public SearchHabitOut insertHabit(@RequestBody HabitIn habit) {
+        int loginId = 1; // 추후 세션 구현되면 세션값 받아서 셋팅
+        habit.setUid(loginId);
+        return HabitService.insertHabit(habit);
+    }
+
+    // @GetMapping("/updateHabit")
+    // public SearchHabitOut insertHabit(@RequestBody HabitIn habit) {
+    //     int loginId = 1; // 추후 세션 구현되면 세션값 받아서 셋팅
+    //     habit.setUid(loginId);
+    //     return HabitService.insertHabit(habit);
+    // }
 }

@@ -21,24 +21,23 @@ export default {
   computed: {
     ...mapState('habit', [
       'habits',
-      'theHabit'
+      'theHabit',
+      'openAddHabitPop'
     ])
   },
-  emits: [
-    'openPop',
-    'afterAdded'
-  ],
   methods: {
     async addHabit () {
       const theHabit = {
         title: this.title,
         description: this.description,
-        habitId: this.habits.length + 1, // 임시
         icon: ''
       }
 
-      await this.$store.dispatch('habit/addHabit', [theHabit])
-      this.$emit('afterAdded', theHabit)
+      await this.$store.dispatch('habit/addHabit', theHabit)
+
+      // 스크롤 하단으로 내리기
+      const list = document.getElementById('habitItemList')
+      list.scrollTop = list.scrollHeight
     }
   }
 }
@@ -49,7 +48,7 @@ export default {
     position: absolute;
     display: flex;
     right: -330px;
-    bottom: 80px;
+    bottom: 115px;
     width: 335px;
     height: 245px;
     border: solid 5px rgb(192, 192, 192);

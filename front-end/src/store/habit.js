@@ -5,6 +5,7 @@ export default {
   state: {
     habits: [],
     loading: false,
+    openAddHabitPop: false,
     habitIcons: ['habitIcon1', 'habitIcon2', 'habitIcon3', 'habitIcon4', 'habitIcon5'],
     theHabit: {},
     today: (() => {
@@ -60,11 +61,9 @@ export default {
       })
 
       try {
-        const res = await _fetchHabit({
+        const res = await _fetchHabit('/habit/getHabits', {
           ...payload
         })
-
-        // const { Search } = res.data
 
         commit('updateState', {
           habits: res.data
@@ -93,7 +92,7 @@ export default {
       payload.endDate = state.thisWeek[state.thisWeek.length - 1].date
 
       try {
-        const res = await _fetchHabit(payload)
+        const res = await _fetchHabit('/habit/getHabitByHabitId', payload)
         const records = res.data.habitRecords
         const thisWeek = state.thisWeek
 
@@ -125,20 +124,27 @@ export default {
       }
     },
     async addHabit ({ state, commit }, payload) {
+      const res = await _fetchHabit('/habit/addHabit', payload)
+
       await commit('updateState', {
-        habits: [...state.habits, ...payload],
-        theHabit: payload[0]
+        habits: [...state.habits, res.data],
+        openAddHabitPop: false,
+        theHabit: res.data
+      })
+    },
+    async updateHabit ({ state, commit }, payload) {
+      const res = await _fetchHabit('/habit/updateHabit', payload)
+
+      await commit('updateState', {
+        habits: [...state.habits, res.data],
+        theHabit: res.data
       })
     }
   }
 }
 
 // '_' 기호는 현재 페이지에서만 사용한다는 의미
-function _fetchHabit (payload) {
-  const { habitId } = payload
-  const url = habitId ? '/habit/getHabitByHabitId' : '/habit/getHabits'
-  // const params = payload
-
+function _fetchHabit (url, payload) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, {

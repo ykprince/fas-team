@@ -17,12 +17,7 @@ export default {
     ...mapState('habit', [
       'thisWeek'
     ])
-  },
-  created () {
-    console.log('안녕하세요?')
-    console.log(this.thisWeek)
   }
-
 }
 </script>
 
