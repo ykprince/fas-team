@@ -1,17 +1,31 @@
 <template>
-  <div class="book-main-container type-card">
-    <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-all-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-all" aria-selected="true" @click="testtt(0)">전체</button>
-        <button class="nav-link" id="nav-type-1-tab" data-bs-toggle="tab" data-bs-target="#nav-type-1" type="button" role="tab" aria-controls="nav-type-1" aria-selected="false" @click="testtt(1)">읽은 책</button>
-        <button class="nav-link" id="nav-type-2-tab" data-bs-toggle="tab" data-bs-target="#nav-type-2" type="button" role="tab" aria-controls="nav-type-2" aria-selected="false" @click="testtt(2)">읽고 있는 책</button>
-        <button class="nav-link" id="nav-type-3-tab" data-bs-toggle="tab" data-bs-target="#nav-type-3" type="button" role="tab" aria-controls="nav-type-3" aria-selected="false" @click="testtt(3)">읽고 싶은 책</button>
+  <div class="book-main-container">
+    <div class="type-card">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="nav-all-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-all" aria-selected="true" @click="testtt(0)">전체</button>
+          <button class="nav-link" id="nav-type-1-tab" data-bs-toggle="tab" data-bs-target="#nav-type-1" type="button" role="tab" aria-controls="nav-type-1" aria-selected="false" @click="testtt(1)">읽은 책</button>
+          <button class="nav-link" id="nav-type-2-tab" data-bs-toggle="tab" data-bs-target="#nav-type-2" type="button" role="tab" aria-controls="nav-type-2" aria-selected="false" @click="testtt(2)">읽고 있는 책</button>
+          <button class="nav-link" id="nav-type-3-tab" data-bs-toggle="tab" data-bs-target="#nav-type-3" type="button" role="tab" aria-controls="nav-type-3" aria-selected="false" @click="testtt(3)">읽고 싶은 책</button>
+        </div>
+
+        <select>
+          <option>카드형</option>
+          <option>리스트형</option>
+          <option>개별</option>
+        </select>
+      </nav>
+      <div class="infoArea">
+        <div  @click="test" v-for="gether in gethers" :key="gether.type" class="gether">
+          <BookGethering :gether="gether"></BookGethering>
+        </div>
       </div>
-    </nav>
-    <div class="infoArea">
-      <div v-for="gether in gethers" :key="gether.type" class="gether">
-        <BookGethering :gether="gether"></BookGethering>
+    </div>
+    <div class="detailArea">
+      <div v-if="bgId === 0">
+        <img src="..\..\assets\book\bookMain.png" class="figure-img img-fluid book-main-img" alt="...">
       </div>
+      <BGcontent v-else></BGcontent>
     </div>
   </div>
 </template>
@@ -19,14 +33,17 @@
 <script>
 import { mapState } from 'vuex'
 import BookGethering from './BookGethering.vue'
+import BGcontent from '@/components/book/BookgetherContent.vue'
 
 export default {
   components: {
-    BookGethering
+    BookGethering,
+    BGcontent
   },
   data () {
     return {
-      tItem: 0
+      tItem: 0,
+      bgId: Number
     }
   },
   watch: {
@@ -38,18 +55,29 @@ export default {
       } else {
         console.log(3)
       }
+    },
+    successTf (newVal) {
+      if (newVal) {
+        this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: 0 })
+      } else {
+        console.log('failfailfailfailfailfailfailfailfailfailfailfail')
+      }
     }
   },
   computed: {
     ...mapState('bookGether', [
-      'gethers2',
+      'theGether',
       'gethers',
-      'message'
+      'message',
+      'successTf'
     ])
   },
   methods: {
     testtt (num) {
       this.tItem = num
+    },
+    test () {
+      console.log(this.bgId)
     }
   },
   mounted () {
@@ -63,9 +91,13 @@ export default {
 @import url(https://fonts.googleapis.com/css?family=Quattrocento);
 .book-main-container{
   margin: 10px;
-  height: 500px;
-  border: 1px solid gray;
+  height: 600px;
   background-color: rgb(252, 252, 252);
+  display: flex;
+}
+.detailArea {
+  width: 50%;
+  background-color: gray;
 }
 
 // 최상위 div 클래스명 변경
@@ -73,13 +105,15 @@ export default {
 // 2. 리스트형 - type-list
 // 3. 개별형 - type-slide
 .type-card {
+  width: 50%;
+  overflow: hidden;
   .infoArea {
     display: inline-flex;
     flex-wrap: wrap;
     justify-content: center;
     padding-top: 20px;
     overflow: scroll;
-    height: 500px;
+    // height: 500px;
     -ms-overflow-style: none;
   }
   .infoArea::-webkit-scrollbar{
@@ -90,14 +124,14 @@ export default {
   font-family: 'Quattrocento', Arial, sans-serif;
   position: relative;
   overflow: hidden;
-  margin: 10px;
+  margin: 25px;
   color: #141414;
   text-align: left;
   line-height: 1.4em;
-  font-size: 16px;
+  font-size: 6px;
   // border: 1px solid black;
-  width: 180px;
-  height: 240px;
+  width: 120px;
+  height: 180px;
   // border-radius: 8px;
   // box-shadow: 1px 1px 1px 1px gray;
   }
@@ -115,7 +149,7 @@ export default {
   }
   .gether figcaption {
     position: absolute;
-    top: calc(80%);
+    top: calc(75%);
     width: 100%;
     background-color: #ffffff;
     padding: 15px 25px 65px;
@@ -158,6 +192,11 @@ export default {
   .gether:hover figcaption,
   .gether.hover figcaption {
     top: 80px;
+  }
+
+  .book-main-img {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

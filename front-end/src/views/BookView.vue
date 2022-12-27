@@ -1,19 +1,16 @@
 <template>
-  <div class="container">
-    <button
-          class="btn btn-primary"
-          @click="handler">
-          add
-    </button>
-    <select>
-      <option>카드형</option>
-      <option>리스트형</option>
-      <option>개별</option>
-    </select>
-    <div  v-if="isShow"  >
-      <addbook @handler="handler" class="container"></addbook>
+  <div>
+    <div class="container">
+      <div  v-if="isShow"  >
+        <addbook @handler="handler" class="container"></addbook>
+      </div>
+      <BGList></BGList>
     </div>
-    <BGList></BGList>
+    <button
+      class="btn btn-primary add-btn"
+      @click="handler">
+      독서 추가하기
+    </button>
   </div>
 </template>
 <script>
@@ -37,3 +34,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .add-btn {
+    position: fixed;
+    top: 6%;
+    right: 10%;
+    border-radius: 60px;
+    width: 100px;
+    height: 100px;
+  }
+</style>

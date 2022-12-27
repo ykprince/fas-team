@@ -39,12 +39,12 @@
       </div>
       <div class="btn-field">
         <div v-if="!(curStep === 1)">
-          <PCBtn class="pgCtrlBtn" :index="curStep > 1? curStep-1 : 1" :msg="msg1" @pageCtrl="pageCtrl"></PCBtn>
-          <PCBtn class="pgCtrlBtn" v-if="!(curStep === 3)" :index="curStep + 1" :msg="msg2" @pageCtrl="pageCtrl"></PCBtn>
+          <PCBtn class="btn btn-secondary pgCtrlBtn" :index="curStep > 1? curStep-1 : 1" :msg="msg1" @pageCtrl="pageCtrl"></PCBtn>
+          <PCBtn class="btn btn-secondary pgCtrlBtn" v-if="!(curStep === 3)" :index="curStep + 1" :msg="msg2" @pageCtrl="pageCtrl"></PCBtn>
           <button class="saveBtn" v-else @click="addBookGethering">저장</button>
         </div>
         <div v-else>
-          <button class="btn btn-secondary" @click="$emit('handler')">닫기</button>
+          <button class="btn btn-secondary saveBtn" @click="$emit('handler')">닫기</button>
         </div>
       </div>
     </div>
@@ -66,6 +66,7 @@ export default {
   },
   data () {
     return {
+      errorBag: { name: [] },
       msg1: 'Pre',
       msg2: 'Next',
       query: '',
@@ -98,8 +99,19 @@ export default {
         curStep: num
       })
     },
-    addBookGethering () {
-      this.$store.dispatch('bookGether/insertBookGether', this.theBook)
+    async addBookGethering () {
+      this.$store.dispatch('bookGether/insertBookGether', this.theBook).then(() => {
+        alert('(토스트로 바꾸기)')
+        this.$store.commit('bookGether/resetTheGether', '')
+        this.$emit('handler')
+      })
+
+      // const res = await this.$store.dispatch('bookGether/insertBookGether', this.theBook)
+      // if (res.sucTf) {
+      //   console.log('callback')
+      //   alert(res.msg + '(토스트로 바꾸기)')
+      //   this.$emit('handler')
+      // }
     }
   },
   mounted () {
@@ -180,8 +192,12 @@ export default {
 
 .pgCtrlBtn {
   width: 100px;
+  height: 30px;
+  margin: 6px;
 }
 .saveBtn {
-
+  width: 100px;
+  height: 30px;
+  margin: 6px;
 }
 </style>

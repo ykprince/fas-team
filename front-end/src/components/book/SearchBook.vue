@@ -26,7 +26,6 @@ export default {
   },
   methods: {
     async sendData () {
-      console.log('asdad@@@@@@@@@@@@@@@@@@@@@@@ADDadasds')
       this.$store.commit('book/updateState', {
         theBook: this.book,
         curStep: 2,
