@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class BookGetherDto {
+    private String bg_idx;         // 모임 번호
     private int uid;            // 등록자 고유번호
     private int type;           // 독후감 타입 ( 1: 읽은 책, 2: 읽고 있는 책, 3: 읽을 책)
     private String sta_dt;      // 독서 시작 일자

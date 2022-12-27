@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+console.log(':::::::::::::::::::::::::::::::::::::')
 const NO_DATA_MSG = '서재가 텅 비어있어요. 로그인 후, 독서 모임을 추가해주세요! '
 export default {
   namespaced: true,

@@ -1,10 +1,26 @@
 <template>
   <div>
-    <label for="inputPassword5" class="form-label">독서기간</label>
-    <input class="form-control" type="date" placeholder="시작일" aria-label="default input example" v-model="theGether.sta_dt">
-    <input class="form-control" type="date" placeholder="종료일" aria-label="default input example" v-model="theGether.end_dt">
-    <label for="inputPassword5" class="form-label">평점</label>
-    <input type="range" class="form-range" id="customRange1" max="100" min="0" step="1" v-model="theGether.rate">
+    <div class="input-form">
+    <h4>독서기간</h4>
+      <div class="form-items">
+        <div>
+          <label for="staDt1" class="form-label">독서량</label>
+          <input class="form-control" type="date" id="staDt1" placeholder="시작일" v-model="theGether.sta_dt">
+          <span>~</span>
+        </div>
+        <div>
+          <label for="endDt1" class="form-label">독서량</label>
+          <input class="form-control" type="date" id="endDt1" placeholder="종료일" v-model="theGether.end_dt">
+        </div>
+      </div>
+    </div>
+    <div class="input-form">
+      <H4>평점</H4>
+      <div class="form-item">
+        <input type="range" class="form-range" id="customRange1" max="100" min="0" step="1" v-model="theGether.rate">
+        <input type="number" class="form-control border-secondary rounded-pill" max="100" min="0" step="1" v-model="theGether.rate">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,9 +37,7 @@ export default {
   },
   computed: {
     ...mapState('bookGether', [
-      'theGether',
-      'books',
-      'theBook'
+      'theGether'
     ])
   },
   mounted () {
@@ -34,3 +48,31 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+.input-form {
+  padding: 30px;
+}
+.form-items {
+  margin-top: 30px;
+  display: flex;
+  div: {
+    text-align: left;
+    width: 200px;
+    margin: 20px;
+  }
+  span {
+    width: 30px;
+  }
+}
+.number-title {
+  display: flex;
+
+  H6 {
+
+  }
+  input {
+  }
+}
+</style>
