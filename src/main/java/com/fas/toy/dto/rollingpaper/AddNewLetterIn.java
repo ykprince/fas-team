@@ -1,14 +1,9 @@
 package com.fas.toy.dto.rollingpaper;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class SearchLetterOut {
-  private int lSeq;
+public class AddNewLetterIn {
   private int rSeq;
   private String lWriter;
   private String lContent;

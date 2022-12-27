@@ -15,4 +15,43 @@
         FROM letter
         WHERE r_seq = #{rSeq}
   </select>
+
+  <select id="searchPaperTitle" resultType="com.fas.toy.dto.rollingpaper.SearchPaperTitleOut">
+      SELECT COUNT(r_title) as rCount
+        FROM rollingpaper
+        WHERE r_seq = #{rSeq} AND r_title = #{rTitle}
+  </select>
+
+  <select id="searchOnePaper">
+      SELECT * 
+        FROM letter 
+        WHERE r_seq = #{id}
+  </select>
+
+  <update id="updatePaperTitle">
+      UPDATE rollingpaper
+        SET r_title = #{rTitle}
+        WHERE r_seq = #{rSeq}
+  </update>
+  <delete id="deletePaper">
+      DELETE l.*, r.*
+      FROM letter AS l
+        LEFT JOIN rollingpaper AS r
+          ON l.r_seq = r.r_seq
+      WHERE l.r_seq = #{rSeq}
+  </delete>
+
+  <insert id="addNewPaper">
+    INSERT INTO rollingpaper
+      (uid, r_title, r_content, r_style, r_expired_at, r_created_at, r_updated_at)
+      VALUES
+      (#{uid}, #{rTitle}, #{rContent}, #{rStyle}, #{rExpiredAt}, #{rCreatedAt}, #{rUpdatedAt})
+  </insert>
+
+  <insert id="addNewLetter">
+    INSERT INTO letter
+      (r_seq, l_writer, l_content, l_style, l_release_at, l_created_at)
+      VALUES
+      (#{rSeq}, #{lWriter}, #{lContent}, #{lStyle}, #{lReleaseAt}, #{lCreatedAt})
+  </insert>
 </mapper>

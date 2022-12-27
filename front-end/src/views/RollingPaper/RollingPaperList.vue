@@ -55,7 +55,7 @@ const moveAddNewRP = () => {
 }
 
 const submitChk = async () => { // 삭제확인
-  await deletePaper()
+  await store.dispatch('deletePaper', waitingDeleteObj.value)
   cancelChk()
 }
 
@@ -68,9 +68,6 @@ const cancelChk = () => { // 삭제취소
   deleteModal.value = false
   waitingDeleteObj.value = {}
 }
-
-const deletePaper = async () =>
-  await store.dispatch('deletePaper', waitingDeleteObj.value)
 
 </script>
 <style lang="scss" scoped>

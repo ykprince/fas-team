@@ -1,5 +1,7 @@
 package com.fas.toy.controller;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fas.toy.dto.rollingpaper.AddNewLetterIn;
+import com.fas.toy.dto.rollingpaper.AddNewPaperIn;
+import com.fas.toy.dto.rollingpaper.DeletePaperIn;
 import com.fas.toy.dto.rollingpaper.SearchLetterIn;
 import com.fas.toy.dto.rollingpaper.SearchLetterOut;
+import com.fas.toy.dto.rollingpaper.SearchOnePaperOut;
+import com.fas.toy.dto.rollingpaper.SearchPaperTitleIn;
 import com.fas.toy.dto.rollingpaper.SearchRollingpaperOut;
 import com.fas.toy.service.rollingpaper.RPService;
 
@@ -28,8 +35,41 @@ public class RPController {
   }
 
   @ResponseBody
+  @PostMapping("/searchOnePaper")
+  public List<SearchOnePaperOut> searchOnePaper(@RequestBody String id) {
+    System.out.println(id);
+    return rpService.searchOnePaper(id);
+  }
+
+  @ResponseBody
   @PostMapping("/getLetters")
   public List<SearchLetterOut> searchLetters(@RequestBody SearchLetterIn searchLetterIn) {
     return rpService.searchLetters(searchLetterIn.getRSeq());
+  }
+
+  @ResponseBody
+  @PostMapping("/searchUpdateTitle")
+  public int searchPaperTitle(@RequestBody SearchPaperTitleIn searchPaperTitleIn) {
+    return rpService.searchPaperTitle(searchPaperTitleIn);
+  }
+
+  @ResponseBody
+  @PostMapping("/deletePaper")
+  public int deletePaper(@RequestBody DeletePaperIn deletePaper) {
+    return rpService.deletePaper(deletePaper.getRSeq());
+  }
+
+  @ResponseBody
+  @PostMapping("/addNewPaper")
+  public int addNewPaper(@RequestBody AddNewPaperIn addNewPaperin) {
+    addNewPaperin.setUid(2);
+
+    return rpService.addNewPaper(addNewPaperin);
+  }
+
+  @ResponseBody
+  @PostMapping("/addNewLetter")
+  public int addNewLetter(@RequestBody AddNewLetterIn addNewLetterIn) {
+    return rpService.addNewLetter(addNewLetterIn);
   }
 }

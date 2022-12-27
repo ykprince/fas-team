@@ -52,15 +52,12 @@ const updateTitleChk = async () => {
   if (!updateTitleText.value.length > 0) {
     return false
   } else {
-    await store.dispatch('searchPaperTitle', updateTitleText.value)
+    const param = { rSeq: props.rpItem.rseq, rTitle: updateTitleText.value }
+    await store.dispatch('checkAndUpdateTitle', param)
 
-    if (titleChk.value === false) { // 중복된 값이 없을 경우
-      const newRpItem = { ...props.rpItem }
-      newRpItem.paperName = updateTitleText.value
-      await store.dispatch('updatePapperTitle', newRpItem)
-
+    if (titleChk.value === false) {
       updateItemYn.value = false
-    } else { // 중복된 값이 있을 경우
+    } else {
       updateItemYn.value = true
     }
   }

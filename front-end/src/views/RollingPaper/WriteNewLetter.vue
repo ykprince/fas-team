@@ -21,14 +21,15 @@ const props = defineProps({
 })
 const router = useRouter()
 const store = useStore()
-
 // 값확인
 if (props.id === 0 || props.id === '0') {
   alert('해당하는 페이지가 존재하지않습니다.')
   router.push({ name: 'rollingpaper' })
 } else {
-  store.dispatch('getAllPapers')
-  store.dispatch('getOnePaper', props.id)
+  store.dispatch('checkPaperAvailable', props.id)
+
+  // store.dispatch('getAllPapers')
+  // store.dispatch('getOnePaper', props.id)
 }
 
 </script>
