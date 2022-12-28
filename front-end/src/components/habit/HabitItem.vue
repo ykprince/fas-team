@@ -1,5 +1,5 @@
 <template>
-    <div class="item" :class="theHabit.habitId==habit.habitId?'active':''" @click="itemClick">
+    <div class="item" :class="theHabit.habitId==habit.habitId?'active':''" @click="itemClick(habit.habitId)">
         <span>{{ habit.title }}</span>
         <div class="icon" :class="[ habit.icon? habit.icon : '' ]"></div>
     </div>
@@ -21,10 +21,10 @@ export default {
     ])
   },
   methods: {
-    itemClick (e) {
+    itemClick (habitId) {
       // 습관 아이디로 아이템 조회하기
       this.$store.dispatch('habit/searchHabitWithId', {
-        habitId: e.target.id
+        habitId: habitId
       })
     }
   }

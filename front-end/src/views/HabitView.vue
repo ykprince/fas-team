@@ -8,7 +8,6 @@
         <HabitList class="habit-list" />
       </div>
       <HabitContents class="col-md-8 habit-content" />
-
     </div>
   </div>
 </template>

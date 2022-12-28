@@ -52,7 +52,7 @@ export default {
     }
   },
   actions: {
-    async searchHabits ({ state, commit }, payload) {
+    async searchHabits ({ state, commit }) {
       if (state.loading) return
 
       commit('updateState', {
@@ -61,12 +61,11 @@ export default {
       })
 
       try {
-        const res = await _fetchHabit('/habit/getHabits', {
-          ...payload
-        })
+        const res = await _fetchHabit('/habit/getHabits')
 
         commit('updateState', {
-          habits: res.data
+          habits: res.data,
+          theHabit: {}
         })
       } catch (message) {
         commit('updateState', {
@@ -96,6 +95,7 @@ export default {
         const records = res.data.habitRecords
         const thisWeek = state.thisWeek
 
+        // TODO 깊은 복사를 해도 왜 변수에 새로 담은 값과 스토어의 thisWeek의 값이 동기화 되는건지 이유를 찾지 못함 --> 추후 개선 필요
         for (const day of thisWeek) {
           if (records.length < 1) {
             day.icon = ''
@@ -123,22 +123,69 @@ export default {
         })
       }
     },
-    async addHabit ({ state, commit }, payload) {
+    async addHabit ({ state, commit, dispatch }, payload) {
+      commit('updateState', {
+        message: '',
+        loading: true
+      })
+
       const res = await _fetchHabit('/habit/addHabit', payload)
 
       await commit('updateState', {
         habits: [...state.habits, res.data],
-        openAddHabitPop: false,
-        theHabit: res.data
+        openAddHabitPop: false
+      })
+
+      // 추가한 습관 내용 재조회
+      // TODO 뭔가 비효율적인 느낌.... 추후 개선
+      dispatch('searchHabitWithId', {
+        habitId: res.data.habitId
       })
     },
-    async updateHabit ({ state, commit }, payload) {
-      const res = await _fetchHabit('/habit/updateHabit', payload)
+    async updateHabit ({ state, commit, dispatch }) {
+      if (state.loading) return
 
-      await commit('updateState', {
-        habits: [...state.habits, res.data],
-        theHabit: res.data
+      commit('updateState', {
+        message: '',
+        loading: true
       })
+
+      const obj = state.theHabit
+      delete obj.habitRecords // -> 필요 없음
+
+      const res = await _fetchHabitPost('/habit/updateHabit', obj)
+
+      // 업데이트 성공 후 제대로 값이 내려왔을 때
+      if (Object.keys(res).length !== 0) {
+        // 수정한 습관 재조회
+        await dispatch('searchHabitWithId', {
+          habitId: obj.habitId,
+          theHabit: res.data
+        })
+
+        // 습관 목록에 변경한 습관 담기
+        for (let i = 0; i < state.habits.length; i++) {
+          if (state.habits[i].habitId === obj.habitId) {
+            state.habits[i] = res.data
+            return
+          }
+        }
+      }
+    },
+    async deleteHabit ({ state, commit, dispatch }) {
+      if (state.loading) return
+
+      commit('updateState', {
+        message: '',
+        loading: true
+      })
+
+      const obj = {
+        habitId: state.theHabit.habitId
+      }
+
+      await _fetchHabitPost('/habit/deleteHabit', obj)
+      await dispatch('searchHabits')
     }
   }
 }
@@ -148,6 +195,25 @@ function _fetchHabit (url, payload) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
+        params: payload
+      })
+      .then((res) => {
+        if (res.data.Error) {
+          reject(res.data.Error)
+        }
+        console.log(res)
+        resolve(res)
+      })
+      .catch((err) => {
+        reject(err.message)
+      })
+  })
+}
+
+function _fetchHabitPost (url, payload) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, null, {
         params: payload
       })
       .then((res) => {
