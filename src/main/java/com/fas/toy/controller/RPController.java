@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,5 +71,14 @@ public class RPController {
   @PostMapping("/addNewLetter")
   public int addNewLetter(@RequestBody AddNewLetterIn addNewLetterIn) {
     return rpService.addNewLetter(addNewLetterIn);
+  }
+
+
+  @ResponseBody
+  @GetMapping("/getKakkao")
+  public String getKakkao() {
+    String url = "https://kauth.kakao.com/oauth/authorize??response_type=code&client_id=3326588eea9b9c394fabf4e7e04844dd&redirect_uri=http://localhost:8080/login";
+    System.out.println("Login Connection url get.");
+    return url;
   }
 }
