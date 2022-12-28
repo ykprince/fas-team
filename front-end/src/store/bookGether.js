@@ -5,6 +5,7 @@ export default {
   namespaced: true,
   state: {
     gethers: [], // 등록된 도서 모임 목록
+    gethersOrigin: [],
     theGether: { // 등록된 도서 모임 개별 항목
     },
     getherContent: { // 상세 컨텐츠
@@ -55,12 +56,37 @@ export default {
       try {
         const res = await callPostService(url, payload)
         commit('updateState', {
-          gethers: res.data
+          gethers: res.data,
+          gethersOrigin: res.data
         })
       } catch (error) {
         commit('updateState', {
           gethers: []
         })
+      }
+    },
+    async filterGethers ({ state, commit }, payload) {
+      let tempGethers
+      console.log('thisis', payload)
+      await payload === 0
+        ? tempGethers = state.gethersOrigin
+        : tempGethers = state.gethersOrigin.filter((obj) =>
+          obj.type === payload
+        )
+      commit('updateState', {
+        gethers: tempGethers
+      })
+    },
+    async delBookGether ({ state, commit }, payload) {
+      console.log('thisis', payload)
+      const url = '/book/deleteBook'
+      const param = payload
+      try {
+        const res = await callPostService(url, param.arr)
+        // 재조회 넣어야댐 !!
+        return { sucTf: true, msg: res.data }
+      } catch (error) {
+        console.log(error + '::::::::::')
       }
     }
   }
@@ -84,20 +110,3 @@ async function callPostService (url, payload) {
       })
   })
 }
-
-// async function callGetService (url, payload) {
-//   return new Promise((resolve, reject) => {
-//     axios.get(url, payload)
-//       .then(res => {
-//         console.log(res)
-//         if (res.data.Error) {
-//           reject(res.data.Error)
-//         }
-//         resolve(res)
-//       })
-//       .catch(err => {
-//         console.log(err)
-//         reject(err.message)
-//       })
-//   })
-// }

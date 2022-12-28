@@ -23,10 +23,19 @@
                 #{thumbnail},
                 #{title},
                 #{translators},
-                #{url}
+                #{url},
+                now()
                 )
     </insert>
 
+    <delete id="deleteBookGether">
+        DELETE
+        FROM book_gether
+        WHERE bg_idx in
+        <foreach collection="array" item="idx" open="(" close=")" separator=",">
+            #{idx}
+        </foreach>
+    </delete>
 
     <select id="selectBookGetherList" resultType="com.fas.toy.dto.book.BookGetherDto">
         SELECT *
