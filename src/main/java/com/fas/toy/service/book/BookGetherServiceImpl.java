@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.fas.toy.dao.book.BookGetherDao;
 import com.fas.toy.dto.book.BookGetherDto;
 import com.fas.toy.dto.book.SearchBookGetherListIn;
-import com.fas.toy.dto.book.SearchBookGetherListOut;
 
 @Service
 public class BookGetherServiceImpl implements BookGetherService{
@@ -18,7 +17,15 @@ public class BookGetherServiceImpl implements BookGetherService{
 
     @Override
     public int insertBookGether(BookGetherDto bgDto) {
-        bgDto.setEndDt("9999-01-01");
+        if(bgDto.getType() == 1){
+
+        }else if(bgDto.getType() == 2){
+            bgDto.setEndDt(null);
+        }else{
+            bgDto.setStaDt(null);
+            bgDto.setEndDt(null);
+        }
+
         return bgDao.insertBookGether(bgDto);
     }
 
@@ -26,5 +33,10 @@ public class BookGetherServiceImpl implements BookGetherService{
     public List<BookGetherDto> seachBookGetherList(SearchBookGetherListIn dto) {
         dto.setUid("0");
         return bgDao.selectBookGetherList(dto);
+    }
+
+    @Override
+    public int delBookGethersS(Integer[] idxs) {
+        return bgDao.deleteBookGether(idxs);
     }
 }

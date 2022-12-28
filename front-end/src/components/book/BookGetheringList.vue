@@ -8,16 +8,29 @@
           <button class="nav-link" id="nav-type-2-tab" data-bs-toggle="tab" data-bs-target="#nav-type-2" type="button" role="tab" aria-controls="nav-type-2" aria-selected="false" @click="testtt(2)">읽고 있는 책</button>
           <button class="nav-link" id="nav-type-3-tab" data-bs-toggle="tab" data-bs-target="#nav-type-3" type="button" role="tab" aria-controls="nav-type-3" aria-selected="false" @click="testtt(3)">읽고 싶은 책</button>
         </div>
+        <div class="etc-bar">
+          <button type="button" id="delConfirmBtn" class="btn btn-light" @click="delGethers" style="display:none">정리 목록 전송</button>
+          <button type="button" id="delSwitchBtn" class="btn btn-light" @click="modiGethers">정리하기</button>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+            <label class="btn btn-outline-primary" for="btnradio1">카드</label>
 
-        <select>
-          <option>카드형</option>
-          <option>리스트형</option>
-          <option>개별</option>
-        </select>
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <label class="btn btn-outline-primary" for="btnradio2">리스트</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+            <label class="btn btn-outline-primary" for="btnradio3">개별</label>
+          </div>
+        </div>
       </nav>
       <div class="infoArea">
         <div  @click="test(gether)" v-for="gether in gethers" :key="gether.type" class="gether">
-          <BookGethering :gether="gether"></BookGethering>
+          <!-- new 버튼이 있을 시 position: absolute;  추가 -->
+          <div  v-if="modiKey === 1" style="width:100%; text-align: right;z-index: 999;" @click="pushDelArr(gether.bgIdx)">
+            <span class="badge bg-secondary" >X</span>
+          </div>
+          <BookGethering :gether="gether" :[attr]="vibration" >
+          </BookGethering>
         </div>
       </div>
     </div>
@@ -44,18 +57,16 @@ export default {
     return {
       tItem: 0,
       bgId: 0,
-      getherList: [{}]
+      modiKey: 0,
+      attr: 'class',
+      vibration: '',
+      delArr: []
     }
   },
   watch: {
     tItem (newVal) {
-      if (newVal === 1) {
-        console.log(1)
-      } else if (newVal === 2) {
-        console.log(2)
-      } else {
-        console.log(3)
-      }
+      this.$store.dispatch('bookGether/filterGethers', newVal)
+      console.log(this.gethers)
     },
     successTf (newVal) {
       if (newVal) {
@@ -79,8 +90,44 @@ export default {
       this.tItem = num
     },
     test (content) {
-      this.bgId = 1
-      this.$store.commit('bookGether/setContent', content)
+      if (this.modiKey === 0) {
+        this.bgId = 1
+        this.$store.commit('bookGether/setContent', content)
+      } else if (this.modiKey === 1) {
+        this.bgId = 0
+        this.$store.commit('bookGether/setContent', {})
+      }
+    },
+    modiGethers () {
+      if (this.modiKey === 0) {
+        this.modiKey = 1
+        this.bgId = 0
+        this.vibration = 'vibration'
+        document.getElementById('delSwitchBtn').value = '취소하기'
+        document.getElementById('delConfirmBtn').style.display = ''
+      } else if (this.modiKey === 1) {
+        this.modiKey = 0
+        this.vibration = ''
+        document.getElementById('delSwitchBtn').value = '정리하기'
+        document.getElementById('delConfirmBtn').style.display = 'none'
+      }
+    },
+    pushDelArr (idx) {
+      const obj = document.getElementById(idx)
+
+      if (obj.classList.contains('del-pushed')) {
+        this.delArr = this.delArr.filter((g) =>
+          g !== idx
+        )
+        obj.classList.remove('del-pushed')
+      } else {
+        obj.classList.add('del-pushed')
+        this.delArr.push(idx)
+      }
+      console.log(this.delArr)
+    },
+    delGethers () {
+      this.$store.dispatch('bookGether/delBookGether', { arr: this.delArr })
     }
   },
   mounted () {
@@ -92,6 +139,7 @@ export default {
 <style lang="scss">
 @import url(https://fonts.googleapis.com/css?family=Oswald);
 @import url(https://fonts.googleapis.com/css?family=Quattrocento);
+@import url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css);
 .book-main-container{
   margin: 10px;
   height: 600px;
@@ -104,6 +152,11 @@ export default {
   // background-color: gray;
 }
 
+.etc-bar {
+  width: 100%;
+  text-align: right;
+  margin-right: 10px;
+}
 // 최상위 div 클래스명 변경
 // 1. 카드형 - type-card
 // 2. 리스트형 - type-list
@@ -111,6 +164,7 @@ export default {
 .type-card {
   width: 50%;
   overflow: hidden;
+  margin: 15px;
   .infoArea {
     display: inline-flex;
     flex-wrap: wrap;
@@ -123,7 +177,6 @@ export default {
   .infoArea::-webkit-scrollbar{
     display:none;
   }
-
   .gether {
   font-family: 'Quattrocento', Arial, sans-serif;
   position: relative;
@@ -133,17 +186,18 @@ export default {
   text-align: left;
   line-height: 1.4em;
   font-size: 6px;
-  // border: 1px solid black;
   width: 120px;
   height: 180px;
-  // border-radius: 8px;
-  // box-shadow: 1px 1px 1px 1px gray;
   }
   .gether * {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -webkit-transition: all 0.35s ease;
     transition: all 0.35s ease;
+  }
+  .vibration {
+    animation: vibration .500s infinite;
+    justify-content: center;
   }
   .thumbImg {
     width: 100%;
@@ -202,5 +256,23 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+
+@keyframes vibration {
+  from {
+    transform: rotate(0.5deg);
+  }
+  to {
+    transform: rotate(-0.5deg);
+  }
+}
+
+.del-pushed {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(219, 98, 98);
+  opacity: 0.7;
+  position: absolute;
+  z-index: 10;
 }
 </style>
