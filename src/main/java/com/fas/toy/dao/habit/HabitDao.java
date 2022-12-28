@@ -11,6 +11,7 @@ import com.fas.toy.dto.habit.HabitOut;
 import com.fas.toy.dto.habit.SearchHabitIn;
 import com.fas.toy.dto.habit.SearchHabitOut;
 import com.fas.toy.dto.habit.SearchHabitRecordsOut;
+import com.fas.toy.dto.habit.UpdateHabitIn;
 
 @Mapper
 public interface HabitDao {
@@ -18,4 +19,6 @@ public interface HabitDao {
     SearchHabitOut searchHabitByHabitId(SearchHabitIn habit);
     List<SearchHabitRecordsOut> searchHabitRecords(SearchHabitIn habit);
     int insertHabit(HabitIn habit);
+    int updateHabit(UpdateHabitIn habit);
+    void deleteHabit(HabitIn habit);
 }

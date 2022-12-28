@@ -48,7 +48,7 @@ export default {
     position: absolute;
     display: flex;
     right: -330px;
-    bottom: 115px;
+    bottom: 75px;
     width: 335px;
     height: 245px;
     border: solid 5px rgb(192, 192, 192);

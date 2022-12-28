@@ -52,7 +52,17 @@
             @click="updateHabit()">수정</button>
           <button
             class="del"
-            :disabled="!theHabitState">삭제</button>
+            :disabled="!theHabitState"
+            @click="deleteHabit()">삭제</button>
+        </div>
+      </div>
+      <div class="dim" v-if="confirmPop">
+        <div class="confirm-popup" v-if="confirmPop">
+          <span class="message">{{message}}</span>
+          <div class="btn-box">
+            <button class="up" @click="confirmPopCntl('do')">확인</button>
+            <button class="del" @click="confirmPopCntl('cancel')">취소</button>
+          </div>
         </div>
       </div>
     </div>
@@ -67,7 +77,10 @@ export default {
     return {
       icon: '',
       title: '',
-      contents: ''
+      contents: '',
+      confirmPop: false,
+      message: '',
+      process: ''
     }
   },
   components: {
@@ -98,7 +111,35 @@ export default {
       })
     },
     updateHabit () {
-      this.$store.commit('habit/updateHabit', this.theHabit)
+      this.confirmPop = true
+      this.message = '수정 하시겠습니까?'
+      this.process = 'update'
+    },
+    async deleteHabit () {
+      // 삭제 하시겠습니까?
+      this.confirmPop = true
+      this.message = '삭제 하시겠습니까?'
+      this.process = 'delete'
+    },
+    openPopup (b) {
+      this.confirmPop = b
+    },
+    async confirmPopCntl (btn) {
+      this.confirmPop = false
+
+      if (btn === 'cancel') {
+        return
+      }
+
+      if (this.process === 'update') {
+        await this.$store.dispatch('habit/updateHabit')
+      } else if (this.process === 'delete') {
+        await this.$store.dispatch('habit/deleteHabit')
+
+        // 스크롤 상단으로 올리기
+        const list = document.getElementById('habitItemList')
+        list.scrollTop = 0
+      }
     }
   }
 
@@ -160,21 +201,6 @@ export default {
       &:last-child {
         margin-right: 0px;
       }
-
-      button {
-        border: solid 1px #e1e1e1;
-        border-radius: 3px;
-        box-shadow: 0px 1px 2px #e1e1e1;
-        background-color: white;
-        color: darkgray;
-        height: 35px;
-        width: 50px;
-        font-size: 12px;
-
-        &:hover {
-          background-color: #f3f3f3;
-        }
-      }
     }
 
     .first-section {
@@ -207,6 +233,7 @@ export default {
           align-items: center;
           font-size: 35px;
         }
+
         .year-month-box {
           width: 118px;
           height: 60px;
@@ -279,6 +306,75 @@ export default {
         padding: 10px;
       }
     }
-
 }
+
+button {
+  border: solid 1px #e1e1e1;
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px #e1e1e1;
+  background-color: white;
+  color: darkgray;
+  height: 35px;
+  width: 50px;
+  font-size: 12px;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}
+
+.dim {
+  position:fixed;
+  top:0;
+  left:0;
+  right: 0;
+  display: flex;
+  background-color: #00000026;
+  z-index: 999;
+  width:100%;
+  height:100%;
+  justify-content: center;
+  align-items: center;
+  color: darkgray;
+  font-size: 12px;
+
+  .confirm-popup {
+    z-index: 9999;
+    width: 300px;
+    height: 150px;
+    display: flex;
+    border: solid 1px rgb(192, 192, 192);
+    border-radius: 5px;
+    background-color: white;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .message {
+    font-size: 15px;
+    padding: 10px;
+    width: 100%;
+    height: 70%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-box {
+    padding: 11px;
+    width: 100%;
+    border-top: 1px solid #e1e1e1;
+
+    & > * {
+      margin-right: 5px;
+    }
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+}
+
 </style>
