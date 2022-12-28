@@ -65,9 +65,7 @@ const updateTitleChk = async () => {
 
 const router = useRouter()
 const viewOneItem = () => {
-  console.log('viewRollingpaper')
   router.push({ name: 'viewRollingpaper', params: { id: props.rpItem.rseq, bgColor: props.rpItem.rstyle, rTitle: props.rpItem.rtitle } })
-  console.log('viewRollingpaper!')
 }
 </script>
 <style lang="scss" scoped>

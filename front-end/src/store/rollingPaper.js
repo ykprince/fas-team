@@ -1,114 +1,5 @@
 import axios from 'axios'
-
-// const testData = [
-//   {
-//     id: 10001,
-//     paperName: 'Fasol', // 롤링페이퍼 1개 obj
-//     aboutPage: 'fasol pagessss1',
-//     paperStyle: 'tomato', // 스타일 설정
-//     expireDate: '',
-//     paperList: [
-//       {
-//         writer: '김상훈',
-//         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-//         style: 'seagreen',
-//         hiddenYn: true
-//       },
-//       {
-//         writer: '이용근',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'royalblue',
-//         hiddenYn: false
-//       },
-//       {
-//         writer: '홍샘이',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'tomato',
-//         hiddenYn: true
-//       }
-//     ]
-//   },
-//   {
-//     id: 10002,
-//     paperName: 'Fasol', // 롤링페이퍼 1개 obj
-//     aboutPage: 'fasol pagessss2',
-//     paperStyle: 'seagreen', // 스타일 설정
-//     expireDate: '',
-//     paperList: [
-//       // 개별 items (다른사람들이 작성)
-//       {
-//         writer: '김상훈',
-//         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-//         style: 'seagreen',
-//         hiddenYn: true
-//       },
-//       {
-//         writer: '이용근',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'darkviolet',
-//         hiddenYn: false
-//       },
-//       {
-//         writer: '홍샘이',
-//         content: '올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.올해도 수고하셨습니다.',
-//         style: 'royalblue',
-//         hiddenYn: true
-//       },
-//       {
-//         writer: '홍샘이',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'royalblue',
-//         hiddenYn: true
-//       },
-//       {
-//         writer: '홍샘이',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'royalblue',
-//         hiddenYn: true
-//       },
-//       {
-//         writer: '홍샘이',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'royalblue',
-//         hiddenYn: true
-//       },
-//       {
-//         writer: '홍샘이',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'royalblue',
-//         hiddenYn: true
-//       }
-//     ]
-//   },
-//   {
-//     id: 10003,
-//     paperName: 'Fasol', // 롤링페이퍼 1개 obj
-//     aboutPage: 'fasol pagessss3',
-//     paperStyle: 'darkviolet', // 스타일 설정
-//     expireDate: '',
-//     paperList: [
-//       // 개별 items (다른사람들이 작성)
-//       {
-//         writer: '김상훈',
-//         content: '올해도 수고하셨습니다. 내년에도 잘 부탁드려요.',
-//         style: 'darkviolet',
-//         hiddenYn: true
-//       },
-//       {
-//         writer: '이용근',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'darkslategrey',
-//         hiddenYn: false
-//       },
-//       {
-//         writer: '홍샘이',
-//         content: '올해도 수고하셨습니다.',
-//         style: 'royalblue',
-//         hiddenYn: true
-//       }
-//     ]
-//   }
-// ]
+import router from '@/router/index.js'
 
 export default {
   state: {
@@ -116,8 +7,20 @@ export default {
     all: [], // Array
     one: {}, // Object
     letters: [],
-    newLetterWritten: false,
+    cpLetters: [], // 검색용
+    onePageAvailable: true, // 해당 롤링페이퍼 존재여부 확인용
     searchResult: false
+  },
+
+  getters: {
+    getOnePapersInfo (state) {
+      const obj = {
+        rtitle: state.one.rtitle,
+        rexpiredAt: state.one.rexpiredAt,
+        rstyle: state.one.rstyle
+      }
+      return obj
+    }
   },
 
   mutations: {
@@ -129,19 +32,22 @@ export default {
     },
     updateLetters (state, letters) {
       state.letters = letters
+      state.cpLetters = letters
     },
     updateOneState (state, paper) {
       state.one = paper
     },
-    searchUpdateState (state, paper) {
-      state.one.paperList = paper
+    searchUpdateState (state, searchLetters) {
+      state.letters = searchLetters
+    },
+    updateOPA (state, bools) {
+      state.onePageAvailable = bools
     }
   },
 
   actions: {
     /**
      * @desc 본인의 모든 목록 조회
-     * @param N/A
      */
     async getAllPapers ({ commit }) {
       const url = '/rp/getRollingpapers'
@@ -175,7 +81,7 @@ export default {
      * @param {String} payload title value
      */
     async searchPaperTitle ({ state, commit }, payload) {
-      const cpList = [...state.all]
+      const cpList = [...state.letters]
       let searchResult = false
       const checkList = cpList.filter(item => item.rtitle === payload)
       if (checkList.length > 0) {
@@ -229,16 +135,16 @@ export default {
       if (res > 0) {
         const newPaperList = state.all.push(newPaperInfo)
         commit('updateState', newPaperList)
+        router.push({ name: 'rollingpaper' })
       } else {
         alert('실패')
       }
     },
+    /**
+     * @desc 목록 조회 - letter
+     * @param {Number} id 롤링페이퍼시퀀스번호
+     */
     async getLetters ({ state, commit }, id) {
-      // paper filters - front
-      const onePage = state.all.filter(item => item.rseq === id)
-      console.log('onePage' + onePage)
-
-      // letters 목록 조회 - db
       const url = '/rp/getLetters'
       id = Number(id)
       const param = { rSeq: id }
@@ -246,12 +152,26 @@ export default {
       const resObj = await _fetchRollingpaper(url, param)
       commit('updateLetters', resObj.data)
     },
+    /**
+     * @desc 롤링페이퍼가 존재하는지 체크
+     * @param {int} id
+     */
     async checkPaperAvailable ({ state, commit }, id) {
-      const url = '/searchOnePaper'
+      const url = '/rp/searchOnePaper'
       const param = { id: id }
       const res = await _fetchRollingpaper(url, param)
-      console.log(res)
+
+      if (res.data.length === 0) {
+        alert('해당 페이지는 존재하지않습니다.')
+        router.push({ name: 'rollingpaper' })
+      } else {
+        commit('updateOneState', res.data[0])
+      }
     },
+    /**
+     * @desc 새로운 쪽지 입력
+     * @param {Object} dataObj
+     */
     async addNewLetter ({ state, commit }, dataObj) {
       const url = '/rp/addNewLetter'
       const newObj = {
@@ -264,20 +184,28 @@ export default {
         lCreatedAt: new Date().toISOString().substring(0, 10)
       }
       const res = await _fetchRollingpaper(url, newObj)
-      // if (res.data == 1) {
 
-      // }
-      console.log(res)
+      if (res.data === 1) {
+        return true
+      } else {
+        alert('입력중 오류가 발생하였습니다. 다시 시도해주세요.')
+        return false
+      }
     },
+    /**
+     * @desc 검색 기능
+     * @param {Objcet} obj 검색내용
+     */
     async searchNameInPaper ({ state, commit }, obj) {
       obj.paperid = Number(obj.paperid)
-      let newObj = []
-      if (obj.name === '') {
-        newObj = state.all.filter(item => item.id === obj.paperid)[0]
-      } else {
-        newObj = state.one.paperList.filter(item => item.writer.includes(obj.name))
-      }
+      const newObj = state.cpLetters.filter(item => item.lwriter.includes(obj.name))
       commit('searchUpdateState', newObj)
+    },
+    /**
+     * @desc 리스트 복구 - letter
+     */
+    async searchNameInPaperRestore ({ state, commit }) {
+      commit('searchUpdateState', state.cpLetters)
     }
   }
 }

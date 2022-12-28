@@ -9,8 +9,10 @@
     </div>
     <div class="second container-list" >
       <p>언제부터 이 쪽지를 볼 수 있을까요?</p>
+      <span>(해당 롤링페이퍼는 {{onePageInfo.rexpiredAt}} 까지 유효합니다.)</span>
       <input type="date" v-model="formData.date" @change="checkDate">
       <p class="error"  v-show="!vertifyChk.date">날짜는 내일부터 가능합니다</p>
+      <p class="error"  v-show="!vertifyChk.overDate">해당 롤링페이퍼는 {{onePageInfo.rexpiredAt}} 까지 유효합니다.</p>
     </div>
 
     <div class="third container-list">
@@ -40,9 +42,12 @@
   </div>
 </template>
 <script setup>
-import { useStore } from 'vuex'
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, computed } from 'vue'
 import SelectColorComp from './SelectColorComp.vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 const topImage = require('@/assets/rollingpaper/chrismas-decoration.png')
 const props = defineProps({
   id: {
@@ -57,15 +62,17 @@ const formData = ref({
   name: '',
   date: '',
   hiddenYn: false,
-  content: '',
-  style: bgColor.value
+  content: ''
 })
 const today = new Date().toISOString()
 const vertifyChk = ref({
   name: true,
   date: true,
+  overDate: true,
   content: true
 })
+const onePageInfo = computed(() => store.getters.getOnePapersInfo)
+store.dispatch('checkPaperAvailable', props.id)
 
 const selectColor = (newColor) => {
   bgColor.value = newColor
@@ -80,31 +87,40 @@ const fncVertifyChk = (type) => {
   }
 }
 
-const checkDate = () => {
-  if (formData.value.date === '') {
+const checkDate = async () => {
+  if (formData.value.date === '' || formData.value.date <= today) {
     vertifyChk.value.date = false
     return false
   } else {
     vertifyChk.value.date = true
   }
-  if (formData.value.date <= today) {
-    vertifyChk.value.date = false
+
+  if (formData.value.date >= onePageInfo.value.rexpiredAt) { // 만료일자 체크
+    vertifyChk.value.overDate = false
     return false
+  } else {
+    vertifyChk.value.overDate = true
   }
 }
 
-const checkVertify = () => {
-  checkDate()
+const checkVertify = async () => {
+  await checkDate()
   formData.value.name === '' ? vertifyChk.value.name = false : vertifyChk.value.name = true
   formData.value.content === '' ? vertifyChk.value.content = false : vertifyChk.value.content = true
 
-  if (vertifyChk.value.name === true && vertifyChk.value.date === true && vertifyChk.value.content === true) {
+  if (vertifyChk.value.name === true && vertifyChk.value.date === true && vertifyChk.value.overDate === true && vertifyChk.value.content === true) {
     addNewLetter()
   }
 }
 
-const addNewLetter = () => {
-  store.dispatch('addNewLetter', formData.value)
+const addNewLetter = async () => {
+  formData.value.style = bgColor.value
+  const result = await store.dispatch('addNewLetter', formData.value)
+  if (result === true) {
+    router.push({ name: 'viewRollingpaper', params: { id: props.id, bgColor: onePageInfo.value.rstyle, rTitle: onePageInfo.value.rtitle } })
+  } else {
+    return false
+  }
 }
 
 const updateRadio = (event) => {

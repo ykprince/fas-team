@@ -136,8 +136,7 @@ const addNewPaper = async () => {
     rStyle: selectBackground.value,
     rExpiredAt: expireDate.value
   }
-  await store.dispatch('addNewPaper', dataObj)
-  closeAdd()
+  store.dispatch('addNewPaper', dataObj)
 }
 </script>
 <style scoped lang="scss">

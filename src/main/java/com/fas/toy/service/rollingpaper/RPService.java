@@ -12,10 +12,10 @@ import com.fas.toy.dto.rollingpaper.SearchRollingpaperOut;
 public interface RPService {
   public abstract List<SearchRollingpaperOut> searchRollingpapers(int id);
   public abstract List<SearchLetterOut> searchLetters(int rSeq);
+  public abstract List<SearchOnePaperOut> searchOnePaper(int id);
   public abstract int searchPaperTitle(SearchPaperTitleIn searchPaperTitleIn);
   public abstract int deletePaper(int rSeq);
   public abstract int addNewPaper(AddNewPaperIn addNewPaperIn);
   public abstract int addNewLetter(AddNewLetterIn addNewLetter);
-  public abstract List<SearchOnePaperOut> searchOnePaper(String id);
   
 }

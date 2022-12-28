@@ -22,9 +22,9 @@
         WHERE r_seq = #{rSeq} AND r_title = #{rTitle}
   </select>
 
-  <select id="searchOnePaper">
+  <select id="searchOnePaper" resultType="com.fas.toy.dto.rollingpaper.SearchOnePaperOut">
       SELECT * 
-        FROM letter 
+        FROM rollingpaper 
         WHERE r_seq = #{id}
   </select>
 

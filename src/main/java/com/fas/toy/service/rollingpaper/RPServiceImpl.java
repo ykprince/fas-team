@@ -77,7 +77,7 @@ public class RPServiceImpl implements RPService {
   }
 
   @Override
-  public List<SearchOnePaperOut> searchOnePaper(String id) {
+  public List<SearchOnePaperOut> searchOnePaper(int id) {
     return RPDao.searchOnePaper(id);
   }
 }
