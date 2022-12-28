@@ -36,8 +36,7 @@ public class RPController {
 
   @ResponseBody
   @PostMapping("/searchOnePaper")
-  public List<SearchOnePaperOut> searchOnePaper(@RequestBody String id) {
-    System.out.println(id);
+  public List<SearchOnePaperOut> searchOnePaper(@RequestBody int id) {
     return rpService.searchOnePaper(id);
   }
 

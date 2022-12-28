@@ -21,15 +21,12 @@
   </div>
 </template>
 <script setup>
-import { ref, defineEmits, computed } from 'vue'
+import { ref, defineEmits } from 'vue'
 const emit = defineEmits(['selectColor'])
 const selectBackground = ref('tomato')
-const emitColor = computed(() => selectBackground.value)
-console.log(emitColor)
 const changedValue = () => {
   emit('selectColor', selectBackground.value)
 }
-
 const selectColor = (event) => {
   const labels = document.querySelectorAll('.bg-select-item label')
   labels.forEach(label => {

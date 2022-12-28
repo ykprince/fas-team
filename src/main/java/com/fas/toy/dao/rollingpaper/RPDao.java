@@ -16,10 +16,10 @@ import com.fas.toy.dto.rollingpaper.SearchPaperTitleOut;
 public interface RPDao {
   List<SearchRollingpaperOut> searchRollingpapers(int id);
   List<SearchLetterOut> searchLetters(int r_seq);
+  List<SearchOnePaperOut> searchOnePaper(int id);
   SearchPaperTitleOut searchPaperTitle(SearchPaperTitleIn searchPaperTitleIn);
   int updatePaperTitle(SearchPaperTitleIn searchPaperTitleIn);
   int deletePaper(int rSeq);
   int addNewPaper(AddNewPaperIn addNewPaperIn);
   int addNewLetter(AddNewLetterIn addNewLetterIn);
-  List<SearchOnePaperOut> searchOnePaper(String id);
 }

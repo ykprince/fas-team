@@ -12,5 +12,4 @@ public class SearchOnePaperOut {
   private String rExpiredAt;
   private String rcreatedAt;
   private String rUpdatedAt;
-  
 }

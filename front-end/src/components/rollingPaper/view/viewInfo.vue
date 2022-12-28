@@ -74,15 +74,13 @@ const props = defineProps({
   }
 })
 const store = useStore()
-const onePage = computed(() => store.state.rollingPaper.one)
 const letters = computed(() => store.state.rollingPaper.letters)
 store.dispatch('getLetters', props.id)
-console.log(onePage)
 const searchingName = ref('')
 
 const searchName = () => {
   if (searchingName.value === '') {
-    store.dispatch('restoreOne')
+    store.dispatch('searchNameInPaperRestore')
   } else {
     const obj = {
       paperid: props.id,
@@ -108,9 +106,6 @@ const searchMyLetter = () => {
   // 2. Search 'one' => info of this account
   console.log('logincheck, search one')
 }
-
-// console.log(listCount)
-
 </script>
 
 <style lang="scss" scoped>
