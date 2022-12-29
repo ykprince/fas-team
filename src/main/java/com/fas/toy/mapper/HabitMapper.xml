@@ -3,21 +3,29 @@
 
 <mapper namespace="com.fas.toy.dao.habit.HabitDao">
     <select id="searchHabits" resultType="com.fas.toy.dto.habit.SearchHabitOut">
-        SELECT h.habit_id, h.title, h.description, hr.icon AS icon 
+        SELECT h.habit_id, h.uid, h.title, hr.icon
         FROM habit h 
-        JOIN habit_records hr 
+        JOIN (
+                SELECT * 
+                FROM habit_records 
+                WHERE date = DATE_FORMAT(NOW(), '%Y%m%d') 
+                AND uid = #{id}
+            ) hr 
         ON h.habit_id = hr.habit_id
-        WHERE h.date = DATE_FORMAT(NOW(), '%Y%m%d')
-        AND h.uid = #{id}
+        WHERE h.uid = #{id}
     </select>
 
     <select id="searchHabitByHabitId" resultType="com.fas.toy.dto.habit.SearchHabitOut">
-        SELECT h.habit_id, h.title, h.description, hr.icon AS icon 
+        SELECT h.habit_id, h.uid, h.title, h.description, hr.icon
         FROM habit h 
-        JOIN habit_records hr 
+        JOIN (
+                SELECT * 
+                FROM habit_records 
+                WHERE date = DATE_FORMAT(NOW(), '%Y%m%d') 
+                AND uid = #{uid}
+            ) hr 
         ON h.habit_id = hr.habit_id
-        WHERE h.date = DATE_FORMAT(NOW(), '%Y%m%d')
-        AND h.uid = #{uid}
+        WHERE h.uid = #{uid}
         AND h.habit_id = #{habitId}
     </select>
 
@@ -37,14 +45,11 @@
     </insert>
 
     <update id="updateHabit" parameterType="com.fas.toy.dto.habit.UpdateHabitIn">
-        UPDATE habit h
-		JOIN habit_records hr
-		ON h.habit_id = hr.habit_id
-        SET h.title = #{title},
-            h.description = #{description},
-            hr.icon = #{icon}
-        WHERE h.date = DATE_FORMAT(NOW(), '%Y%m%d')
-        AND h.habit_id = #{habitId}
+        UPDATE habit
+        SET title = #{title},
+            description = #{description},
+            last_icon = #{icon}
+        WHERE habit_id = #{habitId}
     </update>
 
     <update id="deleteHabit" parameterType="com.fas.toy.dto.habit.HabitIn">
