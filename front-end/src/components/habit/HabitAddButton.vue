@@ -29,7 +29,7 @@ export default {
     height: 60px;
     border-radius: 20%;
     right: 10px;
-    bottom: 10px;
+    bottom: 80px;
     transition: all 0.2s;
     color: rgb(192, 192, 192);
     z-index: 1000;

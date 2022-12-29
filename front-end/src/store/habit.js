@@ -1,4 +1,5 @@
 import axios from 'axios'
+import _ from 'lodash'
 
 export default {
   namespaced: true,
@@ -41,7 +42,8 @@ export default {
       }
 
       return thisWeek
-    })()
+    })(),
+    theRecord: []
   },
   getters: {},
   mutations: {
@@ -65,6 +67,7 @@ export default {
 
         commit('updateState', {
           habits: res.data,
+          theRecord: state.thisWeek,
           theHabit: {}
         })
       } catch (message) {
@@ -86,17 +89,18 @@ export default {
         message: '',
         loading: true
       })
-
+      console.log('아이디로 조회 전')
       payload.startDate = state.thisWeek[0].date
       payload.endDate = state.thisWeek[state.thisWeek.length - 1].date
-
+      console.log('날짜')
+      console.log(state.thisWeek)
       try {
         const res = await _fetchHabit('/habit/getHabitByHabitId', payload)
         const records = res.data.habitRecords
-        const thisWeek = state.thisWeek
-
-        // TODO 깊은 복사를 해도 왜 변수에 새로 담은 값과 스토어의 thisWeek의 값이 동기화 되는건지 이유를 찾지 못함 --> 추후 개선 필요
-        for (const day of thisWeek) {
+        const theRecord = _.cloneDeep(state.thisWeek)
+        console.log('좀 나와라')
+        console.log(res)
+        for (const day of theRecord) {
           if (records.length < 1) {
             day.icon = ''
           } else {
@@ -108,10 +112,10 @@ export default {
             }
           }
         }
-
+        console.log(res.data)
         commit('updateState', {
           theHabit: res.data,
-          thisWeek: thisWeek
+          theRecord: theRecord
         })
       } catch (error) {
         commit('updateState', {
@@ -124,22 +128,32 @@ export default {
       }
     },
     async addHabit ({ state, commit, dispatch }, payload) {
+      if (state.loading) return
+
       commit('updateState', {
         message: '',
         loading: true
       })
 
-      const res = await _fetchHabit('/habit/addHabit', payload)
+      let habitId = ''
 
-      await commit('updateState', {
-        habits: [...state.habits, res.data],
-        openAddHabitPop: false
-      })
+      try {
+        const res = await _fetchHabit('/habit/addHabit', payload)
+        habitId = res.data.habitId
 
-      // 추가한 습관 내용 재조회
-      // TODO 뭔가 비효율적인 느낌.... 추후 개선
-      dispatch('searchHabitWithId', {
-        habitId: res.data.habitId
+        await commit('updateState', {
+          habits: [...state.habits, res.data],
+          openAddHabitPop: false
+        })
+      } catch (error) {
+        commit('updateState', { loading: false })
+        return
+      } finally {
+        commit('updateState', { loading: false })
+      }
+
+      await dispatch('searchHabitWithId', {
+        habitId: habitId
       })
     },
     async updateHabit ({ state, commit, dispatch }) {
@@ -152,24 +166,39 @@ export default {
 
       const obj = state.theHabit
       delete obj.habitRecords // -> 필요 없음
+      let doSch = false
 
-      const res = await _fetchHabitPost('/habit/updateHabit', obj)
+      try {
+        const res = await _fetchHabitPost('/habit/updateHabit', obj)
 
-      // 업데이트 성공 후 제대로 값이 내려왔을 때
-      if (Object.keys(res).length !== 0) {
-        // 수정한 습관 재조회
-        await dispatch('searchHabitWithId', {
-          habitId: obj.habitId,
-          theHabit: res.data
-        })
+        // 업데이트 성공 후 제대로 값이 내려왔을 때
+        if (Object.keys(res.data).length !== 0) {
+          doSch = true
 
-        // 습관 목록에 변경한 습관 담기
-        for (let i = 0; i < state.habits.length; i++) {
-          if (state.habits[i].habitId === obj.habitId) {
-            state.habits[i] = res.data
-            return
+          // 습관 목록에 변경한 습관 담기
+          const habits = _.cloneDeep(state.habits)
+          for (let i = 0; i < state.habits.length; i++) {
+            if (habits[i].habitId === obj.habitId) {
+              habits[i] = res.data
+              break
+            }
           }
+
+          commit('updateState', { habits: habits })
         }
+      } catch (error) {
+        console.log(error)
+        console.log('실패')
+        commit('updateState', { loading: false })
+        return
+      } finally {
+        commit('updateState', { loading: false })
+      }
+
+      if (doSch) {
+        console.log('네')
+        // 수정한 습관 재조회
+        await dispatch('searchHabitWithId', { habitId: obj.habitId })
       }
     },
     async deleteHabit ({ state, commit, dispatch }) {
@@ -180,11 +209,19 @@ export default {
         loading: true
       })
 
-      const obj = {
-        habitId: state.theHabit.habitId
+      try {
+        const obj = { habitId: state.theHabit.habitId }
+        await _fetchHabitPost('/habit/deleteHabit', obj)
+      } catch (error) {
+        console.log(error)
+        console.log('실패')
+        return
+      } finally {
+        commit('updateState', {
+          loading: false
+        })
       }
 
-      await _fetchHabitPost('/habit/deleteHabit', obj)
       await dispatch('searchHabits')
     }
   }
