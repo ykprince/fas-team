@@ -1,6 +1,6 @@
 <template>
     <div class="day-box">
-        <div class="each-day" v-for="(day, index) in thisWeek" :key="index">
+        <div class="each-day" v-for="(day, index) in theRecord" :key="index">
             <div class="day">{{ day.day }}</div>
             <div class="icon" :class="day.icon?day.icon:'defaultIcon'"></div>
         </div>
@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     ...mapState('habit', [
-      'thisWeek'
+      'theRecord'
     ])
   }
 }

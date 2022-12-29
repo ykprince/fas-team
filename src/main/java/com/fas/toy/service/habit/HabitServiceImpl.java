@@ -67,6 +67,9 @@ public class HabitServiceImpl implements HabitService {
 
     @Override
     public SearchHabitOut updateHabit(UpdateHabitIn habit) {
+        LOGGER.info("-------UpdateHabitIn-------");
+        LOGGER.info(habit.toString());
+        
         SearchHabitOut sHabitOut = new SearchHabitOut();
 
         try {
