@@ -4,7 +4,7 @@ import book from './book'
 import bookGether from './bookGether'
 import habit from './habit'
 import rollingPaper from './rollingPaper'
-import oAuths from './oAuths'
+import auth from './auth'
 
 export default createStore({
   state: {
@@ -21,6 +21,6 @@ export default createStore({
     bookGether,
     habit,
     rollingPaper,
-    oAuths
+    auth
   }
 })

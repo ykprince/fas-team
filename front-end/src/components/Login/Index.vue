@@ -12,45 +12,77 @@
       <label for="floatingPassword">Password</label>
     </div>
     <div class="btn-area">
-      <img :src="KAKKAO_BTN" alt="카카오톡 로그인버튼"  @click="KakkaoLogin" >
+      <img :src="KAKKAO_BTN" alt="카카오톡 로그인버튼"  @click="kakaoLogin" >
       <div>
-
         <button @click="GoogleLogin">google</button>
       </div>
-
     </div>
+    <button @click="kakaoLogout">로그아웃</button>
   </div>
 </template>
 <script setup>
-import { KAKAO_URI } from '@/store/kakkaoShareLink.js'
+import { useStore } from 'vuex'
+import { KAKAO_JS_API_KEY } from '@/store/kakkaoShareLink.js'
 import { ref } from 'vue'
-// import axios from 'axios'
-const KAKKAO_BTN = require('@/assets/kakao_login_large_wide.png')
-// window.Kakao.init(KAKAO_JS_API_KEY)
 
+const store = useStore()
+const KAKKAO_BTN = require('@/assets/kakao_login_large_wide.png')
 const vertify = ref({
   id: '',
   pw: ''
 })
-const KakkaoLogin = async () => {
-  location.href = KAKAO_URI
-  // return new Promise((resolve, reject) => {
-  //   axios.post(url, null, {
-  //     params: {
+// const KakkaoLogin = async () => {
+//   location.href = KAKAO_URI
+//   // return new Promise((resolve, reject) => {
+//   //   axios.post(url, null, {
+//   //     params: {
 
-  //     }
-  //   })
-  //     .then((res) => {
-  //       if (res.data.Error) {
-  //         reject(res.data.Error)
-  //       }
-  //       console.log(res)
-  //       resolve(res)
-  //     })
-  //     .catch((err) => {
-  //       reject(err.message)
-  //     })
+//   //     }
+//   //   })
+//   //     .then((res) => {
+//   //       if (res.data.Error) {
+//   //         reject(res.data.Error)
+//   //       }
+//   //       console.log(res)
+//   //       resolve(res)
+//   //     })
+//   //     .catch((err) => {
+//   //       reject(err.message)
+//   //     })
+//   // })
+// }
+
+const kakaoLogin = async () => {
+  await window.Kakao.init(KAKAO_JS_API_KEY)
+  await store.dispatch('auth/kakaoAuthorize')
+  // await window.Kakao.Auth.login({
+  //   scope: 'profile_nickname, profile_image, account_email',
+  //   success: getKakaoAccount
   // })
+  // 인가 코드 받기 -> 토큰 받기 -> 사용자 정보 가져오기
+  // redirectUri: '${SYSTEM_JSP_SITEURL}/login/snsKakaologin', redirect되는 URL
+  // scope: 'phone_number'
+}
+// const getKakaoAccount = async () => {
+//   await window.Kakao.API.request({ url: '/v2/user/me' })
+//     .then((res) => {
+//       const kakaoAccount = res.kakao_account
+//       kakaoSuccessLogin(kakaoAccount)
+//     })
+//     .catch((error) => {
+//       console.log(error)
+//     })
+// }
+
+// const kakaoSuccessLogin = async (res) => {
+//   const param = { ...res, type: 'kakao' }
+//   await store.dispatch('auth/checkEmail', param)
+// }
+
+const kakaoLogout = () => {
+  window.Kakao.Auth.logout((res) => {
+    console.log(res)
+  })
 }
 
 const GoogleLogin = () => {

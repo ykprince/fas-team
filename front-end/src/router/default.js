@@ -13,13 +13,18 @@ export default [
     component: () => import('../views/AboutView.vue')
   },
   {
-    path: '/Login',
+    path: '/login',
     name: 'login',
     component: LoginView
   },
   {
-    path: '/oauth/callback/kakao',
+    path: '/auth/callback',
     name: 'kakaoLoginHandler',
     component: () => import('@/components/ETC/KakaoLoginHandler.vue')
+  },
+  {
+    path: '/auth/register',
+    name: 'register',
+    component: () => import('@/components/ETC/Register.vue')
   }
 ]
