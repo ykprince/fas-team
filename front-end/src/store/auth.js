@@ -1,4 +1,4 @@
-import { CLIENT_ID, KAKAO_REST_API_KEY, DEV_REDIRECT_URI, APP_ADMIN_KEY } from '@/store/kakkaoShareLink.js'
+import { CLIENT_ID, KAKAO_REST_API_KEY, DEV_REDIRECT_URI } from '@/store/kakkaoShareLink.js'
 import axios from 'axios'
 import router from '@/router/index'
 
@@ -20,7 +20,6 @@ export default {
     async kakaoAuthorize ({ state, commit }) {
       const result = await window.Kakao.Auth.authorize({
         redirectUri: DEV_REDIRECT_URI
-        // scope: 'profile_image, account_email'
       })
       const getTokkenUrl = 'kauth.kakao.com/oauth/token'
       const getTokkenBody = {
@@ -31,8 +30,7 @@ export default {
         client_secret: CLIENT_ID
       }
       const token = await postFetchConnection(getTokkenUrl, getTokkenBody)
-      const TokenResult = await window.Kakao.Auth.setAccessToken(token)
-      console.log(TokenResult) // token 결과 값 받은 후 작성해야함
+      await window.Kakao.Auth.setAccessToken(token)
     },
     async kakaoLogin ({ state, commit }, payload) {
       const url1 = 'kauth.kakao.com/oauth/token'
@@ -44,14 +42,27 @@ export default {
         client_secret: CLIENT_ID
       }
       const token = await postFetchConnection(url1, bodyData)
-      console.log('kakaoLogin :: data :::   ' + token)
 
       const url2 = 'kapi.kakao.com/v2/user/me'
       const userData = {
-        Authorization: `Bearer ${token.access_token}/KakaoAK ${APP_ADMIN_KEY}`
+        Authorization: `Bearer ${token.access_token}`
       }
-      const getDataFromKakao = await postHeaderFetchConnection(url2, userData, bodyData)
-      console.log('kakaoLogin :: userData :::   ' + getDataFromKakao)
+      const dataFromKakao = await postHeaderFetchConnection(url2, userData, bodyData)
+
+      if (dataFromKakao.id) {
+        const loginCheckData = {
+          id: dataFromKakao.id,
+          email: dataFromKakao.kakao_account.email,
+          nickName: dataFromKakao.kakao_account.profile.nickname,
+          profileImg: dataFromKakao.kakao_account.profile.profile_image_url,
+          profileThumbnailImg: dataFromKakao.kakao_account.profile.thumbnail_image_url,
+          lastLoginAt: new Date().toISOString()
+        }
+        console.log(loginCheckData)
+
+        const returnData = await _fetchData('/auth/kakaoLoginCheck', loginCheckData)
+        console.log(returnData)
+      }
     },
     /**
      * @desc 가입여부 조회 > 미가입시 가입으로 유도
@@ -130,27 +141,7 @@ const postFetchConnection = async (url, bodyData) => {
  * @param {object} bodyData 보내야하는 데이터
  */
 const postHeaderFetchConnection = async (url, headerData, bodyData) => {
-  // return new Promise((resolve, reject) => {
-  //   fetch('https://' + url, {
-  //     method: 'POST',
-  //     headers: {
-  //       'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-  //       headerData
-  //     },
-  //     body: ['client_id']
-  //   })
-  //     .then(res => res.json())
-  //     .then((data) => {
-  //       console.log(data)
-  //       resolve(data)
-  //     })
-  // })
-
   return new Promise((resolve, reject) => {
-    // const queryStringBody = Object.keys(bodyData)
-    //   .map(k => encodeURIComponent(k) + '=' + encodeURI(bodyData[k]))
-    //   .join('&')
-
     fetch('https://' + url, {
       method: 'post',
       headers: {
