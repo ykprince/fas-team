@@ -39,7 +39,7 @@
             :disabled="!theHabitState">
           <textarea
             class="description"
-            v-model="theHabit.description"
+            v-model="theHabit.content"
             :disabled="!theHabitState"></textarea>
         </div>
         <div>

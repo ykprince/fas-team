@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class HabitOut {
     private int habitId;
     private String title;
-    private String description;
+    private String content;
 }

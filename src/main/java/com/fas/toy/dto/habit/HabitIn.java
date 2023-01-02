@@ -7,7 +7,7 @@ public class HabitIn {
     private int habitId;
     private int uid;
     private String title;
-    private String description;
+    private String content;
     private String icon;
     private String date;
 }
