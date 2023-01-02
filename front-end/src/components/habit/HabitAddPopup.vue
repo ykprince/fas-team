@@ -1,8 +1,8 @@
 <template>
     <div class="popup-contatiner">
         <div class="contents">
-            <input type="text" placeholder="제목을 입력하세요. ex)물 1L 마시기" v-model="title"/>
-            <textarea placeholder="간단히 메모하세요." v-model="description"></textarea>
+            <input type="text" placeholder="제목을 입력하세요. ex)물 1L 마시기" :class="{'error': titleIsNull}" v-model="title"/>
+            <textarea placeholder="간단히 메모하세요." :class="{'error': contentIsNull}" v-model="content"></textarea>
             <button class="submit-btn" @click="addHabit">등록</button>
         </div>
     </div>
@@ -15,7 +15,9 @@ export default {
   data () {
     return {
       title: '',
-      description: ''
+      content: '',
+      titleIsNull: false,
+      contentIsNull: false
     }
   },
   computed: {
@@ -27,9 +29,21 @@ export default {
   },
   methods: {
     async addHabit () {
+      if (this.isNull(this.title)) {
+        this.titleIsNull = true
+        return
+      } else if (this.isNull(this.content)) {
+        this.titleIsNull = false
+        this.contentIsNull = true
+        return
+      } else {
+        this.titleIsNull = false
+        this.contentIsNull = false
+      }
+
       const theHabit = {
         title: this.title,
-        description: this.description,
+        content: this.content,
         icon: ''
       }
 
@@ -38,17 +52,27 @@ export default {
       // 스크롤 하단으로 내리기
       const list = document.getElementById('habitItemList')
       list.scrollTop = list.scrollHeight
+    },
+    isNull (val) {
+      if (val === '' || typeof val === 'undefined' || val === null) return true
+      else return false
     }
   }
 }
 </script>
 
 <style lang="scss">
+
+.error {
+  outline: 1px solid $red !important;
+  transition: 0.5s ease all;
+}
+
 .popup-contatiner {
     position: absolute;
     display: flex;
-    right: -330px;
-    bottom: 75px;
+    right: -328px;
+    bottom: 145px;
     width: 335px;
     height: 245px;
     border: solid 5px rgb(192, 192, 192);

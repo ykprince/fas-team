@@ -3,10 +3,10 @@
 
 <mapper namespace="com.fas.toy.dao.habit.HabitDao">
     <select id="searchHabits" resultType="com.fas.toy.dto.habit.SearchHabitOut">
-        SELECT h.habit_id, h.uid, h.title, hr.icon
+        SELECT h.habit_id, h.uid, h.title, h.content, hr.icon
         FROM habit h 
-        JOIN (
-                SELECT * 
+        LEFT OUTER JOIN (
+                SELECT *
                 FROM habit_records 
                 WHERE date = DATE_FORMAT(NOW(), '%Y%m%d') 
                 AND uid = #{id}
@@ -16,10 +16,10 @@
     </select>
 
     <select id="searchHabitByHabitId" resultType="com.fas.toy.dto.habit.SearchHabitOut">
-        SELECT h.habit_id, h.uid, h.title, h.description, hr.icon
+        SELECT h.habit_id, h.uid, h.title, h.content, hr.icon
         FROM habit h 
-        JOIN (
-                SELECT * 
+        LEFT OUTER JOIN (
+                SELECT *
                 FROM habit_records 
                 WHERE date = DATE_FORMAT(NOW(), '%Y%m%d') 
                 AND uid = #{uid}
@@ -37,8 +37,8 @@
     </select>
 
     <insert id="insertHabit" parameterType="com.fas.toy.dto.habit.HabitIn">
-        INSERT INTO habit (uid, title, description, date)
-        VALUES (#{uid}, #{title}, #{description}, DATE_FORMAT(NOW(), '%Y%m%d'));
+        INSERT INTO habit (uid, title, content, date)
+        VALUES (#{uid}, #{title}, #{content}, DATE_FORMAT(NOW(), '%Y%m%d'));
         <selectKey keyProperty="habitId" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID() AS habitId
         </selectKey>
@@ -47,7 +47,7 @@
     <update id="updateHabit" parameterType="com.fas.toy.dto.habit.UpdateHabitIn">
         UPDATE habit
         SET title = #{title},
-            description = #{description},
+            content = #{content},
             last_icon = #{icon}
         WHERE habit_id = #{habitId}
     </update>
