@@ -69,6 +69,32 @@ export default {
         }
       }
     },
+
+    /**
+     * @desc 일반 로그인 체크
+     * @param {Object} payload id, pw 정보
+     */
+    async loginCheckById ({ state, commit }, payload) {
+      console.log(payload)
+      if (payload.id === '' || payload.pw === '' || payload.id.length < 4 || payload.pw.length < 4) {
+        alert('아이디 및 비밀번호를 확인해주세요.')
+        return false
+      } else {
+        const idAvailableChk = await _fetchData('/auth/idChk', payload)
+
+        if (isEmptyArr(idAvailableChk.data)) { // id가 존재하지않을경우
+          return 'no-id'
+        } else { // id는 존재하는 경우
+          const loginChkRs = await _fetchData('/auth/idPwChk', payload) // id,pw 체크
+          if (isEmptyArr(loginChkRs.data)) {
+            return 'no-pw'
+          } else {
+            commit('updateAuth', payload)
+          }
+        }
+      }
+    },
+
     /**
      * @desc 가입여부 조회 > 미가입시 가입으로 유도
      * @param {object} auth 로그인 정보
@@ -158,4 +184,17 @@ const postHeaderFetchConnection = async (url, headerData, bodyData) => {
         resolve(data)
       })
   })
+}
+
+/**
+ * @desc 배열 존재여부체크
+ * @param {Array} arr 배열
+ * @returns
+ */
+function isEmptyArr (arr) {
+  if (Array.isArray(arr) && arr.length === 0) {
+    return true
+  }
+
+  return false
 }

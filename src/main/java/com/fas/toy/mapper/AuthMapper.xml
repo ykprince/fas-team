@@ -18,4 +18,15 @@
       WHERE userId = #{email} 
         AND kakao_id = #{kakaoId}
   </select>
+
+  <select id="searchId" resultType="com.fas.toy.dto.auth.SearchIdOut">
+    SELECT * FROM member
+      WHERE userId = #{id}
+  </select>
+
+  <select id="searchIdPw" resultType="com.fas.toy.dto.auth.SearchIdOut">
+    SELECT * FROM member
+      WHERE userId = #{id} 
+        AND password = #{pw}
+  </select>
 </mapper>
