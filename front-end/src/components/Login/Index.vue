@@ -4,33 +4,70 @@
       <h1>로그인해주세요</h1>
     </div>
     <div class="form-floating mb-3">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="vertify.id">
-      <label for="floatingInput">Email address</label>
+      <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="vertify.id">
+      <label for="floatingInput">아이디를 입력해주세요</label>
     </div>
     <div class="form-floating">
       <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="vertify.pw">
       <label for="floatingPassword">Password</label>
     </div>
     <div class="btn-area">
+      <button @click="loginChk">로그인할게요</button>
+
       <img :src="KAKKAO_BTN" alt="카카오톡 로그인버튼"  @click="kakaoLogin" class="kakao-login-img">
       <div>
         <button @click="GoogleLogin">google</button>
       </div>
     </div>
-    <button @click="kakaoLogout">로그아웃</button>
+    <button @click="kakaoLogout" v-if="auth.uid">로그아웃</button>
   </div>
 </template>
 <script setup>
 import { useStore } from 'vuex'
 import { KAKAO_JS_API_KEY } from '@/store/kakkaoShareLink.js'
-import { ref } from 'vue'
-
+import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
+const route = useRouter()
 const store = useStore()
+const auth = computed(() => store.state.auth.auth)
+
+watch(() => auth.value, (newValue, oldValue) => {
+  if (auth.value.uid) {
+    console.log('로그인 성공!')
+    route.push('/')
+  }
+})
 const KAKKAO_BTN = require('@/assets/kakao_login_large_wide.png')
 const vertify = ref({
   id: '',
   pw: ''
 })
+const vertifyChk = ref({
+  id: true,
+  pw: true
+})
+
+const loginChk = async () => {
+  fncVertifyChk()
+
+  if (vertifyChk.value.id === true && vertifyChk.value.pw === true) {
+    // 로그인 체크 - store
+    const resString = await store.dispatch('auth/loginCheckById', vertify.value)
+    if (resString === 'no-id') { // id 없을 경우
+      alert('해당 아이디가 존재하지 않습니다.')
+    } else if (resString === 'no-pw') {
+      alert('비밀번호가 틀렸습니다.')
+    }
+  }
+}
+
+const fncVertifyChk = () => {
+  vertify.value.id === '' ? vertifyChk.value.id = false : vertifyChk.value.id = true
+  vertify.value.pw === '' ? vertifyChk.value.pw = false : vertifyChk.value.pw = true
+
+  vertify.value.id.length < 4 ? vertifyChk.value.id = false : vertifyChk.value.id = true // ID는 최소 4글자
+  vertify.value.pw.length < 4 ? vertifyChk.value.pw = false : vertifyChk.value.pw = true // PW는 최소 4글자
+}
 
 const kakaoLogin = async () => {
   await window.Kakao.init(KAKAO_JS_API_KEY)

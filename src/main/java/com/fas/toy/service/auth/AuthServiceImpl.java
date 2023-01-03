@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fas.toy.dao.auth.AuthDao;
+import com.fas.toy.dto.auth.SearchIdIn;
+import com.fas.toy.dto.auth.SearchIdOut;
 import com.fas.toy.dto.auth.SearchKakaoAuthIn;
 import com.fas.toy.dto.auth.SearchKakaoAuthOut;
 
@@ -28,7 +30,16 @@ public class AuthServiceImpl implements AuthService{
 
     List<SearchKakaoAuthOut> skao = authDao.searchIdWithKakao(skai);
     return skao;
+  }
 
-    
+  // id 존재여부 체크
+  @Override
+  public List<SearchIdOut> searchId(SearchIdIn sii) {
+    return authDao.searchId(sii);
+  }
+
+  @Override
+  public List<SearchIdOut> searchIdPw(SearchIdIn sii) {
+    return authDao.searchIdPw(sii);
   }
 }
