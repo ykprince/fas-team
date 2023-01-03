@@ -16,16 +16,19 @@ public class AuthServiceImpl implements AuthService{
    
   @Override
   public List<SearchKakaoAuthOut> searchKakaoAuths(SearchKakaoAuthIn skai){
-    List<SearchKakaoAuthOut> skao =  authDao.searchKakaoAuths(skai);
-    if (skao == null) { //회원가입시 다른 서비스를 호출해야할 것으로 생각
-      // int resultType = authDao.registWithKakao(skai);
-      // return resultType;
-      // 회원가입 내용
-      return null;
-    } else {
-      return null;
+    int rsCnt =  authDao.searchKakaoAuths(skai); // 회원정보 조회 체크
 
-      // 로그인 처리
-    }
+    if (rsCnt == 0) { //회원가입시 다른 서비스를 호출해야할 것으로 생각
+      try {
+        authDao.registWithKakao(skai);
+      } catch (Exception e) {
+        System.out.println(e);
+      }
+    } 
+
+    List<SearchKakaoAuthOut> skao = authDao.searchIdWithKakao(skai);
+    return skao;
+
+    
   }
 }
