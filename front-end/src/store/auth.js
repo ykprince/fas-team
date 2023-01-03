@@ -5,14 +5,13 @@ import router from '@/router/index'
 export default {
   namespaced: true,
   state: {
-    loginstatus: {},
-    auths: {}
+    auth: {}
   },
 
   mutations: {
-    addNewKakaoAuth (state, payload) {
-      state.auths = payload
-      console.log(state.auths)
+    updateAuth (state, payload) { // 회원정보 업데이트
+      state.auth = payload
+      console.log(state.auth)
     }
   },
 
@@ -32,6 +31,10 @@ export default {
       const token = await postFetchConnection(getTokkenUrl, getTokkenBody)
       await window.Kakao.Auth.setAccessToken(token)
     },
+    /**
+     * @desc 카카오로 로그인 or 회원가입 자동 처리
+     * @param {String} payload code 값
+     */
     async kakaoLogin ({ state, commit }, payload) {
       const url1 = 'kauth.kakao.com/oauth/token'
       const bodyData = {
@@ -51,17 +54,19 @@ export default {
 
       if (dataFromKakao.id) {
         const loginCheckData = {
-          id: dataFromKakao.id,
+          kakaoId: dataFromKakao.id,
           email: dataFromKakao.kakao_account.email,
           nickName: dataFromKakao.kakao_account.profile.nickname,
           profileImg: dataFromKakao.kakao_account.profile.profile_image_url,
           profileThumbnailImg: dataFromKakao.kakao_account.profile.thumbnail_image_url,
           lastLoginAt: new Date().toISOString()
         }
-        console.log(loginCheckData)
 
-        const returnData = await _fetchData('/auth/kakaoLoginCheck', loginCheckData)
-        console.log(returnData)
+        const returnData = await _fetchData('/auth/kakaoLoginCheck', loginCheckData) // 카카오로 로그인 및 회원가입 자동 프로세스 처리
+
+        if (returnData.data) {
+          commit('updateAuth', returnData.data[0]) // 회원정보 업데이트
+        }
       }
     },
     /**
@@ -80,9 +85,6 @@ export default {
           router.push({ path: '/auth/register' })
         }
       }
-    },
-    async registWithKakao ({ state, commit }) {
-      console.log(state.auths)
     }
   }
 }

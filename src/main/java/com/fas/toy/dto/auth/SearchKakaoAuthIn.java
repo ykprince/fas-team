@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SearchKakaoAuthIn {
-  private String id;
+  private String kakaoId;
   private String email;
   private String nickName;
   private String profileImg;

@@ -9,6 +9,7 @@ import com.fas.toy.dto.auth.SearchKakaoAuthOut;
 
 @Mapper
 public interface AuthDao {
-  List<SearchKakaoAuthOut> searchKakaoAuths(SearchKakaoAuthIn skai);
+  int searchKakaoAuths(SearchKakaoAuthIn skai);
   int registWithKakao(SearchKakaoAuthIn skai);
+  List<SearchKakaoAuthOut> searchIdWithKakao(SearchKakaoAuthIn skai);
 }

@@ -12,7 +12,7 @@
       <label for="floatingPassword">Password</label>
     </div>
     <div class="btn-area">
-      <img :src="KAKKAO_BTN" alt="카카오톡 로그인버튼"  @click="kakaoLogin" >
+      <img :src="KAKKAO_BTN" alt="카카오톡 로그인버튼"  @click="kakaoLogin" class="kakao-login-img">
       <div>
         <button @click="GoogleLogin">google</button>
       </div>
@@ -62,6 +62,12 @@ max-width: 500px;
   img {
     margin:0 auto;
     width: 100%;
+    box-shadow: 1px 1px 1px grey;
+    border-radius: 5px 5px 5px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 }
