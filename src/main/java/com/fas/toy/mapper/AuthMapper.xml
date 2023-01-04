@@ -19,6 +19,20 @@
         AND kakao_id = #{kakaoId}
   </select>
 
+    <insert id="registNewId">
+        INSERT INTO member
+          (userId, name, nickname, password)
+        VALUES (#{id}, #{name}, #{name}, #{password})
+    </insert>
+
+
+    <select id="chkIdAvailable" resultType="int">
+      SELECT COUNT(uid) AS cnt
+        FROM member
+        WHERE userId = #{id}
+    </select>
+
+
   <select id="searchId" resultType="com.fas.toy.dto.auth.SearchIdOut">
     SELECT * FROM member
       WHERE userId = #{id}
