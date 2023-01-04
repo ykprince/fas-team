@@ -21,10 +21,16 @@ export default {
     ])
   },
   methods: {
-    itemClick (habitId) {
+    async itemClick (habitId) {
       // 습관 아이디로 아이템 조회하기
-      this.$store.dispatch('habit/searchHabitWithId', {
+      await this.$store.dispatch('habit/searchHabitWithId', {
         habitId: habitId
+      })
+
+      // 캘린더 초기화
+      this.$store.commit('habit/updateState', {
+        calendarOn: false,
+        attributes: []
       })
     }
   }

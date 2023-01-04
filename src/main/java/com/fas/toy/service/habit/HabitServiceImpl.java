@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fas.toy.dao.habit.HabitDao;
 import com.fas.toy.dto.habit.HabitIn;
+import com.fas.toy.dto.habit.HabitOut;
 import com.fas.toy.dto.habit.SearchHabitIn;
 import com.fas.toy.dto.habit.SearchHabitOut;
 import com.fas.toy.dto.habit.SearchHabitRecordsOut;
@@ -99,5 +100,10 @@ public class HabitServiceImpl implements HabitService {
         }
         
         return result;
+    }
+
+    @Override
+    public List<SearchHabitRecordsOut> searchHabitRecordsOfTheYear(HabitIn habit) {
+        return HabitDao.searchHabitRecordsOfTheYear(habit);
     }
 }

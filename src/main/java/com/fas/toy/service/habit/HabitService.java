@@ -16,4 +16,5 @@ public interface HabitService {
     public abstract SearchHabitOut insertHabit(HabitIn habit);
     public abstract SearchHabitOut updateHabit(UpdateHabitIn habit);
     public abstract HashMap<String, Boolean> deleteHabit(HabitIn habit);
+    public abstract List<SearchHabitRecordsOut> searchHabitRecordsOfTheYear(HabitIn habit);
 }

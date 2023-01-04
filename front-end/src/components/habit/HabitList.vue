@@ -1,7 +1,7 @@
 <template>
   <div class="habit-item-list" id="habitItemList">
-    <div>
-        <div class="no-data" v-if="Object.keys(habits).length === 0">습관을 추가해 주세요.</div>
+    <div class="habit-items">
+        <div class="no-data" v-if="Object.keys(habits).length === 0">이 곳에 마우스를 올려 습관을 추가해 주세요.</div>
         <HabitItem
           v-for="habit in habits"
           :key="habit.habitId"
@@ -32,18 +32,6 @@ export default {
       'habits',
       'openAddHabitPop'
     ])
-  },
-  methods: {
-    afterAdded (habit) {
-      // 팝업 닫기
-      // this.$store.commit('habit/updateState', {
-      //   openAddHabitPop: false
-      // })
-
-      // 스크롤 하단으로 내리기
-      // const list = document.getElementById('habitItemList')
-      // list.scrollTop = list.scrollHeight
-    }
   }
 }
 </script>
@@ -57,6 +45,11 @@ export default {
 
 .habit-item-list .item:last-child {
   margin-bottom: 80px;
+}
+
+.habit-items {
+  width: 100%;
+  height: 100%;
 }
 
 .no-data {

@@ -54,6 +54,14 @@
 
     <update id="deleteHabit" parameterType="com.fas.toy.dto.habit.HabitIn">
         DELETE FROM habit
-        WHERE habit_id = #{habitId};
+        WHERE habit_id = #{habitId}
     </update>
+
+    <select id="searchHabitRecordsOfTheYear" resultType="com.fas.toy.dto.habit.SearchHabitOut">
+        SELECT icon, date
+        FROM habit_records hr 
+        WHERE uid = #{uid}
+        AND habit_id = #{habitId}
+        AND date LIKE CONCAT(#{date},'%')
+    </select>
 </mapper>

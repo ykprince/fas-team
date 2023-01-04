@@ -43,7 +43,9 @@ export default {
 
       return thisWeek
     })(),
-    theRecord: []
+    theRecord: [],
+    attributes: [],
+    calendarOn: false
   },
   getters: {},
   mutations: {
@@ -89,17 +91,15 @@ export default {
         message: '',
         loading: true
       })
-      console.log('아이디로 조회 전')
+
       payload.startDate = state.thisWeek[0].date
       payload.endDate = state.thisWeek[state.thisWeek.length - 1].date
-      console.log('날짜')
-      console.log(state.thisWeek)
+
       try {
         const res = await _fetchHabit('/habit/getHabitByHabitId', payload)
         const records = res.data.habitRecords
         const theRecord = _.cloneDeep(state.thisWeek)
-        console.log('좀 나와라')
-        console.log(res)
+
         for (const day of theRecord) {
           if (records.length < 1) {
             day.icon = ''
@@ -143,7 +143,9 @@ export default {
 
         await commit('updateState', {
           habits: [...state.habits, res.data],
-          openAddHabitPop: false
+          openAddHabitPop: false,
+          calendarOn: false,
+          attributes: []
         })
       } catch (error) {
         commit('updateState', { loading: false })
@@ -196,7 +198,6 @@ export default {
       }
 
       if (doSch) {
-        console.log('네')
         // 수정한 습관 재조회
         await dispatch('searchHabitWithId', { habitId: obj.habitId })
       }
@@ -223,6 +224,42 @@ export default {
       }
 
       await dispatch('searchHabits')
+    },
+    async searchHabitRecordsOfTheYear ({ state, commit }, payload) {
+      if (state.loading) return
+
+      commit('updateState', {
+        message: '',
+        loading: true
+      })
+
+      try {
+        const res = await _fetchHabit('/habit/searchHabitRecordsOfTheYear', payload)
+        const attribute = []
+
+        for (const element of res.data) {
+          const attr = element
+          const object = {
+            customData: {
+              class: attr.icon
+            },
+            dates: new Date(attr.date.substring(0, 4), Number(attr.date.substring(4, 6)) - 1, attr.date.substring(6))
+          }
+          attribute.push(object)
+        }
+
+        commit('updateState', {
+          attributes: [...attribute]
+        })
+      } catch (error) {
+        console.log(error)
+        console.log('실패')
+        return
+      } finally {
+        commit('updateState', {
+          loading: false
+        })
+      }
     }
   }
 }
