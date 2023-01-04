@@ -68,4 +68,16 @@ public class HabitController {
 
         return HabitService.deleteHabit(habit);
     }
+
+    @GetMapping("/searchHabitRecordsOfTheYear")
+    public List<SearchHabitRecordsOut> searchHabitRecordsOfTheYear(@RequestBody HabitIn habit) {
+        int loginId = 1; // 추후 세션 구현되면 세션값 받아서 셋팅
+        habit.setUid(loginId);
+
+        LOGGER.info("------------------------------");
+        LOGGER.info(habit.toString());
+        LOGGER.info("------------------------------");
+
+        return HabitService.searchHabitRecordsOfTheYear(habit);
+    }
 }

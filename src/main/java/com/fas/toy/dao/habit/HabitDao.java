@@ -21,4 +21,5 @@ public interface HabitDao {
     int insertHabit(HabitIn habit);
     int updateHabit(UpdateHabitIn habit);
     void deleteHabit(HabitIn habit);
+    List<SearchHabitRecordsOut> searchHabitRecordsOfTheYear(HabitIn habit);
 }

@@ -75,10 +75,11 @@ export default {
 
   .left-section {
     position: relative;
+    height: 400px;
 
     .habit-list {
       display: inline-block;
-      height: 400px;
+      height: 100%;
       min-width: 300px;
       -ms-overflow-style: none;
 
