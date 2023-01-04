@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fas.toy.dao.auth.AuthDao;
+import com.fas.toy.dto.auth.RegistIn;
 import com.fas.toy.dto.auth.SearchIdIn;
 import com.fas.toy.dto.auth.SearchIdOut;
 import com.fas.toy.dto.auth.SearchKakaoAuthIn;
@@ -15,11 +16,11 @@ import com.fas.toy.dto.auth.SearchKakaoAuthOut;
 public class AuthServiceImpl implements AuthService{
   @Autowired
   public AuthDao authDao;
-   
+  
   @Override
   public List<SearchKakaoAuthOut> searchKakaoAuths(SearchKakaoAuthIn skai){
     int rsCnt =  authDao.searchKakaoAuths(skai); // 회원정보 조회 체크
-
+    
     if (rsCnt == 0) { //회원가입시 다른 서비스를 호출해야할 것으로 생각
       try {
         authDao.registWithKakao(skai);
@@ -27,19 +28,37 @@ public class AuthServiceImpl implements AuthService{
         System.out.println(e);
       }
     } 
-
+    
     List<SearchKakaoAuthOut> skao = authDao.searchIdWithKakao(skai);
     return skao;
   }
-
-  // id 존재여부 체크
-  @Override
+  
+  @Override // id 존재여부 체크
   public List<SearchIdOut> searchId(SearchIdIn sii) {
     return authDao.searchId(sii);
   }
-
+  
   @Override
   public List<SearchIdOut> searchIdPw(SearchIdIn sii) {
     return authDao.searchIdPw(sii);
+  }
+  
+  @Override
+  public String chkIdAvailable(SearchIdIn sii) {
+    System.out.println(sii);
+    String rt ;
+    int cnt = authDao.chkIdAvailable(sii);
+    if (cnt > 0) {
+      rt = "exist";
+    } else {
+      rt = "available";
+    }
+    
+    return rt;
+  }
+
+  @Override
+  public int registNewId(RegistIn sii) {
+    return authDao.registNewId(sii);
   }
 }

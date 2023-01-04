@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fas.toy.dto.auth.RegistIn;
 import com.fas.toy.dto.auth.SearchIdIn;
 import com.fas.toy.dto.auth.SearchIdOut;
 import com.fas.toy.dto.auth.SearchKakaoAuthIn;
@@ -37,6 +38,18 @@ public class AuthController {
   @PostMapping("/idPwChk")
   public List<SearchIdOut> searchIdPw(SearchIdIn sii) {
     return AuthService.searchIdPw(sii);
+  }
+
+  @ResponseBody
+  @PostMapping("/chkIdAvailable")
+  public String chkIdAvailable(SearchIdIn sii) {
+    return AuthService.chkIdAvailable(sii);
+  }
+
+  @ResponseBody
+  @PostMapping("/registNewId")
+  public int registNewId(RegistIn sii) {
+    return AuthService.registNewId(sii);
   }
   
 }

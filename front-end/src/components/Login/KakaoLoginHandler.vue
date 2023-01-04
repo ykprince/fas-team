@@ -18,7 +18,7 @@ store.dispatch('auth/kakaoLogin', code)
 watch(() => auth.value, (newValue, oldValue) => {
   if (auth.value.uid) {
     console.log('로그인 성공!')
-    route.push('/')
+    route.replace('/')
   }
 })
 

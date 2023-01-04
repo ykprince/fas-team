@@ -1,22 +1,36 @@
-import { CLIENT_ID, KAKAO_REST_API_KEY, DEV_REDIRECT_URI } from '@/store/kakkaoShareLink.js'
+import { CLIENT_ID, KAKAO_REST_API_KEY, DEV_REDIRECT_URI, KAKAO_JS_API_KEY } from '@/store/kakkaoShareLink.js'
 import axios from 'axios'
 import router from '@/router/index'
 
 export default {
   namespaced: true,
   state: {
-    auth: {}
+    auth: [],
+    loading: false
+  },
+
+  getters: {
+    getAuth (state) {
+      return state.auth
+    },
+    getSessionAuth () {
+      const rs = getSessionLogin()
+      console.log(rs)
+    }
   },
 
   mutations: {
     updateAuth (state, payload) { // 회원정보 업데이트
       state.auth = payload
-      console.log(state.auth)
+    },
+    activeLoading (state, payload) {
+      state.loading = payload
     }
   },
 
   actions: {
     async kakaoAuthorize ({ state, commit }) {
+      await window.Kakao.init(KAKAO_JS_API_KEY)
       const result = await window.Kakao.Auth.authorize({
         redirectUri: DEV_REDIRECT_URI
       })
@@ -68,6 +82,7 @@ export default {
           commit('updateAuth', returnData.data[0]) // 회원정보 업데이트
         }
       }
+      commit('activeLoading', false)
     },
 
     /**
@@ -75,7 +90,10 @@ export default {
      * @param {Object} payload id, pw 정보
      */
     async loginCheckById ({ state, commit }, payload) {
-      console.log(payload)
+      commit('activeLoading', true)
+      await resetAutoLogin()
+      await autoLoginSet(payload) // 자동로그인설정
+
       if (payload.id === '' || payload.pw === '' || payload.id.length < 4 || payload.pw.length < 4) {
         alert('아이디 및 비밀번호를 확인해주세요.')
         return false
@@ -89,12 +107,29 @@ export default {
           if (isEmptyArr(loginChkRs.data)) {
             return 'no-pw'
           } else {
-            commit('updateAuth', payload)
+            commit('updateAuth', loginChkRs.data) // auth-store 정보 저장
+            setSessionLogin(loginChkRs.data)
           }
         }
       }
+      commit('activeLoading', false)
     },
 
+    /**
+     * @desc 일반 회원가입
+     * @param {Object} payload id, pw
+     */
+    async registWithId ({ state, commit }, payload) {
+      console.log(payload)
+      if (payload.id === '' || payload.pw === '' || payload.id.length < 4 || payload.name === '') {
+        return 'verify-failure'
+      }
+      const idCheckResult = await _fetchData('/auth/chkIdAvailable', { id: payload.id }) // id 존재여부체크
+      if (idCheckResult.data === 'available') {
+        const rs = await _fetchData('/auth/registNewId', payload)
+        return rs.data
+      }
+    },
     /**
      * @desc 가입여부 조회 > 미가입시 가입으로 유도
      * @param {object} auth 로그인 정보
@@ -111,6 +146,25 @@ export default {
           router.push({ path: '/auth/register' })
         }
       }
+    },
+
+    /**
+     * @desc 아이디/이메일 존재여부 확인
+     * @param {String} payload 아이디/이메일
+     */
+    async chkIdAvailable ({ state, commit }, payload) {
+      const rs = await _fetchData('/auth/chkIdAvailable', { id: payload })
+      return rs.data
+    },
+
+    async getLoginSession ({ state, commit }) {
+      if (!state.auth) {
+        const sessionLoginData = await getSessionLogin()
+        if (sessionLoginData && sessionLoginData !== {}) {
+          console.log('session에서 불러온 데이터:::: ' + sessionLoginData)
+          commit('updateAuth', sessionLoginData)
+        }
+      }
     }
   }
 }
@@ -119,7 +173,6 @@ export default {
  * @desc axios비동기통신 함수
  * @param {string} url
  * @param {object} payload
- * @returns
  */
 function _fetchData (url, payload) {
   return new Promise((resolve, reject) => {
@@ -138,7 +191,6 @@ function _fetchData (url, payload) {
 }
 
 /**
- *
  * @param {String} url 주소
  * @param {object} bodyData 보내야하는 데이터
  */
@@ -164,7 +216,6 @@ const postFetchConnection = async (url, bodyData) => {
 }
 
 /**
- *
  * @param {String} url 주소
  * @param {object} bodyData 보내야하는 데이터
  */
@@ -186,15 +237,34 @@ const postHeaderFetchConnection = async (url, headerData, bodyData) => {
   })
 }
 
-/**
- * @desc 배열 존재여부체크
- * @param {Array} arr 배열
- * @returns
- */
-function isEmptyArr (arr) {
+function isEmptyArr (arr) { // 배열 존재여부체크
   if (Array.isArray(arr) && arr.length === 0) {
     return true
   }
 
   return false
+}
+
+const autoLoginSet = async (loginData) => { // localStorage 저장
+  if (loginData.autoLoginChk === true) {
+    localStorage.setItem('fasolVueAppLoginId', loginData.id)
+    localStorage.setItem('fasolVueAppLoginPw', loginData.pw)
+  } else {
+    localStorage.removeItem('fasolVueAppLoginId', loginData.id)
+    localStorage.removeItem('fasolVueAppLoginPw', loginData.pw)
+  }
+}
+
+const resetAutoLogin = async () => { // 자동 로그인 해제
+  localStorage.removeItem('fasolVueAppLoginId')
+  localStorage.removeItem('fasolVueAppLoginPw')
+}
+
+const setSessionLogin = (loginData) => { // 세션에 로그인 데이터 저장
+  localStorage.setItem('fasolSessionLoginInfo', JSON.stringify(loginData))
+}
+
+const getSessionLogin = async () => { // 세션 로그인정보 가져오기
+  const rs = localStorage.getItem('fasolSessionLoginInfo')
+  return JSON.parse(rs)
 }
