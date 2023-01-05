@@ -67,8 +67,8 @@ export default {
     },
     async filterGethers ({ state, commit }, payload) {
       let tempGethers
-      console.log('thisis', payload)
-      await payload === 0
+      // console.log('thisis', payload)
+      payload === 0
         ? tempGethers = state.gethersOrigin
         : tempGethers = state.gethersOrigin.filter((obj) =>
           obj.type === payload
