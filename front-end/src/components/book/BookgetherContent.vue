@@ -12,6 +12,9 @@
                 <div class="info-span">
                     <span>{{ getherContent.contents }}</span>
                 </div>
+                <div class="go-url">
+                    <button type="button" class="btn btn-link" @click="openURL(getherContent.url)">자세히 보러 가기</button>
+                </div>
             </div>
         </div>
         <!--// 상단  -->
@@ -130,6 +133,9 @@ export default {
     ])
   },
   methods: {
+    openURL (url) {
+      window.open(url)
+    }
   },
   mounted () {
   }
@@ -196,7 +202,7 @@ export default {
         .memo-submit-bottom {
             width: 20%;
             display: block;
-text-align: left;
+            text-align: left;
             .page-input {
                 width: 100%;
                 padding-left: 5%;
@@ -219,5 +225,10 @@ text-align: left;
 }
 .memo-area {
     height: 80%;
+}
+
+.go-url {
+    text-align: right;
+    margin-top: 5px;
 }
 </style>

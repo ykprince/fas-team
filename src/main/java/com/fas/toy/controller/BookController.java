@@ -26,9 +26,7 @@ public class BookController {
 
     @PostMapping("/insert")
     public String insertBookGethering(@RequestBody BookGetherDto dto) {
-        System.out.println(dto);
-        int result = service2.insertBookGether(dto);
-        return result > 0 ? "등록 성공" : "문제가 발생";
+        return service2.insertBookGether(dto) > 0 ? "등록 성공" : "문제가 발생";
     }
 
     @PostMapping("/selectBookGetherList")

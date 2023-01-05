@@ -1,8 +1,8 @@
 <template>
   <div class="book-main-container">
-    <div class="type-card">
+    <div :class="viewType">
       <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
           <button class="nav-link active" id="nav-all-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-all" aria-selected="true" @click="testtt(0)">전체</button>
           <button class="nav-link" id="nav-type-1-tab" data-bs-toggle="tab" data-bs-target="#nav-type-1" type="button" role="tab" aria-controls="nav-type-1" aria-selected="false" @click="testtt(1)">읽은 책</button>
           <button class="nav-link" id="nav-type-2-tab" data-bs-toggle="tab" data-bs-target="#nav-type-2" type="button" role="tab" aria-controls="nav-type-2" aria-selected="false" @click="testtt(2)">읽고 있는 책</button>
@@ -11,16 +11,6 @@
         <div class="etc-bar">
           <button type="button" id="delConfirmBtn" class="btn btn-light" @click="delGethers" style="display:none">정리 목록 전송</button>
           <button type="button" id="delSwitchBtn" class="btn btn-light" @click="modiGethers">정리하기</button>
-          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-            <label class="btn btn-outline-primary" for="btnradio1">카드</label>
-
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btnradio2">리스트</label>
-
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btnradio3">개별</label>
-          </div>
         </div>
       </nav>
       <div class="infoArea">
@@ -63,16 +53,22 @@ export default {
       delArr: []
     }
   },
+  props: {
+    viewType: {
+      Type: String,
+      default: 'type-card'
+    }
+  },
   watch: {
     tItem (newVal) {
       this.$store.dispatch('bookGether/filterGethers', newVal)
-      console.log(this.gethers)
+      // this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: newVal })
     },
     successTf (newVal) {
       if (newVal) {
         this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: 0 })
       } else {
-        console.log('failfailfailfailfailfailfailfailfailfailfailfail')
+        console.log('fail')
       }
     }
   },
@@ -103,13 +99,18 @@ export default {
         this.modiKey = 1
         this.bgId = 0
         this.vibration = 'vibration'
-        document.getElementById('delSwitchBtn').value = '취소하기'
+        document.getElementById('delSwitchBtn').innerHTML = '취소하기'
         document.getElementById('delConfirmBtn').style.display = ''
       } else if (this.modiKey === 1) {
         this.modiKey = 0
         this.vibration = ''
-        document.getElementById('delSwitchBtn').value = '정리하기'
+        this.delArr = []
+        document.getElementById('delSwitchBtn').innerHTML = '정리하기'
         document.getElementById('delConfirmBtn').style.display = 'none'
+
+        document.querySelectorAll('.del-pushed').forEach(function (obj) {
+          obj.classList.remove('del-pushed')
+        })
       }
     },
     pushDelArr (idx) {
@@ -127,7 +128,10 @@ export default {
       console.log(this.delArr)
     },
     delGethers () {
-      this.$store.dispatch('bookGether/delBookGether', { arr: this.delArr })
+      this.$store.dispatch('bookGether/delBookGether', { arr: this.delArr }).then(() => {
+        this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: 0 })
+        this.modiGethers()
+      })
     }
   },
   mounted () {
@@ -143,7 +147,6 @@ export default {
 .book-main-container{
   margin: 10px;
   height: 600px;
-  background-color: rgb(252, 252, 252);
   display: flex;
 }
 .detailArea {
@@ -156,6 +159,7 @@ export default {
   width: 100%;
   text-align: right;
   margin-right: 10px;
+  margin-top: 10px;
 }
 // 최상위 div 클래스명 변경
 // 1. 카드형 - type-card
@@ -165,6 +169,8 @@ export default {
   width: 50%;
   overflow: hidden;
   margin: 15px;
+  border: 5px dotted aliceblue;
+  padding: 5px;
   .infoArea {
     display: inline-flex;
     flex-wrap: wrap;
@@ -274,5 +280,9 @@ export default {
   opacity: 0.7;
   position: absolute;
   z-index: 10;
+}
+
+.nav {
+
 }
 </style>
