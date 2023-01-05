@@ -1,13 +1,9 @@
 <template lang="">
   <div class="container" v-if="rollingpaperObj.length > 0">
     <div class="container-header">
-      <div class="header-text">
-        <span>반가워요,</span>
-        <h2>ㅇㅇㅇ</h2>
-        <span>님</span>
-      </div>
+      <hello-user></hello-user>
       <div class="add-new-button">
-        <button @click="moveAddNewRP">새로운 롤링페이퍼</button>
+        <button @click="router.push('/add-rollingpaper')">새로운 롤링페이퍼</button>
       </div>
     </div>
     <div class="content-repeat-area">
@@ -36,6 +32,7 @@
 import { useStore } from 'vuex'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import HelloUser from '@/components/rollingPaper/HelloUser.vue'
 import modalPopup from '@/components/modalPopup.vue'
 import paperListItem from '@/components/rollingPaper/paperListItem.vue'
 const router = useRouter()
@@ -45,14 +42,14 @@ const modalText = ref('삭제 하시겠습니까?')
 const btnText1 = ref('확인')
 const btnText2 = ref('취소')
 const store = useStore()
+const userInfo = computed(() => store.state.auth.auth) // 로그인정보 조회
+if (Object.keys(userInfo).length === 0) {
+  router.push('/auth/login')
+}
 const rollingpaperObj = computed(() => store.state.rollingPaper.all) // 롤링페이퍼
 onMounted(() => {
-  store.dispatch('getAllPapers')
+  store.dispatch('getAllPapers', userInfo.value.uid)
 })
-
-const moveAddNewRP = () => {
-  router.push('/add-rollingpaper')
-}
 
 const submitChk = async () => { // 삭제확인
   await store.dispatch('deletePaper', waitingDeleteObj.value)
@@ -95,21 +92,6 @@ const cancelChk = () => { // 삭제취소
   justify-content: space-between;
   height: 4rem;
   margin-bottom: 2rem;
-
-  .header-text{
-    flex:1;
-    min-width: 180px;
-    text-align:left;
-
-    h2 {
-      display: inline-block;
-      font-size: 2.7rem;
-      font-weight: bold;
-    }
-    span{
-      font-size: 1.8rem;
-    }
-  }
 
   .add-new-button{
     padding-right: 0.5rem;

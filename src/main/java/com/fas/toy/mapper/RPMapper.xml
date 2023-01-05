@@ -6,7 +6,7 @@
       SELECT r.*, COUNT(l.r_seq) as listCount 
         FROM rollingpaper AS r LEFT JOIN letter AS l 
         ON r.r_seq =l.r_seq 
-        WHERE r.uid=#{id} 
+        WHERE r.uid=#{uid} 
         GROUP BY r.r_seq
   </select>
 

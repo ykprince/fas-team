@@ -71,6 +71,21 @@ const vertifyChk = ref({
   overDate: true,
   content: true
 })
+const user = computed(() => store.state.auth.auth)
+
+if (Object.keys(user.value).length === 0) { // 로그인하지않았을경우, 로그인/회원가입으로 유도
+  const params = {
+    pageName: 'WriteNewLetter',
+    param: {
+      id: props.id
+    }
+  }
+  console.log('파람데이터 ::')
+  console.log(params)
+  await store.dispatch('auth/setParams', params) // store에 파라미터 저장
+  console.log('로그인화면으로 이동함요')
+  // router.push({ name: 'login' })
+}
 const onePageInfo = computed(() => store.getters.getOnePapersInfo)
 store.dispatch('checkPaperAvailable', props.id)
 

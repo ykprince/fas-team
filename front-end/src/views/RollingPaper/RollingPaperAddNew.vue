@@ -83,8 +83,10 @@ const validChk = ref({
   content: true
 })
 const store = useStore()
+const userInfo = computed(() => store.state.auth.auth) // 로그인정보 조회
+// const rollingpaperObj = computed(() => store.state.rollingPaper.all) // 롤링페이퍼
 
-store.dispatch('getAllPapers')
+store.dispatch('getAllPapers', userInfo.value.uid)
 
 const selectColor = (newBgColor) => {
   selectBackground.value = newBgColor
@@ -131,6 +133,7 @@ const closeAdd = () => {
 
 const addNewPaper = async () => {
   const dataObj = {
+    uid: userInfo.value.uid,
     rTitle: title.value,
     rContent: content.value,
     rStyle: selectBackground.value,

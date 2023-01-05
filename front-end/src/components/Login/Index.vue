@@ -104,7 +104,7 @@ const loginChk = async () => {
     if (resString === 'success-login') {
       if (auth.value !== {} && auth.value) {
         loading.value = false
-        route.push('/')
+        route.replace('/')
       }
     } else {
       fncFailedVerify(resString) // 유효성 검사 실패 로직

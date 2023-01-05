@@ -20,8 +20,10 @@ public class RPServiceImpl implements RPService {
   RPDao RPDao;
 
   @Override
-  public List<SearchRollingpaperOut> searchRollingpapers(int id) {
-    return RPDao.searchRollingpapers(id);
+  public List<SearchRollingpaperOut> searchRollingpapers(int uid) {
+    System.out.println("contorller:: " + uid);
+
+    return RPDao.searchRollingpapers(uid);
   }
 
   @Override

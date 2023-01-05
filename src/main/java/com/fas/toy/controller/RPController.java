@@ -26,10 +26,10 @@ public class RPController {
   @Autowired
   RPService rpService;
   
+  @ResponseBody
   @PostMapping("/getRollingpapers")
-  public List<SearchRollingpaperOut> searchRollingpapers() {
-    int id2 = 2; //세션값 가져오기
-    return rpService.searchRollingpapers(id2);
+  public List<SearchRollingpaperOut> searchRollingpapers(@RequestBody int uid) {
+    return rpService.searchRollingpapers(uid);
   }
 
   @ResponseBody
@@ -59,8 +59,6 @@ public class RPController {
   @ResponseBody
   @PostMapping("/addNewPaper")
   public int addNewPaper(@RequestBody AddNewPaperIn addNewPaperin) {
-    addNewPaperin.setUid(2);
-
     return rpService.addNewPaper(addNewPaperin);
   }
 
