@@ -3,9 +3,6 @@
     <div class="writing-section">
       <write-letter :id="props.id"></write-letter>
     </div>
-    <div>
-
-    </div>
   </div>
 </template>
 <script setup>

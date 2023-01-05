@@ -14,7 +14,7 @@ import com.fas.toy.dto.rollingpaper.SearchPaperTitleOut;
 
 @Mapper
 public interface RPDao {
-  List<SearchRollingpaperOut> searchRollingpapers(int id);
+  List<SearchRollingpaperOut> searchRollingpapers(int uid);
   List<SearchLetterOut> searchLetters(int r_seq);
   List<SearchOnePaperOut> searchOnePaper(int id);
   SearchPaperTitleOut searchPaperTitle(SearchPaperTitleIn searchPaperTitleIn);

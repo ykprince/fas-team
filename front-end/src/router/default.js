@@ -26,5 +26,9 @@ export default [
     path: '/auth/regist',
     name: 'register',
     component: () => import('@/components/Login/Register.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/Error.vue')
   }
 ]

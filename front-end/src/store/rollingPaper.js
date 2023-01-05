@@ -46,12 +46,9 @@ export default {
   },
 
   actions: {
-    /**
-     * @desc 본인의 모든 목록 조회
-     */
-    async getAllPapers ({ commit }) {
+    async getAllPapers ({ state, commit }, payload) { // 소유하고 있는 모든 롤링페이퍼 조회
       const url = '/rp/getRollingpapers'
-      const rsObj = await _fetchRollingpaper(url, {})
+      const rsObj = await _fetchRollingpaper(url, { uid: payload })
       console.log(rsObj.data)
       commit('updateState', rsObj.data)
     },
@@ -60,7 +57,6 @@ export default {
      * @param {object} payload 페이퍼 객체 한개
      */
     async deletePaper ({ state, commit }, payload) {
-      // post -> rseq 값만 가져감
       const rSeq = payload.rseq
       const url = '/rp/deletePaper'
       const res = await _fetchRollingpaper(url, { rSeq: rSeq })
@@ -123,6 +119,7 @@ export default {
     async addNewPaper ({ state, commit }, payload) {
       const now = new Date().toISOString().substring(0, 10)
       const newPaperInfo = {
+        uid: payload.uid,
         rTitle: payload.rTitle,
         rContent: payload.rContent,
         rStyle: payload.rStyle,
@@ -132,7 +129,7 @@ export default {
       }
       const url = '/rp/addNewPaper'
       const res = await _fetchRollingpaper(url, newPaperInfo)
-      if (res > 0) {
+      if (res.data > 0) {
         const newPaperList = state.all.push(newPaperInfo)
         commit('updateState', newPaperList)
         router.push({ name: 'rollingpaper' })

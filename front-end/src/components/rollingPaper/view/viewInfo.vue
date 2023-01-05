@@ -57,7 +57,6 @@
 import MasonryWall from '@yeger/vue-masonry-wall'
 import { useStore } from 'vuex'
 import { defineProps, computed, ref } from 'vue'
-import { KAKKAO_JS_API_KEY } from '@/store/kakkaoShareLink.js'
 import TopImage from '../TopImage.vue'
 const props = defineProps({
   id: {
@@ -91,14 +90,7 @@ const searchName = () => {
 }
 
 const showOthers = async () => {
-  await window.Kakao.init(KAKKAO_JS_API_KEY)
-  await window.Kakao.Share.sendCustom({
-    templateId: 87538,
-    installTalk: true, // 카카오톡 미설치시 설치페이지로 이동
-    serverCallbackArgs: {
-      key: props.id // 사용자 정의 파라미터 설정
-    }
-  })
+  store.dispatch('auth/shareRPLink', { id: props.id })
 }
 
 const searchMyLetter = () => {

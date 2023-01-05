@@ -6,6 +6,7 @@ export default {
   namespaced: true,
   state: {
     auth: {},
+    authParams: {},
     logoutChk: false
   },
 
@@ -24,10 +25,27 @@ export default {
     },
     updateLogoutChk (state, payload) {
       state.logoutChk = payload
+    },
+    updateParam (state, payload) {
+      console.log('payload::: ' + payload)
+      state.authParams = payload
     }
   },
 
   actions: {
+    async setParams ({ state, commit }, payload) {
+      commit('updateParam', payload)
+    },
+    async shareRPLink ({ state, commit }, payload) {
+      await window.Kakao.init(KAKAO_JS_API_KEY)
+      await window.Kakao.Share.sendCustom({
+        templateId: 87839,
+        installTalk: true, // 카카오톡 미설치시 설치페이지로 이동
+        templateArgs: {
+          id: `${payload.id}` // 사용자 정의 파라미터 설정
+        }
+      })
+    },
     async kakaoAuthorize ({ state, commit }) {
       await window.Kakao.init(KAKAO_JS_API_KEY)
       const result = await window.Kakao.Auth.authorize({
