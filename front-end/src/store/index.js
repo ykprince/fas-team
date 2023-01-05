@@ -5,6 +5,7 @@ import bookGether from './bookGether'
 import habit from './habit'
 import rollingPaper from './rollingPaper'
 import auth from './auth'
+import createPersistedState from 'vuex-persistedstate'
 
 export default createStore({
   state: {
@@ -22,5 +23,8 @@ export default createStore({
     habit,
     rollingPaper,
     auth
-  }
+  },
+  plugins: [createPersistedState({
+    paths: ['auth']
+  })]
 })
