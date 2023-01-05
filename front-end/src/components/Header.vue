@@ -11,66 +11,60 @@
       </RouterLink>
     </nav>
     <div class="login-area">
-      <RouterLink v-if="auth" to="/auth/login">Login</RouterLink>
-      <button v-if="!auth" @click="logout">Logout</button>
-      <button v-if="!auth" >My Page</button>
+      <RouterLink class="login-button" v-if="!authChk" to="/auth/login">Login</RouterLink>
+      <button v-if="authChk" @click="logout">Logout</button>
+      <button v-if="authChk" >My Page</button>
+      <!-- <img src="" alt=""> --> <!--프로필 이미지-->
     </div>
   </header>
 </template>
 
-<script>
-import { mapGetters, mapState } from 'vuex'
-export default {
-  data () {
-    return {
-      navigations: [
-        {
-          name: 'Search',
-          href: '/'
-        },
-        {
-          name: 'About',
-          href: '/about'
-        },
-        {
-          name: 'Habit',
-          href: '/habit'
-        },
-        {
-          name: 'Book',
-          href: '/book'
-        },
-        {
-          name: 'Rollingpaper',
-          href: '/rollingpaper'
-        }
-      ]
-    }
+<script setup>
+import { useStore } from 'vuex'
+import { ref, computed, watchEffect } from 'vue'
+const navigations = ref([
+  {
+    name: 'Search',
+    href: '/'
   },
-  computed: {
-    ...mapState(['auth']),
-    ...mapGetters(['getAuth'])
+  {
+    name: 'About',
+    href: '/about'
   },
-  methods: {
+  {
+    name: 'Habit',
+    href: '/habit'
   },
-  created () {
-    this.$store.dispatch('auth/getLoginSession')
+  {
+    name: 'Book',
+    href: '/book'
+  },
+  {
+    name: 'Rollingpaper',
+    href: '/rollingpaper'
   }
-}
+])
+const store = useStore()
+const auth = computed(() => store.state.auth.auth)
+const authChk = ref(false)
+watchEffect(() => {
+  authChk.value = Object.keys(auth.value).length
+})
+const logout = () => { store.dispatch('auth/logoutAuth') }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 header {
   height: 70px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   padding: 0 40px;
   position: relative;
 }
 
 nav {
-  padding: 30px;
-  flex: 1;
+  padding: 15px;
 }
 
 a {
@@ -84,5 +78,21 @@ nav a.router-link-exact-active {
 
 .login-area {
   width: fit-content;
+  position: absolute;
+  right: 35px;
+
+  button, .login-button {
+    width: fit-content;
+    height: 45px;
+    padding: 15px;
+    background: inherit;
+    border: none;
+    color: #2c3e50;
+    text-decoration: none;
+
+    &:hover {
+      background: #e2e2e2;
+    }
+  }
 }
 </style>

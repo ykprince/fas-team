@@ -5,17 +5,16 @@ import router from '@/router/index'
 export default {
   namespaced: true,
   state: {
-    auth: [],
-    loading: false
+    auth: {},
+    logoutChk: false
   },
 
   getters: {
     getAuth (state) {
       return state.auth
     },
-    getSessionAuth () {
-      const rs = getSessionLogin()
-      console.log(rs)
+    getLogoutCheck (state) {
+      return state.logoutChk
     }
   },
 
@@ -23,8 +22,8 @@ export default {
     updateAuth (state, payload) { // 회원정보 업데이트
       state.auth = payload
     },
-    activeLoading (state, payload) {
-      state.loading = payload
+    updateLogoutChk (state, payload) {
+      state.logoutChk = payload
     }
   },
 
@@ -82,7 +81,6 @@ export default {
           commit('updateAuth', returnData.data[0]) // 회원정보 업데이트
         }
       }
-      commit('activeLoading', false)
     },
 
     /**
@@ -90,7 +88,6 @@ export default {
      * @param {Object} payload id, pw 정보
      */
     async loginCheckById ({ state, commit }, payload) {
-      commit('activeLoading', true)
       await resetAutoLogin()
       await autoLoginSet(payload) // 자동로그인설정
 
@@ -107,12 +104,13 @@ export default {
           if (isEmptyArr(loginChkRs.data)) {
             return 'no-pw'
           } else {
-            commit('updateAuth', loginChkRs.data) // auth-store 정보 저장
-            setSessionLogin(loginChkRs.data)
+            commit('updateAuth', loginChkRs.data[0]) // auth-store 정보 저장
+            setSessionLogin(loginChkRs.data[0])
+
+            return 'success-login'
           }
         }
       }
-      commit('activeLoading', false)
     },
 
     /**
@@ -157,15 +155,31 @@ export default {
       return rs.data
     },
 
-    async getLoginSession ({ state, commit }) {
-      if (!state.auth) {
+    async getLoginSession ({ state, commit }) { // store에 값이 비었을 때 session에서 값 수신
+      if (!state.auth || state.auth === {}) {
         const sessionLoginData = await getSessionLogin()
         if (sessionLoginData && sessionLoginData !== {}) {
           console.log('session에서 불러온 데이터:::: ' + sessionLoginData)
           commit('updateAuth', sessionLoginData)
         }
       }
+    },
+
+    async logoutAuth ({ state, commit }) {
+      console.log('logout process')
+      // 0.session 로그아웃 처리
+      sessionStorage.removeItem('fasolSessionLoginInfo')
+      // 1.auth 비우기
+      commit('updateAuth', {}) // 빈객체로 초기화 처리
+      // 2.logoutChk false 처리 : 자동 로그인 방지용
+      commit('updateLogoutChk', false)
+
+      router.push('/auth/login')
+
+      // session을 먼저 처리한 이유 : header에 값이 없으면 session으로 얻어오게 하는 created 로직 존재함, 해당 로직이 호출 될 수 있어서
+      console.log('logout end')
     }
+
   }
 }
 
@@ -247,24 +261,22 @@ function isEmptyArr (arr) { // 배열 존재여부체크
 
 const autoLoginSet = async (loginData) => { // localStorage 저장
   if (loginData.autoLoginChk === true) {
-    localStorage.setItem('fasolVueAppLoginId', loginData.id)
-    localStorage.setItem('fasolVueAppLoginPw', loginData.pw)
+    localStorage.setItem('fasolLocalAutoLoginInfo', JSON.stringify(loginData))
   } else {
-    localStorage.removeItem('fasolVueAppLoginId', loginData.id)
-    localStorage.removeItem('fasolVueAppLoginPw', loginData.pw)
+    localStorage.removeItem('fasolLocalAutoLoginInfo')
   }
 }
 
 const resetAutoLogin = async () => { // 자동 로그인 해제
-  localStorage.removeItem('fasolVueAppLoginId')
-  localStorage.removeItem('fasolVueAppLoginPw')
+  localStorage.removeItem('fasolLocalAutoLoginInfo')
 }
 
 const setSessionLogin = (loginData) => { // 세션에 로그인 데이터 저장
-  localStorage.setItem('fasolSessionLoginInfo', JSON.stringify(loginData))
+  sessionStorage.setItem('fasolSessionLoginInfo', JSON.stringify(loginData))
 }
 
 const getSessionLogin = async () => { // 세션 로그인정보 가져오기
-  const rs = localStorage.getItem('fasolSessionLoginInfo')
+  const rs = sessionStorage.getItem('fasolSessionLoginInfo')
+  sessionStorage.setItem('fasolSessionLoginInfo', rs)
   return JSON.parse(rs)
 }
