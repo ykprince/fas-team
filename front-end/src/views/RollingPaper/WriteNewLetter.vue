@@ -1,25 +1,24 @@
 <template lang="">
   <div class="container">
     <div class="writing-section">
-      <write-letter :id="props.id"></write-letter>
+      <write-letter :id="NumberId"></write-letter>
     </div>
   </div>
 </template>
 <script setup>
 import WriteLetter from '@/components/rollingPaper/new/writeLetter.vue'
-import { defineProps } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-const props = defineProps({
-  id: {
-    default: 0,
-    Type: Number
-  }
-})
+
 const router = useRouter()
-// 값확인
-if (props.id === 0 || props.id === '0') {
+const NumberId = ref(0)
+const id = new URLSearchParams(location.search).get('id')
+
+if (id === '' || !id) {
   alert('해당하는 페이지가 존재하지않습니다.')
   router.push({ name: 'rollingpaper' })
+} else {
+  NumberId.value = Number(id)
 }
 </script>
 <style lang="scss" scoped>

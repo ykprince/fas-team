@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fas.toy.dto.rollingpaper.AddNewLetterIn;
 import com.fas.toy.dto.rollingpaper.AddNewPaperIn;
 import com.fas.toy.dto.rollingpaper.DeletePaperIn;
+import com.fas.toy.dto.rollingpaper.MixLettersUid;
 import com.fas.toy.dto.rollingpaper.SearchLetterIn;
 import com.fas.toy.dto.rollingpaper.SearchLetterOut;
 import com.fas.toy.dto.rollingpaper.SearchOnePaperOut;
@@ -40,7 +41,7 @@ public class RPController {
 
   @ResponseBody
   @PostMapping("/getLetters")
-  public List<SearchLetterOut> searchLetters(@RequestBody SearchLetterIn searchLetterIn) {
+  public MixLettersUid searchLetters(@RequestBody SearchLetterIn searchLetterIn) {
     return rpService.searchLetters(searchLetterIn.getRSeq());
   }
 

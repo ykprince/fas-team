@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class SearchLetterOut {
   private int lSeq;
   private int rSeq;
+  private int uid;
   private String lWriter;
   private String lContent;
   private Boolean lHiddenYn;

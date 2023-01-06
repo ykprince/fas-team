@@ -62,7 +62,8 @@ const formData = ref({
   name: '',
   date: '',
   hiddenYn: false,
-  content: ''
+  content: '',
+  writerUid: 0
 })
 const today = new Date().toISOString()
 const vertifyChk = ref({
@@ -72,22 +73,22 @@ const vertifyChk = ref({
   content: true
 })
 const user = computed(() => store.state.auth.auth)
-
-if (Object.keys(user.value).length === 0) { // 로그인하지않았을경우, 로그인/회원가입으로 유도
-  const params = {
-    pageName: 'WriteNewLetter',
-    param: {
-      id: props.id
-    }
-  }
-  console.log('파람데이터 ::')
-  console.log(params)
-  await store.dispatch('auth/setParams', params) // store에 파라미터 저장
-  console.log('로그인화면으로 이동함요')
-  // router.push({ name: 'login' })
-}
 const onePageInfo = computed(() => store.getters.getOnePapersInfo)
-store.dispatch('checkPaperAvailable', props.id)
+
+const init = async () => {
+  if (Object.keys(user.value).length === 0) { // 로그인하지않았을경우, 로그인/회원가입으로 유도
+    const params = {
+      path: '/new-letter',
+      param: {
+        id: props.id
+      }
+    }
+    await store.dispatch('auth/setParams', params) // store에 파라미터 저장
+    router.push({ name: 'login' })
+  } else {
+    store.dispatch('checkPaperAvailable', props.id)
+  }
+}
 
 const selectColor = (newColor) => {
   bgColor.value = newColor
@@ -130,6 +131,8 @@ const checkVertify = async () => {
 
 const addNewLetter = async () => {
   formData.value.style = bgColor.value
+  formData.value.writerUid = user.value.uid
+
   const result = await store.dispatch('addNewLetter', formData.value)
   if (result === true) {
     router.push({ name: 'viewRollingpaper', params: { id: props.id, bgColor: onePageInfo.value.rstyle, rTitle: onePageInfo.value.rtitle } })
@@ -143,6 +146,8 @@ const updateRadio = (event) => {
   radios.forEach((item) => { item.classList.remove('active') })
   event.target.classList.add('active')
 }
+
+init()
 </script>
 <style lang="scss" scoped>
 

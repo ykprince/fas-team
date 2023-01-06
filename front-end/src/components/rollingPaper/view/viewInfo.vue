@@ -1,7 +1,13 @@
 <template lang="">
   <div class="container" :class="props.bgColor">
     <div class="top-image">
-      <topImage></topImage>
+      <topImage class="chirsmas-tree-img"></topImage>
+      <div class="share-area">
+        <p v-show="clickShareLinkStatus">링크가 복사됐어요!</p>
+        <input type="text" v-model="copyLink" v-show="false">
+        <img :src="SHARE_LINK" alt="링크로 공유하기" class="share-link" v-clipboard:copy="copyLink" @click="shareLink"/>
+        <img :src="KAKAO_SHARE" alt="카카오톡으로 공유하기" @click="KakaoShowOthers" @touchstart="KakaoShowOthers" class="kakao-share-link">
+      </div>
     </div>
 
     <div class="container-header">
@@ -15,9 +21,9 @@
 
       <div class="search-section">
         <div>
-          <button type="button" @click="searchMyLetter">내가 쓴 글 찾기</button>
+          <button v-if="!myPaperCheck" type="button" @click="searchMyLetter">내가 쓴 글 찾기</button>
         </div>
-        <div>
+        <div class="right-position">
           <input type="text" placeholder="작성자를 검색해보세요" autofocus v-model="searchingName" @keyup="searchName">
         </div>
       </div>
@@ -28,11 +34,11 @@
     <div class="container-content-area">
       <MasonryWall :items="letters" :ssr-columns="1" :column-width="250" :gap="10" v-if="letters.length > 0">
         <template #default="{item}">
-          <div class="repeat-area" :class="item.lstyle">
+          <div v-if="myPaperCheck" class="repeat-area" :class="item.lstyle">
             <!--작성자-->
             <span class="writer">
               <strong class="writer-strong writer-link" :style="{'color':item.lstyle}">{{item.lwriter}}</strong>
-              님께서
+              님이
               <strong class="writer-strong" :style="[{'display' : item.lhiddenYn === true ? 'inline' : 'none'}, {'color':item.lstyle}]">몰래</strong>
               써주셨어요.
             </span>
@@ -47,7 +53,7 @@
       </MasonryWall>
       <div v-else class="contents-none">
         <h1>쪽지가 없어요😥</h1>
-        <button class="btn " type="button" @click="showOthers" @touchstart="showOthers">지인들에게 페이지를 알려줄래요</button>
+        <button class="btn " type="button" @click="KakaoShowOthers" @touchstart="KakaoShowOthers">지인들에게 페이지를 알려줄래요</button>
       </div>
     </div>
 
@@ -58,6 +64,11 @@ import MasonryWall from '@yeger/vue-masonry-wall'
 import { useStore } from 'vuex'
 import { defineProps, computed, ref } from 'vue'
 import TopImage from '../TopImage.vue'
+import useClipboard from 'vue-clipboard3'
+
+const { toClipboard } = useClipboard()
+const KAKAO_SHARE = require('@/assets/kakaotalk_sharing_btn_small.png')
+const SHARE_LINK = require('@/assets/share-link.png')
 const props = defineProps({
   id: {
     Type: Number,
@@ -75,9 +86,15 @@ const props = defineProps({
 const store = useStore()
 const letters = computed(() => store.state.rollingPaper.letters)
 store.dispatch('getLetters', props.id)
-const searchingName = ref('')
 
-const searchName = () => {
+const searchingName = ref('')
+const clickShareLinkStatus = ref(false)
+const copyLink = ref('')
+const userAuth = computed(() => store.state.auth.auth) // 현재 로그인된 정보
+const ownerId = computed(() => store.state.rollingPaper.lettersOwnerUid) // 롤링페이퍼 주인 uid
+const myPaperCheck = computed(() => ownerId.value === userAuth.value.uid)
+
+const searchName = () => { // 닉네임으로 검색
   if (searchingName.value === '') {
     store.dispatch('searchNameInPaperRestore')
   } else {
@@ -89,18 +106,61 @@ const searchName = () => {
   }
 }
 
-const showOthers = async () => {
+const KakaoShowOthers = async () => { // 카카오로 공유
   store.dispatch('auth/shareRPLink', { id: props.id })
 }
 
-const searchMyLetter = () => {
-  // 1. Logincheck.
-  // 2. Search 'one' => info of this account
-  console.log('logincheck, search one')
+const searchMyLetter = async () => { // 내가 쓴 letter 검색
+  await store.dispatch('searchMyLetterInPaper', userAuth.value.uid)
 }
+
+const shareLink = async () => { // 링크공유 클릭 이벤트
+  try {
+    console.log('copy start')
+
+    copyLink.value = `/new-letter?id=${props.id}`
+    await toClipboard(copyLink.value)
+
+    clickShareLinkStatus.value = true
+    setTimeout(() => {
+      clickShareLinkStatus.value = false
+    }, 2500)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+/**
+ * document.execCommand() 안됨
+ * https://www.npmjs.com/package/vue-clipboard2 : vue-clipboard2
+ * https://www.npmjs.com/package/vue3-clipboard : vue-clipboard3
+ * https://github.com/JamieCurnow/vue-clipboard3 : github
+ * warn 이 출력됨. (정상적으로 복사되지만, 확인필요)
+ */
+
 </script>
 
 <style lang="scss" scoped>
+.share-area{
+  width: fit-content;
+  height: 30px;
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: 5px;
+
+  button {
+    width: 30px;
+  }
+
+  img {
+    border-radius: 15px 15px 15px;
+    background: white;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
 .container {
   width: 100%;
   margin: 0;
@@ -111,9 +171,15 @@ const searchMyLetter = () => {
   font-size: 1.2rem;
 }
 .top-image{
-  max-width: 500px;
-  display: block;
-  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .chirsmas-tree-img{
+    margin: 0 auto;
+    max-width :500px;
+  }
 }
 .container-header {
   width: 100%;
