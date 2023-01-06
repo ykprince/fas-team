@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '../../assets/scss/habit.scss';
 .habit-item-list {
   overflow: scroll;
   width: 100%;

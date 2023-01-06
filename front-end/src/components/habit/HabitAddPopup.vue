@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+@import '../../assets/scss/habit.scss';
 .error {
   outline: 1px solid $red !important;
   transition: 0.5s ease all;
