@@ -16,10 +16,9 @@ export default [
     props: true
   },
   {
-    path: '/new-letter/:id',
+    path: '/new-letter',
     name: 'WriteNewLetter',
-    component: () => import('@/views/RollingPaper/WriteNewLetter.vue'),
-    props: true
+    component: () => import('@/views/RollingPaper/WriteNewLetter.vue')
   },
   {
     path: '/bg',

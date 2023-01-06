@@ -104,13 +104,30 @@ const loginChk = async () => {
     if (resString === 'success-login') {
       if (auth.value !== {} && auth.value) {
         loading.value = false
-        route.replace('/')
+        mapRoute()
       }
     } else {
       fncFailedVerify(resString) // 유효성 검사 실패 로직
     }
   } else {
     fncFailedVerify()
+  }
+}
+
+const authParams = computed(() => store.state.auth.authParams) // path 값 수신(기본 : '' = String)
+
+const mapRoute = () => { // path 이동.
+  if (!authParams.value.path || authParams.value.path === '') {
+    route.replace('/')
+  } else if (authParams.value.param && Object.keys(authParams.value.param).length > 0) {
+    let qs = '?'
+    for (const obj in authParams.value.param) {
+      qs += obj + '=' + authParams.value.param[obj] + '&'
+    }
+    qs = qs.substring(0, qs.length - 1)
+    route.replace(authParams.value.path + qs)
+  } else {
+    route.replace(authParams.value.path)
   }
 }
 
@@ -124,21 +141,6 @@ const fncVertifyChk = () => { // 로그인 입력값 유효성 확인
 
 const getLogoutCheck = computed(() => store.getters.getLogoutCheck)
 
-if (localStorage.getItem('fasolLocalAutoLoginInfo')) {
-  let loginInfo = localStorage.getItem('fasolLocalAutoLoginInfo')
-  loginInfo = JSON.parse(loginInfo)
-
-  vertify.value.id = loginInfo.id
-  vertify.value.pw = loginInfo.pw
-  // 세팅완료
-
-  // 1)로그아웃일 경우 아이디/비밀번호 세팅까지만.
-  // 2)일반 로그인의 경우(자동로그인)
-  if (getLogoutCheck.value === false) {
-    autoLoginChk.value = true
-    loginChk() // 로그인처리
-  }
-}
 const kakaoLogin = async () => {
   await store.dispatch('auth/kakaoAuthorize')
 }
@@ -146,6 +148,26 @@ const kakaoLogin = async () => {
 const GoogleLogin = () => {
   console.log('GoogleLogin')
 }
+
+const init = () => {
+  if (localStorage.getItem('fasolLocalAutoLoginInfo')) {
+    let loginInfo = localStorage.getItem('fasolLocalAutoLoginInfo')
+    loginInfo = JSON.parse(loginInfo)
+
+    vertify.value.id = loginInfo.id
+    vertify.value.pw = loginInfo.pw
+    // 세팅완료
+
+    // 1)로그아웃일 경우 아이디/비밀번호 세팅까지만.
+    // 2)일반 로그인의 경우(자동로그인)
+    if (getLogoutCheck.value === false) {
+      autoLoginChk.value = true
+      loginChk() // 로그인처리
+    }
+  }
+}
+
+init()
 </script>
   <style lang="scss" scoped>
   .container {

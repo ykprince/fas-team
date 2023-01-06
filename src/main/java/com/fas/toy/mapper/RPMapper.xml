@@ -10,11 +10,16 @@
         GROUP BY r.r_seq
   </select>
 
+  <!--letter 테이블 정보 가져오기-->
   <select id="searchLetters" resultType="com.fas.toy.dto.rollingpaper.SearchLetterOut">
       SELECT *
         FROM letter
         WHERE r_seq = #{rSeq}
   </select>
+
+ <select id="searchUserIdWithRSeq" resultType="int">
+    SELECT uid FROM rollingpaper WHERE r_seq = #{rSeq}
+ </select>
 
   <select id="searchPaperTitle" resultType="com.fas.toy.dto.rollingpaper.SearchPaperTitleOut">
       SELECT COUNT(r_title) as rCount
@@ -50,8 +55,8 @@
 
   <insert id="addNewLetter">
     INSERT INTO letter
-      (r_seq, l_writer, l_content, l_style, l_release_at, l_created_at)
+      (r_seq, l_writer, l_content, l_style, l_release_at, l_created_at, l_writer_uid)
       VALUES
-      (#{rSeq}, #{lWriter}, #{lContent}, #{lStyle}, #{lReleaseAt}, #{lCreatedAt})
+      (#{rSeq}, #{lWriter}, #{lContent}, #{lStyle}, #{lReleaseAt}, #{lCreatedAt}, #{lwriterUid})
   </insert>
 </mapper>

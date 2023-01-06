@@ -7,6 +7,7 @@ export default {
     all: [], // Array
     one: {}, // Object
     letters: [],
+    lettersOwnerUid: 0,
     cpLetters: [], // 검색용
     onePageAvailable: true, // 해당 롤링페이퍼 존재여부 확인용
     searchResult: false
@@ -42,6 +43,9 @@ export default {
     },
     updateOPA (state, bools) {
       state.onePageAvailable = bools
+    },
+    updateLetterOwnerUid (state, payload) { // rollingpaper owners uid : 비밀글에 사용
+      state.lettersOwnerUid = payload
     }
   },
 
@@ -145,9 +149,13 @@ export default {
       const url = '/rp/getLetters'
       id = Number(id)
       const param = { rSeq: id }
+      const resObj = await _fetchRollingpaper(url, param) // db조회
 
-      const resObj = await _fetchRollingpaper(url, param)
-      commit('updateLetters', resObj.data)
+      const letters = resObj.data.slo // letters
+      const lwriterUid = resObj.data.lwriterUid // uid
+      console.log(lwriterUid)
+      commit('updateLetters', letters)
+      commit('updateLetterOwnerUid', lwriterUid) // rollingpaper owners uid : 비밀글에 사용
     },
     /**
      * @desc 롤링페이퍼가 존재하는지 체크
@@ -174,6 +182,7 @@ export default {
       const newObj = {
         rSeq: dataObj.id,
         lWriter: dataObj.name,
+        lwriterUid: dataObj.writerUid,
         lContent: dataObj.content,
         lStyle: dataObj.style,
         lHiddenYn: dataObj.hiddenYn,
@@ -198,6 +207,12 @@ export default {
       const newObj = state.cpLetters.filter(item => item.lwriter.includes(obj.name))
       commit('searchUpdateState', newObj)
     },
+
+    async searchMyLetterInPaper ({ state, commit }, uid) { // 내가 쓴 letter 확인
+      const newObj = state.cpLetters.filter(item => item.lwriterUid === uid)
+      commit('searchUpdateState', newObj)
+    },
+
     /**
      * @desc 리스트 복구 - letter
      */

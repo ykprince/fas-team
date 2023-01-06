@@ -10,7 +10,7 @@ const ballsAndStars = require('@/assets/rollingpaper/balls_and_stars.png')
 const bells = require('@/assets/rollingpaper/bells.png')
 const treeAndLight = require('@/assets/rollingpaper/snowball-tree_and_light.png')
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .bg-area{
   position: relative;
   width: 100%;

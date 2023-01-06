@@ -27,13 +27,12 @@ export default {
       state.logoutChk = payload
     },
     updateParam (state, payload) {
-      console.log('payload::: ' + payload)
       state.authParams = payload
     }
   },
 
   actions: {
-    async setParams ({ state, commit }, payload) {
+    async setParams ({ state, commit }, payload) { // 파라미터 authParam에 저장
       commit('updateParam', payload)
     },
     async shareRPLink ({ state, commit }, payload) {
