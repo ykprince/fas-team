@@ -158,7 +158,7 @@ export default {
         habitId: habitId
       })
     },
-    async updateHabit ({ state, commit, dispatch }) {
+    async updateHabit ({ state, commit, dispatch }, payload) {
       if (state.loading) return
 
       commit('updateState', {
@@ -166,12 +166,10 @@ export default {
         loading: true
       })
 
-      const obj = state.theHabit
-      delete obj.habitRecords // -> 필요 없음
       let doSch = false
 
       try {
-        const res = await _fetchHabitPost('/habit/updateHabit', obj)
+        const res = await _fetchHabitPost('/habit/updateHabit', payload)
 
         // 업데이트 성공 후 제대로 값이 내려왔을 때
         if (Object.keys(res.data).length !== 0) {
@@ -180,7 +178,7 @@ export default {
           // 습관 목록에 변경한 습관 담기
           const habits = _.cloneDeep(state.habits)
           for (let i = 0; i < state.habits.length; i++) {
-            if (habits[i].habitId === obj.habitId) {
+            if (habits[i].habitId === payload.habitId) {
               habits[i] = res.data
               break
             }
@@ -199,7 +197,7 @@ export default {
 
       if (doSch) {
         // 수정한 습관 재조회
-        await dispatch('searchHabitWithId', { habitId: obj.habitId })
+        await dispatch('searchHabitWithId', { habitId: payload.habitId })
       }
     },
     async deleteHabit ({ state, commit, dispatch }) {

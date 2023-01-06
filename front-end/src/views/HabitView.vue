@@ -57,48 +57,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../assets/scss/habit.scss';
-
-.container {
-  font-family: 'Noto Sans KR', sans-serif;
-  display: flex;
-
-  .disabled > * * {
-    background-color: #f3f3f3 !important;;
-    color: darkgray !important;
-
-    &::after {
-      color: darkgray !important;
-    }
-  }
-
-  .left-section {
-    position: relative;
-    height: 400px;
-
-    .habit-list {
-      display: inline-block;
-      height: 100%;
-      min-width: 300px;
-      -ms-overflow-style: none;
-
-      &:hover>.unclicked {
-        background-color: white;
-        color: rgb(192, 192, 192);
-        box-shadow: 0px 0px 8px -3px #8a8a8a;
-      }
-    }
-
-    .habit-list::-webkit-scrollbar{
-      display:none;
-    }
-
-    .habit-content{
-      display: inline-block;
-    }
-  }
-}
 
 // @include media-breakpoint-down(xl) {
 //   .poster {

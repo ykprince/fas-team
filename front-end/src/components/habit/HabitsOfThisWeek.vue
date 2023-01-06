@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '../../assets/scss/habit.scss';
 .day-box {
     display: flex;
     justify-content: center;

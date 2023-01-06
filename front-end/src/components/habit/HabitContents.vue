@@ -40,7 +40,7 @@
                 v-for="icon in habitIcons"
                 :id="icon"
                 :key="icon"
-                :class="theHabit.icon==icon?icon+' clicked':icon"
+                :class="[theHabit.icon==icon? 'clicked': '', icon?icon:'']"
                 @click="iconClick"></div>
           </div>
         </div>
@@ -89,7 +89,7 @@ import Calendar from './Calendar.vue'
 export default {
   data () {
     return {
-      icon: '',
+      habitIcon: '',
       title: '',
       contents: '',
       confirmPop: false,
@@ -103,11 +103,13 @@ export default {
   },
   computed: {
     ...mapState('habit', [
+      'habits',
       'theHabit',
       'habitIcons',
       'today',
       'calendarOn',
-      'attributes'
+      'attributes',
+      'theRecord'
     ]),
     theHabitState () {
       let theHabitTf = true
@@ -116,16 +118,14 @@ export default {
       return theHabitTf
     }
   },
+  updated () {
+    console.log(this.theHabit.icon)
+    // document.getElementById(this.theHabit.icon).className += ' clicked'
+  },
   methods: {
     iconClick (e) {
       if (Object.keys(this.theHabit).length === 0) return
-
-      this.$store.commit('habit/updateState', {
-        theHabit: {
-          ...this.theHabit,
-          icon: e.target.id
-        }
-      })
+      this.theHabit.icon = e.target.id
     },
     updateHabit () {
       this.confirmPop = true
@@ -141,17 +141,19 @@ export default {
     openPopup (b) {
       this.confirmPop = b
     },
-    async confirmPopCntl (btn) {
+    confirmPopCntl (btn) {
       this.confirmPop = false
-
-      if (btn === 'cancel') {
-        return
-      }
+      if (btn === 'cancel') return
 
       if (this.process === 'update') {
-        await this.$store.dispatch('habit/updateHabit')
+        this.$store.dispatch('habit/updateHabit', {
+          habitId: this.theHabit.habitId,
+          icon: this.theHabit.icon,
+          title: this.theHabit.title,
+          content: this.theHabit.content
+        })
       } else if (this.process === 'delete') {
-        await this.$store.dispatch('habit/deleteHabit')
+        this.$store.dispatch('habit/deleteHabit')
 
         // 스크롤 상단으로 올리기
         const list = document.getElementById('habitItemList')
@@ -175,13 +177,20 @@ export default {
         })
       }
     }
+  },
+  watch: {
+    theHabit (val, oldVal) {
+      console.log('val ', val)
+      console.log('oldVal ', oldVal)
+      console.log(this.theRecord)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
-
+@import '../../assets/scss/habit.scss';
 .nav {
   margin-left: 20px;
   height: 42px;
