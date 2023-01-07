@@ -13,8 +13,7 @@
     <div class="login-area">
       <RouterLink class="login-button" v-if="!authChk" to="/auth/login">Login</RouterLink>
       <button v-if="authChk" @click="logout">Logout</button>
-      <button v-if="authChk" >My Page</button>
-      <!-- <img src="" alt=""> --> <!--프로필 이미지-->
+      <img v-if="authChk" :src="auth.profileImage" alt="" class="profile-img" @click="myPage"> <!--프로필 이미지-->
     </div>
   </header>
 </template>
@@ -22,6 +21,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { ref, computed, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
 const navigations = ref([
   {
     name: 'Search',
@@ -45,12 +45,14 @@ const navigations = ref([
   }
 ])
 const store = useStore()
+const router = useRouter()
 const auth = computed(() => store.state.auth.auth)
 const authChk = ref(false)
 watchEffect(() => {
-  authChk.value = Object.keys(auth.value).length
+  authChk.value = Object.keys(auth.value).length > 0
 })
 const logout = () => { store.dispatch('auth/logoutAuth') }
+const myPage = () => { router.push({ name: 'mypage' }) }
 </script>
 
 <style scoped lang="scss">
@@ -92,6 +94,16 @@ nav a.router-link-exact-active {
 
     &:hover {
       background: #e2e2e2;
+    }
+  }
+
+  .profile-img{
+    width: 30px;
+    height: 30px;
+    border-radius: 15px 15px 15px;
+    margin-left: 5px;
+    &:hover{
+      cursor: pointer;
     }
   }
 }
