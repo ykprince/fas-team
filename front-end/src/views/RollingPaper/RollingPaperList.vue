@@ -43,12 +43,15 @@ const btnText1 = ref('확인')
 const btnText2 = ref('취소')
 const store = useStore()
 const userInfo = computed(() => store.state.auth.auth) // 로그인정보 조회
-if (Object.keys(userInfo).length === 0) {
-  router.push('/auth/login')
-}
+
 const rollingpaperObj = computed(() => store.state.rollingPaper.all) // 롤링페이퍼
 onMounted(() => {
-  store.dispatch('getAllPapers', userInfo.value.uid)
+  if (Object.keys(userInfo.value).length === 0) {
+    router.push('/auth/login')
+  } else {
+    console.log('disp[atch getallpapers]')
+    store.dispatch('getAllPapers', userInfo.value.uid)
+  }
 })
 
 const submitChk = async () => { // 삭제확인

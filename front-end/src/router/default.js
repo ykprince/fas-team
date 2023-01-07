@@ -28,6 +28,12 @@ export default [
     component: () => import('@/components/Login/Register.vue')
   },
   {
+    path: '/auth/mypage',
+    name: 'mypage',
+    component: () => import('@/views/Auth/MyPage.vue')
+  },
+
+  { // 경로가 없을 경우 (404)
     path: '/:pathMatch(.*)*',
     component: () => import('@/views/Error.vue')
   }
