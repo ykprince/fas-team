@@ -1,4 +1,4 @@
-import { CLIENT_ID, KAKAO_REST_API_KEY, DEV_REDIRECT_URI, KAKAO_JS_API_KEY } from '@/store/kakkaoShareLink.js'
+import { CLIENT_ID, KAKAO_REST_API_KEY, DEV_REDIRECT_URI, KAKAO_JS_API_KEY } from '@/store/ShareLink.js'
 import axios from 'axios'
 import router from '@/router/index'
 
@@ -7,7 +7,8 @@ export default {
   state: {
     auth: {},
     authParams: {},
-    logoutChk: false
+    logoutChk: false,
+    kakaoInitialized: false // 카카오 init 여부
   },
 
   getters: {
@@ -28,15 +29,22 @@ export default {
     },
     updateParam (state, payload) {
       state.authParams = payload
+    },
+    updateKakaoInitialize (state) {
+      state.kakaoInitialized = true
     }
   },
 
   actions: {
+    async kakaoInit ({ commit }) {
+      await window.Kakao.init(KAKAO_JS_API_KEY)
+      console.log('kakao init activated')
+      commit('updateKakaoInitialize')
+    },
     async setParams ({ state, commit }, payload) { // 파라미터 authParam에 저장
       commit('updateParam', payload)
     },
     async shareRPLink ({ state, commit }, payload) {
-      await window.Kakao.init(KAKAO_JS_API_KEY)
       await window.Kakao.Share.sendCustom({
         templateId: 87839,
         installTalk: true, // 카카오톡 미설치시 설치페이지로 이동
