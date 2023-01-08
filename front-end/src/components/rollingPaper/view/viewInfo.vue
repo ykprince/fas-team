@@ -3,10 +3,11 @@
     <div class="top-image">
       <topImage class="chirsmas-tree-img"></topImage>
       <div class="share-area">
-        <p v-show="clickShareLinkStatus">링크가 복사됐어요!</p>
-        <input type="text" v-model="copyLink" v-show="false">
-        <img :src="SHARE_LINK" alt="링크로 공유하기" class="share-link" v-clipboard:copy="copyLink" @click="shareLink"/>
-        <img :src="KAKAO_SHARE" alt="카카오톡으로 공유하기" @click="KakaoShowOthers" @touchstart="KakaoShowOthers" class="kakao-share-link">
+        <div class="cover-share-area">
+          <p v-show="clickShareLinkStatus" class="link-copy-check-text">링크가 복사됐어요!</p>
+          <img :src="SHARE_LINK" alt="링크로 공유하기" class="share-link" @click="shareLink"/>
+          <img :src="KAKAO_SHARE" alt="카카오톡으로 공유하기" @click="KakaoShowOthers" @touchstart="KakaoShowOthers" class="kakao-share-link">
+        </div>
       </div>
     </div>
 
@@ -62,9 +63,10 @@
 <script setup>
 import MasonryWall from '@yeger/vue-masonry-wall'
 import { useStore } from 'vuex'
-import { defineProps, computed, ref } from 'vue'
+import { defineProps, computed, ref, onMounted } from 'vue'
 import TopImage from '../TopImage.vue'
 import useClipboard from 'vue-clipboard3'
+import { STIE_ADDRESS } from '@/store/ShareLink.js'
 
 const { toClipboard } = useClipboard()
 const KAKAO_SHARE = require('@/assets/kakaotalk_sharing_btn_small.png')
@@ -89,11 +91,10 @@ store.dispatch('getLetters', props.id)
 
 const searchingName = ref('')
 const clickShareLinkStatus = ref(false)
-const copyLink = ref('')
 const userAuth = computed(() => store.state.auth.auth) // 현재 로그인된 정보
 const ownerId = computed(() => store.state.rollingPaper.lettersOwnerUid) // 롤링페이퍼 주인 uid
 const myPaperCheck = computed(() => ownerId.value === userAuth.value.uid)
-
+const kakaoInitialized = computed(() => store.state.auth.kakaoInitialized)
 const searchName = () => { // 닉네임으로 검색
   if (searchingName.value === '') {
     store.dispatch('searchNameInPaperRestore')
@@ -106,8 +107,15 @@ const searchName = () => { // 닉네임으로 검색
   }
 }
 
+const fncInit = async () => { // 기본호출함수
+  await store.dispatch('auth/kakaoInit')
+}
+
 const KakaoShowOthers = async () => { // 카카오로 공유
-  store.dispatch('auth/shareRPLink', { id: props.id })
+  if (kakaoInitialized.value === false) {
+    await store.dispatch('auth/kakaoInit')
+  }
+  await store.dispatch('auth/shareRPLink', { id: props.id })
 }
 
 const searchMyLetter = async () => { // 내가 쓴 letter 검색
@@ -115,12 +123,9 @@ const searchMyLetter = async () => { // 내가 쓴 letter 검색
 }
 
 const shareLink = async () => { // 링크공유 클릭 이벤트
+  const url = STIE_ADDRESS + `new-letter?id=${props.id}`
   try {
-    console.log('copy start')
-
-    copyLink.value = `/new-letter?id=${props.id}`
-    await toClipboard(copyLink.value)
-
+    await toClipboard(url)
     clickShareLinkStatus.value = true
     setTimeout(() => {
       clickShareLinkStatus.value = false
@@ -130,14 +135,9 @@ const shareLink = async () => { // 링크공유 클릭 이벤트
   }
 }
 
-/**
- * document.execCommand() 안됨
- * https://www.npmjs.com/package/vue-clipboard2 : vue-clipboard2
- * https://www.npmjs.com/package/vue3-clipboard : vue-clipboard3
- * https://github.com/JamieCurnow/vue-clipboard3 : github
- * warn 이 출력됨. (정상적으로 복사되지만, 확인필요)
- */
-
+onMounted(async () => {
+  await fncInit() // 기본호출함수
+})
 </script>
 
 <style lang="scss" scoped>
@@ -146,9 +146,12 @@ const shareLink = async () => { // 링크공유 클릭 이벤트
   height: 30px;
   position: absolute;
   right: 0;
-  display: flex;
-  gap: 5px;
-
+  display: block;
+  .cover-share-area{
+    display: flex;
+  height: 30px;
+    gap: 5px;
+  }
   button {
     width: 30px;
   }
@@ -156,10 +159,18 @@ const shareLink = async () => { // 링크공유 클릭 이벤트
   img {
     border-radius: 15px 15px 15px;
     background: white;
+    box-shadow: 1px 1px 1px rgb(87, 87, 87);
+    opacity: 0.9;
     &:hover {
       cursor: pointer;
     }
   }
+  .link-copy-check-text{
+    line-height: 30px;
+    height: 100%;
+    vertical-align: middle;
+  }
+
 }
 .container {
   width: 100%;
