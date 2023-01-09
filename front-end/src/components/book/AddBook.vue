@@ -23,8 +23,6 @@
       </div>
 
       <div v-else-if="curStep === 2" class="step-2" >
-        <!-- <div class="addStepArea">
-        </div> -->
         <div class="row contentsArea">
           <IGData :theBook="theBook" ></IGData>
         </div>
@@ -41,7 +39,7 @@
         <div v-if="!(curStep === 1)">
           <PCBtn class="btn btn-secondary pgCtrlBtn" :index="curStep > 1? curStep-1 : 1" :msg="msg1" @pageCtrl="pageCtrl"></PCBtn>
           <PCBtn class="btn btn-secondary pgCtrlBtn" v-if="!(curStep === 3)" :index="curStep + 1" :msg="msg2" @pageCtrl="pageCtrl"></PCBtn>
-          <button class="saveBtn" v-else @click="addBookGethering">저장</button>
+          <button class="saveBtn" v-else @click="checkConfirm">저장</button>
         </div>
         <div v-else>
           <button class="btn btn-secondary saveBtn" @click="$emit('handler')">닫기</button>
@@ -70,6 +68,8 @@ export default {
       msg1: 'Pre',
       msg2: 'Next',
       query: '',
+      checkVal: true,
+      errMsg: '',
       book: {}
     }
   },
@@ -79,6 +79,9 @@ export default {
       'books',
       'theBook',
       'curStep'
+    ]),
+    ...mapState('bookGether', [
+      'theGether'
     ])
   },
   watch: {
@@ -100,18 +103,59 @@ export default {
       })
     },
     async addBookGethering () {
-      this.$store.dispatch('bookGether/insertBookGether', this.theBook).then(() => {
+      this.theBook.processType = 'insert'
+      this.theBook.processName = 'Gether'
+      this.$store.dispatch('bookGether/frontController', this.theBook).then(() => {
         alert('(토스트로 바꾸기)')
         this.$store.commit('bookGether/resetTheGether', '')
         this.$emit('handler')
       })
+    },
+    checkConfirm () {
+      console.log(this.theGether)
+      this.checkval = true
+      const getherType = this.theGether.type
 
-      // const res = await this.$store.dispatch('bookGether/insertBookGether', this.theBook)
-      // if (res.sucTf) {
-      //   console.log('callback')
-      //   alert(res.msg + '(토스트로 바꾸기)')
-      //   this.$emit('handler')
-      // }
+      if (getherType === 1) {
+        if (this.isEmptyVal(this.theGether.staDt)) {
+          this.checkval = false
+          this.errMsg = '시작일자를 입력해주세요'
+        } else if (this.isEmptyVal(this.theGether.endDt)) {
+          this.checkval = false
+          this.errMsg = '종료일자를 입력해주세요'
+        } else if (this.theGether.endDt < this.theGether.staDt) {
+          this.checkval = false
+          this.errMsg = '시작일자는 종료일자보다 클 수 없습니다 ! '
+        } else if (this.isEmptyVal(this.theGether.rate)) {
+          this.checkval = false
+          this.errMsg = '평점을 넣어주세요'
+        }
+      } else if (getherType === 2) {
+        if (this.isEmptyVal(this.theGether.readPage)) {
+          this.checkval = false
+          this.errMsg = '진행 중인 페이지를 입력해주세요'
+        } else if (this.isEmptyVal(this.theGether.staDt)) {
+          this.checkval = false
+          this.errMsg = '시작일자를 입력해주세요'
+        }
+      } else if (getherType === 3) {
+        if (this.isEmptyVal(this.theGether.rateEx)) {
+          this.checkval = false
+          this.errMsg = '기대평점을 입력해주세요'
+        }
+      } else {
+        this.checkval = false
+        this.errMsg = '타입에러'
+      }
+
+      if (this.checkval) {
+        this.addBookGethering()
+      } else {
+        alert(this.errMsg)
+      }
+    },
+    isEmptyVal (str) {
+      if (typeof str === 'undefined' || str === null || str === '') { return true } else { return false }
     }
   },
   mounted () {
@@ -137,10 +181,10 @@ export default {
   background-color: black;
 }
 .modal-card {
-  position: relative;
-  max-width: 80%;
-  margin: auto;
-  margin-top: 30px;
+  position: fixed;
+  width: 70%;
+  margin-left: 25%;
+  margin-top: 2%;
   padding: 40px 80px 40px 80px;
   background-color: white;
   border-radius: 10px;

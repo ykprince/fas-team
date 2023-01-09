@@ -46,4 +46,23 @@
                 now()
                 )
     </insert>
+
+    <insert id="insertMemo">
+        INSERT INTO book_memo
+        VALUES (
+                NULL,
+                #{uid},
+                #{bgIdx},
+                #{memoPage},
+                now(),
+                #{memoContent}
+                )
+    </insert>
+
+    <select id="selectMemoList" resultType="com.fas.toy.dto.book.MemoDto">
+        SELECT *
+        FROM book_memo
+        WHERE uid = #{uid}
+        AND bg_idx = #{bgIdx}
+    </select>
 </mapper>

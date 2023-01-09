@@ -9,12 +9,15 @@
           <button class="nav-link" id="nav-type-3-tab" data-bs-toggle="tab" data-bs-target="#nav-type-3" type="button" role="tab" aria-controls="nav-type-3" aria-selected="false" @click="testtt(3)">읽고 싶은 책</button>
         </div>
         <div class="etc-bar">
-          <button type="button" id="delConfirmBtn" class="btn btn-light" @click="delGethers" style="display:none">정리 목록 전송</button>
+          <button type="button" id="delConfirmBtn" class="btn btn-light del-btn" @click="delGethers" style="display:none">정리 목록 전송</button>
           <button type="button" id="delSwitchBtn" class="btn btn-light" @click="modiGethers">정리하기</button>
         </div>
       </nav>
       <div class="infoArea">
-        <div  @click="test(gether)" v-for="gether in gethers" :key="gether.type" class="gether">
+        <div v-if="gethers.length === 0" class="gether">
+          xx
+        </div>
+        <div v-else @click="test(gether)" v-for="gether in gethers" :key="gether.bgIdx" class="gether">
           <!-- new 버튼이 있을 시 position: absolute;  추가 -->
           <div  v-if="modiKey === 1" style="width:100%; text-align: right;z-index: 999;" @click="pushDelArr(gether.bgIdx)">
             <span class="badge bg-secondary" >X</span>
@@ -62,11 +65,15 @@ export default {
   watch: {
     tItem (newVal) {
       this.$store.dispatch('bookGether/filterGethers', newVal)
-      // this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: newVal })
+      // this.$store.commit('bookGether/resetGethers', [])
+      // this.$store.dispatch('bookGether/frontController', { uid: 0, type: newVal, processType: 'select', processName: 'Gether' }).then((data) => {
+      //   console.log(data)
+      // })
     },
     successTf (newVal) {
       if (newVal) {
-        this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: 0 })
+        console.log('success')
+        // this.$store.dispatch('bookGether/frontController', { uid: 0, type: 0, processType: 'select', processName: 'Gether' })
       } else {
         console.log('fail')
       }
@@ -128,14 +135,14 @@ export default {
       console.log(this.delArr)
     },
     delGethers () {
-      this.$store.dispatch('bookGether/delBookGether', { arr: this.delArr }).then(() => {
-        this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: 0 })
+      this.$store.dispatch('bookGether/frontController', { arr: this.delArr, processType: 'delete', processName: 'Gether' }).then(() => {
+        this.$store.dispatch('bookGether/frontController', { uid: 0, type: 0, processType: 'select', processName: 'Gether' })
         this.modiGethers()
       })
     }
   },
   mounted () {
-    this.$store.dispatch('bookGether/searchGetherList', { uid: 0, type: 0 })
+    this.$store.dispatch('bookGether/frontController', { uid: 0, type: 0, processType: 'select', processName: 'Gether' })
   }
 }
 </script>
@@ -150,9 +157,10 @@ export default {
   display: flex;
 }
 .detailArea {
+  height: 550px;
   width: 50%;
-  padding: 15px;
-  // background-color: gray;
+  margin: 15px;
+  box-shadow: 5px 5px 5px 5px #e1e1e1;
 }
 
 .etc-bar {
@@ -166,10 +174,11 @@ export default {
 // 2. 리스트형 - type-list
 // 3. 개별형 - type-slide
 .type-card {
+  height: 550px;
   width: 50%;
   overflow: hidden;
   margin: 15px;
-  border: 5px dotted aliceblue;
+  box-shadow: 5px 5px 5px 5px #e1e1e1;
   padding: 5px;
   .infoArea {
     display: inline-flex;
@@ -284,5 +293,8 @@ export default {
 
 .nav {
 
+}
+.del-btn {
+  margin-right: 10px;
 }
 </style>

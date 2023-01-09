@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.fas.toy.dao.book.BookGetherDao;
 import com.fas.toy.dto.book.BookGetherDto;
+import com.fas.toy.dto.book.MemoDto;
 import com.fas.toy.dto.book.SearchBookGetherListIn;
+import com.fas.toy.dto.book.SearchMemoIn;
 
 @Service
 public class BookGetherServiceImpl implements BookGetherService{
@@ -38,5 +40,15 @@ public class BookGetherServiceImpl implements BookGetherService{
     @Override
     public int delBookGethersS(Integer[] idxs) {
         return bgDao.deleteBookGether(idxs);
+    }
+
+    @Override
+    public int insertMemo(MemoDto mDto) {
+        mDto.setUid("0");
+        return bgDao.insertMemo(mDto);
+    }
+    @Override
+    public List<MemoDto> searchMemo(SearchMemoIn dto) {
+        return bgDao.selectMemoList(dto);
     }
 }
