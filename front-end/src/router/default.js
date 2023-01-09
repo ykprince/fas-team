@@ -1,5 +1,5 @@
 import HomeView from '@/views/HomeView.vue'
-import LoginView from '@/components/Login/Index.vue'
+import LoginView from '@/components/auth/Index.vue'
 
 export default [
   {
@@ -20,12 +20,12 @@ export default [
   {
     path: '/auth/callback',
     name: 'kakaoLoginHandler',
-    component: () => import('@/components/Login/KakaoLoginHandler.vue')
+    component: () => import('@/components/auth/KakaoLoginHandler.vue')
   },
   {
     path: '/auth/regist',
     name: 'register',
-    component: () => import('@/components/Login/Register.vue')
+    component: () => import('@/components/auth/Register.vue')
   },
   {
     path: '/auth/mypage',
