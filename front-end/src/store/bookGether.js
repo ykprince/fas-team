@@ -1,6 +1,7 @@
 import axios from 'axios'
 const NO_DATA_MSG = '서재가 텅 비어있어요. 로그인 후, 독서 모임을 추가해주세요! '
 const FAIL_MSG = '등록에 실패했어요 다시 확인해주세용'
+const ROOT_PATH = '/book/'
 export default {
   namespaced: true,
   state: {
@@ -13,7 +14,10 @@ export default {
     getherDetail: {},
     message: NO_DATA_MSG,
     successMsg: FAIL_MSG,
-    successTf: false
+    successTf: false,
+    memo: {
+    },
+    memoList: []
   },
   getters: {
   },
@@ -26,43 +30,31 @@ export default {
     resetTheGether (state, payload) {
       state.theGether.type = payload
     },
+    resetGethers (state, payload) {
+      state.Gethers = payload
+    },
     setContent (state, payload) {
       state.getherContent = payload
     }
   },
   actions: {
-    async insertBookGether ({ state, commit }, payload) {
+    async frontController ({ state, commit }, payload) {
       commit('updateState', {
         successMsg: FAIL_MSG,
         successTf: false
       })
-      const url = '/book/insert'
-      const param = { ...state.theGether, ...payload }
-      param.authors = param.authors.join()
-      param.translators = param.translators.join()
+
+      const url = ROOT_PATH + payload.processType + payload.processName
+      const param = await valControll(payload.processType, payload.processName, payload, state)
+
       try {
         const res = await callPostService(url, param)
-        commit('updateState', {
-          successMsg: res.data,
-          successTf: true
-        })
-        return { sucTf: true, msg: res.data }
+        // resControll(payload.processType, payload.processName, res, state, commit)
+
+        return resControll(payload.processType, payload.processName, res, state, commit)
+        // return { sucTf: true, msg: res.data }
       } catch (error) {
         console.log(error + '::::::::::')
-      }
-    },
-    async searchGetherList ({ state, commit }, payload) {
-      const url = '/book/selectBookGetherList'
-      try {
-        const res = await callPostService(url, payload)
-        commit('updateState', {
-          gethers: res.data,
-          gethersOrigin: res.data
-        })
-      } catch (error) {
-        commit('updateState', {
-          gethers: []
-        })
       }
     },
     async filterGethers ({ state, commit }, payload) {
@@ -76,18 +68,6 @@ export default {
       commit('updateState', {
         gethers: tempGethers
       })
-    },
-    async delBookGether ({ state, commit }, payload) {
-      console.log('thisis', payload)
-      const url = '/book/deleteBook'
-      const param = payload
-      try {
-        const res = await callPostService(url, param.arr)
-        // 재조회 넣어야댐 !!
-        return { sucTf: true, msg: res.data }
-      } catch (error) {
-        console.log(error + '::::::::::')
-      }
     }
   }
 }
@@ -109,4 +89,58 @@ async function callPostService (url, payload) {
         reject(err.message)
       })
   })
+}
+
+/**
+ * valControll 인풋값 컨트롤
+ * resControll 결과 콜백
+ * errControll 에러 콜백
+ */
+async function valControll (type, name, payload, state) {
+  if (type === 'insert') {
+    const param = name === 'Gether'
+      ? { ...state.theGether, ...payload }
+      : { ...payload }
+    if (name === 'Gether') {
+      param.authors = param.authors.join()
+      param.translators = param.translators.join()
+    }
+    return param
+  } else if (type === 'delete') {
+    const param = payload.arr
+    return param
+  } else if (type === 'select') {
+    const param = payload
+    return param
+  }
+}
+
+async function resControll (type, name, res, state, commit) {
+  if (type === 'insert') {
+    if (name === 'Gether') {
+      await commit('updateState', {
+        successMsg: res.data,
+        successTf: true
+      })
+    } else if (name === 'Memo') {
+      console.log('')
+    }
+  } else if (type === 'select') {
+    if (name === 'Gether') {
+      await commit('updateState', {
+        gethers: res.data,
+        gethersOrigin: res.data
+      })
+      return state.gethers
+    } else if (name === 'Memo') {
+      const tempObj = state.getherContent
+      tempObj.memoList = res.data
+      await commit('updateState', {
+        getherContent: tempObj
+      })
+      return tempObj.memoList
+    }
+  } else if (type === 'delete') {
+    console.log('')
+  }
 }

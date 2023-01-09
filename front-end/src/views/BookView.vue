@@ -15,14 +15,14 @@
           <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @click="setViewType('type-slide')">
           <label class="btn btn-outline-primary" for="btnradio3">개별</label>
         </div>
+        <button
+          class="btn btn-primary add-btn"
+          @click="handler">
+          독서 추가하기 +
+        </button>
       </div>
       <BGList :viewType="viewType"></BGList>
     </div>
-    <button
-      class="btn btn-primary add-btn"
-      @click="handler">
-      독서 추가하기
-    </button>
   </div>
 </template>
 <script>
@@ -52,17 +52,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .add-btn {
-    position: fixed;
-    top: 6%;
-    right: 10%;
-    border-radius: 60px;
-    width: 100px;
-    height: 100px;
-  }
-
   .view-ctrl {
     width: 50%;
     text-align: right;
+    .btn-group {
+      margin-right: 10px;
+    }
+    .add-btn {
+
+    }
   }
 </style>
