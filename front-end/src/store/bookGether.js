@@ -135,6 +135,7 @@ async function resControll (type, name, res, state, commit) {
     } else if (name === 'Memo') {
       const tempObj = state.getherContent
       tempObj.memoList = res.data
+      // state.getherContent = res.data
       await commit('updateState', {
         getherContent: tempObj
       })
