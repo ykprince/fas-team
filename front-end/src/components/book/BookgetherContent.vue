@@ -169,11 +169,13 @@ export default {
       window.open(url)
     },
     insertMemo () {
+      this.memoObj.processType = 'insert'
       this.memoObj.processName = 'Memo'
       this.$store.dispatch('bookGether/frontController', this.memoObj).then(() => {
         // alert('(토스트로 바꾸기)')
         // this.$store.commit('bookGether/resetTheGether', '')
         // this.$emit('handler')
+        this.$store.dispatch('bookGether/frontController', { bgIdx: this.getherContent.bgIdx, uid: '0', processType: 'select', processName: 'Memo' })
       })
     },
     getMemo () {
@@ -234,6 +236,7 @@ export default {
         }
     }
     .memo-submit-form {
+        margin-top: 15px;
         width: 100%;
         display: flex;
         .memo-submit-top {
@@ -268,8 +271,11 @@ export default {
 }
 .memo-area {
     height: 80%;
+    overflow: scroll;
 }
-
+.memo-area::-webkit-scrollbar{
+    display:none;
+}
 .go-url {
     text-align: right;
     margin-top: 5px;
