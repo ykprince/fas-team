@@ -12,9 +12,6 @@ export default {
   },
 
   getters: {
-    getAuth (state) {
-      return state.auth
-    },
     getLogoutCheck (state) {
       return state.logoutChk
     }
@@ -36,6 +33,15 @@ export default {
   },
 
   actions: {
+    async myPagePasswordCheck ({ state }, payload) {
+      const info = { id: state.auth.userId, password: payload }
+      const pwChk = await _fetchData('/auth/myPagePwChk', info)
+      if (pwChk.data === 1) {
+        console.log(pwChk.data)
+      } else {
+        console.log(pwChk.data)
+      }
+    },
     async kakaoInit ({ commit }) {
       await window.Kakao.init(KAKAO_JS_API_KEY)
       console.log('kakao init activated')

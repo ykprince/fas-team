@@ -1,12 +1,10 @@
 <template lang="">
   <div>
-    hello this is mypage
+    <MyPageCheckPassword></MyPageCheckPassword>
   </div>
 </template>
-<script>
-export default {
-
-}
+<script setup>
+import MyPageCheckPassword from '@/components/auth/MyPageCheckPassword.vue'
 </script>
 <style lang="">
 
