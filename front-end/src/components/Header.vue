@@ -11,9 +11,19 @@
       </RouterLink>
     </nav>
     <div class="login-area">
-      <RouterLink class="login-button" v-if="!authChk" to="/auth/login">Login</RouterLink>
+      <RouterLink
+        class="login-button"
+        v-if="!authChk"
+        to="/auth/login"
+      >Login</RouterLink>
       <button v-if="authChk" @click="logout">Logout</button>
-      <img v-if="authChk" :src="auth.profileImage" alt="" class="profile-img" @click="myPage"> <!--프로필 이미지-->
+      <img
+        v-if="authChk"
+        :src="auth.profileImage ? auth.profileImage : DEFAULT_PROFILE_IMG"
+        @click="myPage"
+        alt="프로필 사진"
+        class="profile-img"
+        >
     </div>
   </header>
 </template>
@@ -22,6 +32,8 @@
 import { useStore } from 'vuex'
 import { ref, computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
+const DEFAULT_PROFILE_IMG = require('@/assets/default-profile-img.png')
+
 const navigations = ref([
   {
     name: 'Search',
@@ -53,6 +65,7 @@ watchEffect(() => {
 })
 const logout = () => { store.dispatch('auth/logoutAuth') }
 const myPage = () => { router.push({ name: 'mypage' }) }
+
 </script>
 
 <style scoped lang="scss">

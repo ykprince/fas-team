@@ -12,15 +12,22 @@ import com.fas.toy.dto.auth.SearchIdIn;
 import com.fas.toy.dto.auth.SearchIdOut;
 import com.fas.toy.dto.auth.SearchKakaoAuthIn;
 import com.fas.toy.dto.auth.SearchKakaoAuthOut;
+import com.fas.toy.dto.auth.MyPagePwChkIn;
 import com.fas.toy.service.auth.AuthService;
 import org.springframework.web.bind.annotation.PostMapping;
-
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
   @Autowired
   AuthService AuthService;
+
+  @ResponseBody
+  @PostMapping("/myPagePwChk")
+  public Integer myPagePwChk(MyPagePwChkIn mppci) {
+    System.out.println(mppci);
+    return AuthService.myPagePwChk(mppci);
+  }
 
   @ResponseBody
   @PostMapping("/kakaoLoginCheck")
@@ -51,5 +58,5 @@ public class AuthController {
   public int registNewId(RegistIn sii) {
     return AuthService.registNewId(sii);
   }
-  
+
 }
