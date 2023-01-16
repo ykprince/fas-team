@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="container">
+      <div>
+        <Spinner v-if="loading" />
+      </div>
       <div  v-if="isShow"  >
         <addbook @handler="handler" class="container"></addbook>
       </div>
@@ -26,8 +29,10 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import addbook from '@/components/book/AddBook.vue'
 import BGList from '@/components/book/BookGetheringList.vue'
+import Spinner from '../components/habit/Spinner.vue'
 export default {
   data () {
     return {
@@ -35,9 +40,15 @@ export default {
       viewType: 'type-card'
     }
   },
+  computed: {
+    ...mapState('bookGether', [
+      'loading'
+    ])
+  },
   components: {
     addbook,
-    BGList
+    BGList,
+    Spinner
   },
   methods: {
     handler () {

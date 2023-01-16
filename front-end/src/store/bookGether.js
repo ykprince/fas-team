@@ -5,6 +5,7 @@ const ROOT_PATH = '/book/'
 export default {
   namespaced: true,
   state: {
+    loading: false,
     gethers: [], // 등록된 도서 모임 목록
     gethersOrigin: [],
     theGether: { // 등록된 도서 모임 개별 항목
@@ -39,9 +40,11 @@ export default {
   },
   actions: {
     async frontController ({ state, commit }, payload) {
+      if (state.loading) return
       commit('updateState', {
         successMsg: FAIL_MSG,
-        successTf: false
+        successTf: false,
+        loading: true
       })
 
       const url = ROOT_PATH + payload.processType + payload.processName
@@ -55,6 +58,11 @@ export default {
         // return { sucTf: true, msg: res.data }
       } catch (error) {
         console.log(error + '::::::::::')
+      } finally {
+        console.log('::::::::::')
+        commit('updateState', {
+          loading: false
+        })
       }
     },
     async filterGethers ({ state, commit }, payload) {
