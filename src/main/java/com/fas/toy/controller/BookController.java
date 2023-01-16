@@ -39,6 +39,8 @@ public class BookController {
 
     @PostMapping("/selectGether")
     public List<BookGetherDto> selectBookGetherList(@RequestBody SearchBookGetherListIn dto) {
+        LOGGER.info(dto.getUid());
+        LOGGER.info(dto.getType());
         return service2.seachBookGetherList(dto);
     }
 
