@@ -12,12 +12,12 @@
       ㄴ) GCP
    4) NoSQL?
       
-2. 주제 선정
+2. [해결]주제 선정
    1) 롤링페이퍼
    2) 생활습관기록
    3) 독서기록
    
-3. 추가 개발환경 세팅
+3. [해결]추가 개발환경 세팅
    1) eslintrc 관련 세팅
    2) Bootstrap css Framework 적용
    3) front <-> server 동시 빌드 환경
